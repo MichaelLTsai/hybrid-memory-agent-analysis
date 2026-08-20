@@ -1,0 +1,47 @@
+{
+  "qa_accuracy_all": 0.3333333333333333,
+  "token_f1_all": 0.21954118297401878,
+  "qa_num": 6,
+  "retrieval": {
+    "recall@3": 0.38888888888888884,
+    "recall@5": 0.5555555555555555,
+    "recall@10": 0.7777777777777777,
+    "ndcg@3": 0.27572669202659433,
+    "ndcg@5": 0.3637493995507913,
+    "ndcg@10": 0.44666175954543313
+  },
+  "per_type": {
+    "knowledge-update": {
+      "accuracy": 0.0,
+      "num": 1
+    },
+    "multi-session": {
+      "accuracy": 0.0,
+      "num": 1
+    },
+    "single-session-assistant": {
+      "accuracy": 1.0,
+      "num": 1
+    },
+    "single-session-preference": {
+      "accuracy": 0.0,
+      "num": 1
+    },
+    "single-session-user": {
+      "accuracy": 1.0,
+      "num": 1
+    },
+    "temporal-reasoning": {
+      "accuracy": 0.0,
+      "num": 1
+    }
+  },
+  "probe_update": {
+    "ku_n": 1,
+    "ku_recall@5": 1.0,
+    "ku_recall@10": 1.0,
+    "ku_gold_in_ctx": 1.0,
+    "P0_trigger": 1.0,
+    "P0_mode": "pipeline-by-design"
+  }
+}

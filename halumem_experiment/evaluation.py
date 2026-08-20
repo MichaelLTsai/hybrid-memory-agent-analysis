@@ -1,0 +1,486 @@
+import os
+import json
+import time
+import copy
+import argparse
+from tqdm import tqdm
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
+from eval_tools import (
+    evaluation_for_memory_accuracy,
+    evaluation_for_memory_integrity,
+    evaluation_for_question,
+    evaluation_for_update_memory
+)
+
+
+def compute_f1(precision: float, recall: float) -> float:
+    if precision + recall == 0:
+        return 0.0
+    return 2 * (precision * recall) / (precision + recall)
+
+
+def process_user(idx: int, user_data: dict, max_workers: int = 10):
+    uuid = user_data["uuid"]
+    user_name = user_data["user_name"]
+
+    eval_results = {
+        "memory_integrity_records": [],
+        "memory_accuracy_records": [],
+        "memory_update_records": [],
+        "question_answering_records": []
+    }
+
+    memory_integrity_inputs = []
+    memory_accuracy_inputs = []
+    memory_update_inputs = []
+    question_answering_inputs = []
+
+    for sid, session in enumerate(user_data["sessions"]):
+
+        if session.get('is_generated_qa_session', False):
+            continue
+
+        golden_memories = session["memory_points"]
+        extract_memories = session["extracted_memories"]
+
+        extract_memories_str = "\n".join(extract_memories)
+        for memory in golden_memories:
+            if memory["is_update"] == "True" and memory.get("memories_from_system", []):
+                new_update_memory = copy.deepcopy(memory)
+                new_update_memory["uuid"] = uuid
+                new_update_memory["ssession_id"] = sid
+                memory_update_inputs.append(new_update_memory)
+            else:
+                new_memory = copy.deepcopy(memory)
+                new_memory["uuid"] = uuid
+                new_memory["ssession_id"] = sid
+                memory_integrity_inputs.append(
+                    (new_memory, extract_memories_str)
+                )
+
+        dialogue = session["dialogue"]
+        dialogue_str = []
+        for turn in dialogue:
+            dialogue_str.append(
+                f'[{turn["timestamp"]}]{turn["role"]}: {turn["content"]}'
+            )
+            if turn["role"] == "assistant":
+                dialogue_str.append("")
+
+        dialogue_str = "\n".join(dialogue_str)
+
+        golden_memories_str = "\n".join(
+            [m["memory_content"] for m in golden_memories if m["memory_source"] != "interference"]
+        )
+
+        for memory in extract_memories:
+            new_memory = {
+                "uuid": uuid,
+                "ssession_id": sid,
+                "memory_content": memory
+            }
+            memory_accuracy_inputs.append(
+                (dialogue_str, golden_memories_str, new_memory)
+            )
+
+        if "questions" in session:
+            for qa in session["questions"]:
+                new_qa = copy.deepcopy(qa)
+                new_qa["uuid"] = uuid
+                new_qa["ssession_id"] = sid
+                question_answering_inputs.append(new_qa)
+
+    # Memory Integrity Evaluation
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = {}
+        for memory, extract_memories_str in memory_integrity_inputs:
+            if extract_memories_str.strip() == "":
+                memory["memory_integrity_score"] = 0
+                eval_results["memory_integrity_records"].append(memory)
+                continue
+            future = executor.submit(
+                evaluation_for_memory_integrity,
+                extract_memories_str,
+                memory["memory_content"]
+            )
+            futures[future] = memory
+
+        for future in tqdm(as_completed(futures), total=len(futures), desc=f"Memory Integrity Evaluation([{idx}]{user_name})"):
+            memory = futures[future]
+            try:
+                result = future.result()
+                score = int(result.get("score"))
+            except Exception as e:
+                score = None
+            memory["memory_integrity_score"] = score
+            eval_results["memory_integrity_records"].append(memory)
+
+    # Memory Accuracy Evaluation
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = {}
+        for dialogue_str, golden_memories_str, memory in memory_accuracy_inputs:
+            future = executor.submit(
+                evaluation_for_memory_accuracy,
+                dialogue_str,
+                golden_memories_str,
+                memory["memory_content"]
+            )
+            futures[future] = memory
+
+        for future in tqdm(as_completed(futures), total=len(futures), desc=f"Memory Accuracy Evaluation([{idx}]{user_name})"):
+            memory = futures[future]
+            try:
+                result = future.result()
+                score = int(result.get("accuracy_score"))
+                is_included_in_golden_memories = result.get("is_included_in_golden_memories", "false")
+            except Exception as e:
+                score = None
+                is_included_in_golden_memories = "false"
+            memory["memory_accuracy_score"] = score
+            memory["is_included_in_golden_memories"] = is_included_in_golden_memories
+            eval_results["memory_accuracy_records"].append(memory)
+
+    # Memory Update Evaluation
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = {}
+        for update_memory in memory_update_inputs:
+            future = executor.submit(
+                evaluation_for_update_memory,
+                "\n".join(update_memory["memories_from_system"]),
+                update_memory["memory_content"],
+                "\n".join(update_memory["original_memories"])
+            )
+            futures[future] = update_memory
+
+        for future in tqdm(as_completed(futures), total=len(futures), desc=f"Memory Update Evaluation([{idx}]{user_name})"):
+            update_memory = futures[future]
+            try:
+                result = future.result()
+                update_type = result.get("evaluation_result")
+            except Exception as e:
+                update_type = None
+            update_memory["memory_update_type"] = update_type
+            eval_results["memory_update_records"].append(update_memory)
+
+    # Question-Answering Evaluation
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = {}
+        for qa in question_answering_inputs:
+            future = executor.submit(
+                evaluation_for_question,
+                qa["question"],
+                qa["answer"],
+                "\n".join([i["memory_content"] for i in qa["evidence"]]),
+                qa["system_response"]
+            )
+            futures[future] = qa
+
+        for future in tqdm(as_completed(futures), total=len(futures), desc=f"Question-Answering Evaluation([{idx}]{user_name})"):
+            qa = futures[future]
+            try:
+                result = future.result()
+                result_type = result.get("evaluation_result")
+            except Exception as e:
+                result_type = None
+            qa["result_type"] = result_type
+            eval_results["question_answering_records"].append(qa)
+
+    return eval_results
+
+
+def aggregate_eval_results(eval_results):
+
+    # Memory Integrity Evaluation
+    memory_integrity_scores = 0
+    memory_integrity_weighted_scores = 0
+    memory_integrity_valid_num = 0
+    memory_integrity_num = 0
+    memory_integrity_weighted_valid_num = 0
+    memory_integrity_weighted_num = 0
+    interference_memory_scores = 0
+    interference_memory_valid_num = 0
+    interference_memory_num = 0
+    for item in eval_results["memory_integrity_records"]:
+
+        item["is_valid"] = True
+
+        if item["memory_source"] != "interference":
+            memory_integrity_num += 1
+            memory_integrity_weighted_num += item["importance"]
+        else:
+            interference_memory_num += 1
+
+        if item["memory_integrity_score"] is None:
+            item["is_valid"] = False
+            continue
+
+        if item["memory_source"] != "interference":
+            if item["memory_integrity_score"] == 2:
+                memory_integrity_scores += 1
+            memory_integrity_weighted_scores += 0.5 * item["memory_integrity_score"] * item["importance"]
+            memory_integrity_valid_num += 1
+            memory_integrity_weighted_valid_num += item["importance"]
+        else:
+            if item["memory_integrity_score"] == 0:
+                interference_memory_scores += 1
+            interference_memory_valid_num += 1
+
+    eval_results["overall_score"]["memory_integrity"]["recall(all)"] = memory_integrity_scores / memory_integrity_num if memory_integrity_num else 0
+    eval_results["overall_score"]["memory_integrity"]["recall(valid)"] = memory_integrity_scores / memory_integrity_valid_num if memory_integrity_valid_num else 0
+    eval_results["overall_score"]["memory_integrity"]["weighted_recall(all)"] = memory_integrity_weighted_scores / memory_integrity_weighted_num if memory_integrity_weighted_num else 0
+    eval_results["overall_score"]["memory_integrity"]["weighted_recall(valid)"] = memory_integrity_weighted_scores / memory_integrity_weighted_valid_num if memory_integrity_weighted_valid_num else 0
+    eval_results["overall_score"]["memory_integrity"]["memory_valid_importance_sum"] = memory_integrity_weighted_valid_num
+    eval_results["overall_score"]["memory_integrity"]["memory_importance_sum"] = memory_integrity_weighted_num
+    eval_results["overall_score"]["memory_integrity"]["memory_valid_num"] = memory_integrity_valid_num
+    eval_results["overall_score"]["memory_integrity"]["memory_num"] = memory_integrity_num
+    eval_results["overall_score"]["memory_accuracy"]["interference_accuracy(all)"] = interference_memory_scores / interference_memory_num if interference_memory_num else 0
+    eval_results["overall_score"]["memory_accuracy"]["interference_accuracy(valid)"] = interference_memory_scores / interference_memory_valid_num if interference_memory_valid_num else 0
+    eval_results["overall_score"]["memory_accuracy"]["interference_memory_valid_num"] = interference_memory_valid_num
+    eval_results["overall_score"]["memory_accuracy"]["interference_memory_num"] = interference_memory_num
+
+    # Memory Accuracy Evaluation
+    target_memory_accuracy_scores = 0
+    memory_accuracy_weighted_scores = 0
+    target_memory_accuracy_valid_num = 0
+    target_memory_accuracy_num = 0
+    memory_accuracy_valid_num = 0
+    memory_accuracy_num = 0
+    for item in eval_results["memory_accuracy_records"]:
+
+        item["is_valid"] = True
+        memory_accuracy_num += 1
+
+        if item["is_included_in_golden_memories"] in ["true", "True"]:
+            target_memory_accuracy_num += 1
+
+        if item["memory_accuracy_score"] is None:
+            item["is_valid"] = False
+            continue
+
+        if item["is_included_in_golden_memories"] in ["true", "True"]:
+            target_memory_accuracy_scores += 0.5 * item["memory_accuracy_score"]
+            target_memory_accuracy_valid_num += 1
+
+        memory_accuracy_weighted_scores += 0.5 * item["memory_accuracy_score"]
+        memory_accuracy_valid_num += 1
+
+    eval_results["overall_score"]["memory_accuracy"]["target_accuracy(all)"] = target_memory_accuracy_scores / target_memory_accuracy_num if target_memory_accuracy_num else 0
+    eval_results["overall_score"]["memory_accuracy"]["target_accuracy(valid)"] = target_memory_accuracy_scores / target_memory_accuracy_valid_num if target_memory_accuracy_valid_num else 0
+    eval_results["overall_score"]["memory_accuracy"]["target_memory_valid_num"] = target_memory_accuracy_valid_num
+    eval_results["overall_score"]["memory_accuracy"]["target_memory_num"] = target_memory_accuracy_num
+    eval_results["overall_score"]["memory_accuracy"]["weighted_accuracy(all)"] = memory_accuracy_weighted_scores / memory_accuracy_num if memory_accuracy_num else 0
+    eval_results["overall_score"]["memory_accuracy"]["weighted_accuracy(valid)"] = memory_accuracy_weighted_scores / memory_accuracy_valid_num if memory_accuracy_valid_num else 0
+    eval_results["overall_score"]["memory_accuracy"]["memory_valid_num"] = memory_accuracy_valid_num
+    eval_results["overall_score"]["memory_accuracy"]["memory_num"] = memory_accuracy_num
+
+    # Memory Extraction F1-score
+    eval_results["overall_score"]["memory_extraction_f1"] = compute_f1(
+        precision=eval_results["overall_score"]["memory_accuracy"]["target_accuracy(all)"],
+        recall=eval_results["overall_score"]["memory_integrity"]["recall(all)"]
+    )
+
+    # Memory Update Evaluation
+    correct_update_memory_num = 0
+    hallucination_update_memory_num = 0
+    omission_update_memory_num = 0
+    other_update_memory_num = 0
+    update_memory_num = 0
+    update_memory_valid_num = 0
+    for item in eval_results["memory_update_records"]:
+
+        item["is_valid"] = True
+        update_memory_num += 1
+
+        if item["memory_update_type"] not in ["Correct", "Hallucination", "Omission", "Other"]:
+            item["is_valid"] = False
+            continue
+
+        if item["memory_update_type"] == "Correct":
+            correct_update_memory_num += 1
+        elif item["memory_update_type"] == "Hallucination":
+            hallucination_update_memory_num += 1
+        elif item["memory_update_type"] == "Omission":
+            omission_update_memory_num += 1
+        elif item["memory_update_type"] == "Other":
+            other_update_memory_num += 1
+
+        update_memory_valid_num += 1
+
+    eval_results["overall_score"]["memory_update"]["correct_update_memory_ratio(all)"] = correct_update_memory_num / update_memory_num if update_memory_num else 0
+    eval_results["overall_score"]["memory_update"]["correct_update_memory_ratio(valid)"] = correct_update_memory_num / update_memory_valid_num if update_memory_valid_num else 0
+    eval_results["overall_score"]["memory_update"]["hallucination_update_memory_ratio(all)"] = hallucination_update_memory_num / update_memory_num if update_memory_num else 0
+    eval_results["overall_score"]["memory_update"]["hallucination_update_memory_ratio(valid)"] = hallucination_update_memory_num / update_memory_valid_num if update_memory_valid_num else 0
+    eval_results["overall_score"]["memory_update"]["omission_update_memory_ratio(all)"] = omission_update_memory_num / update_memory_num if update_memory_num else 0
+    eval_results["overall_score"]["memory_update"]["omission_update_memory_ratio(valid)"] = omission_update_memory_num / update_memory_valid_num if update_memory_valid_num else 0
+    eval_results["overall_score"]["memory_update"]["other_update_memory_ratio(all)"] = other_update_memory_num / update_memory_num if update_memory_num else 0
+    eval_results["overall_score"]["memory_update"]["other_update_memory_ratio(valid)"] = other_update_memory_num / update_memory_valid_num if update_memory_valid_num else 0
+    eval_results["overall_score"]["memory_update"]["update_memory_valid_num"] = update_memory_valid_num
+    eval_results["overall_score"]["memory_update"]["update_memory_num"] = update_memory_num
+
+    # Question-Answering Evaluation
+    correct_qa_num = 0
+    hallucination_qa_num = 0
+    omission_qa_num = 0
+    qa_num = 0
+    qa_valid_num = 0
+    for item in eval_results["question_answering_records"]:
+        item["is_valid"] = True
+        qa_num += 1
+
+        if item["result_type"] not in ["Correct", "Hallucination", "Omission"]:
+            item["is_valid"] = False
+            continue
+
+        if item["result_type"] == "Correct":
+            correct_qa_num += 1
+        elif item["result_type"] == "Hallucination":
+            hallucination_qa_num += 1
+        elif item["result_type"] == "Omission":
+            omission_qa_num += 1
+
+        qa_valid_num += 1
+
+    eval_results["overall_score"]["question_answering"]["correct_qa_ratio(all)"] = correct_qa_num / qa_num if qa_num else 0
+    eval_results["overall_score"]["question_answering"]["correct_qa_ratio(valid)"] = correct_qa_num / qa_valid_num if qa_valid_num else 0
+    eval_results["overall_score"]["question_answering"]["hallucination_qa_ratio(all)"] = hallucination_qa_num / qa_num if qa_num else 0
+    eval_results["overall_score"]["question_answering"]["hallucination_qa_ratio(valid)"] = hallucination_qa_num / qa_valid_num if qa_valid_num else 0
+    eval_results["overall_score"]["question_answering"]["omission_qa_ratio(all)"] = omission_qa_num / qa_num if qa_num else 0
+    eval_results["overall_score"]["question_answering"]["omission_qa_ratio(valid)"] = omission_qa_num / qa_valid_num if qa_valid_num else 0
+    eval_results["overall_score"]["question_answering"]["qa_valid_num"] = qa_valid_num
+    eval_results["overall_score"]["question_answering"]["qa_num"] = qa_num
+
+    # Memory Type Accuracy
+    for item in eval_results['memory_integrity_records']:
+        if 'memory_integrity_score' not in item or 'importance' not in item:
+            continue
+        score = 1 if item['memory_integrity_score'] == 2 else 0
+        eval_results["overall_score"]["memory_type_accuracy"][item['memory_type']]['memory_integrity_acc'] += score
+        eval_results["overall_score"]["memory_type_accuracy"][item['memory_type']]['total_num'] += 1
+
+    for item in eval_results["memory_update_records"]:
+        if 'memory_update_type' not in item or 'importance' not in item:
+            continue
+        score = 1 if item['memory_update_type'] == "Correct" else 0
+        eval_results["overall_score"]["memory_type_accuracy"][item['memory_type']]['memory_update_acc'] += score
+        eval_results["overall_score"]["memory_type_accuracy"][item['memory_type']]['total_num'] += 1
+
+    for key in eval_results["overall_score"]["memory_type_accuracy"]:
+        total = eval_results["overall_score"]["memory_type_accuracy"][key]['total_num']
+        if total > 0:
+            eval_results["overall_score"]["memory_type_accuracy"][key]['memory_integrity_acc'] /= total
+            eval_results["overall_score"]["memory_type_accuracy"][key]['memory_update_acc'] /= total
+        eval_results["overall_score"]["memory_type_accuracy"][key]['memory_acc'] = (
+            eval_results["overall_score"]["memory_type_accuracy"][key]['memory_integrity_acc'] +
+            eval_results["overall_score"]["memory_type_accuracy"][key]['memory_update_acc']
+        )
+
+    return eval_results
+
+
+def iter_jsonl(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                yield json.loads(line)
+
+
+def run_evaluation(
+    frame: str,
+    version: str = "default",
+    result_dir: str = None,
+    user_num: int = None,
+    max_workers: int = 10,
+    attribution: bool = True,
+):
+    if result_dir is None:
+        result_dir = f"results/{frame}-{version}/"
+
+    input_file = os.path.join(result_dir, f"{frame}_eval_results.jsonl")
+    score_output_file = os.path.join(result_dir, f"{frame}_scores.json")
+    detail_output_file = os.path.join(result_dir, f"{frame}_eval_detail.jsonl")
+
+    all_eval_results = {
+        "overall_score": {
+            "memory_integrity": {},
+            "memory_accuracy": {},
+            "memory_update": {},
+            "question_answering": {},
+            "memory_extraction_f1": 0,
+            "memory_type_accuracy": {
+                "Persona Memory": {"memory_integrity_acc": 0, "memory_update_acc": 0, "memory_acc": 0, "total_num": 0},
+                "Event Memory": {"memory_integrity_acc": 0, "memory_update_acc": 0, "memory_acc": 0, "total_num": 0},
+                "Relationship Memory": {"memory_integrity_acc": 0, "memory_update_acc": 0, "memory_acc": 0, "total_num": 0},
+            }
+        },
+        "memory_integrity_records": [],
+        "memory_accuracy_records": [],
+        "memory_update_records": [],
+        "question_answering_records": []
+    }
+
+    users = list(iter_jsonl(input_file))
+    if user_num:
+        users = users[:user_num]
+
+    for idx, user_data in enumerate(tqdm(users, desc="Evaluating users"), 1):
+        user_results = process_user(idx, user_data, max_workers=max_workers)
+        all_eval_results["memory_integrity_records"].extend(user_results["memory_integrity_records"])
+        all_eval_results["memory_accuracy_records"].extend(user_results["memory_accuracy_records"])
+        all_eval_results["memory_update_records"].extend(user_results["memory_update_records"])
+        all_eval_results["question_answering_records"].extend(user_results["question_answering_records"])
+
+    all_eval_results = aggregate_eval_results(all_eval_results)
+
+    # QA error attribution: split wrong answers into STORAGE / RETRIEVAL / GENERATION
+    if attribution:
+        try:
+            from qa_attribution import attribute_failures, build_stored_pools
+            print("\n=== QA Error Attribution (storage / retrieval / generation) ===")
+            pools = build_stored_pools(users)
+            attr_summary = attribute_failures(
+                all_eval_results["question_answering_records"],
+                pools,
+                max_workers=max(2, max_workers // 2),
+            )
+            all_eval_results["overall_score"]["qa_attribution"] = attr_summary
+            print(json.dumps(attr_summary, indent=2, ensure_ascii=False))
+        except Exception as e:
+            print(f"⚠️  QA attribution skipped: {e}")
+
+    with open(score_output_file, "w", encoding="utf-8") as f:
+        json.dump(all_eval_results["overall_score"], f, ensure_ascii=False, indent=2)
+
+    with open(detail_output_file, "w", encoding="utf-8") as f:
+        for key in ["memory_integrity_records", "memory_accuracy_records", "memory_update_records", "question_answering_records"]:
+            for record in all_eval_results[key]:
+                f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+    print(f"\n=== Evaluation Results ===")
+    print(json.dumps(all_eval_results["overall_score"], indent=2, ensure_ascii=False))
+    print(f"\nScores saved to: {score_output_file}")
+    print(f"Details saved to: {detail_output_file}")
+
+    return all_eval_results["overall_score"]
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--frame", default="mem0_oss")
+    parser.add_argument("--version", default="default")
+    parser.add_argument("--result-dir", default=None)
+    parser.add_argument("--user-num", type=int, default=None)
+    parser.add_argument("--max-workers", type=int, default=10)
+    parser.add_argument("--no-attribution", action="store_true",
+                        help="Skip QA error attribution (storage/retrieval/generation)")
+    args = parser.parse_args()
+
+    run_evaluation(
+        frame=args.frame,
+        version=args.version,
+        result_dir=args.result_dir,
+        user_num=args.user_num,
+        max_workers=args.max_workers,
+        attribution=not args.no_attribution,
+    )

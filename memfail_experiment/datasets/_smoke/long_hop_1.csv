@@ -1,0 +1,9 @@
+id,hop_count,fact_1,fact_2,fact_3,fact_4,chain_1,chain_2,chain_3,chain_4,chain_5,graded_question,ground_truth_answer,choice_a,choice_b,choice_c,choice_d,choice_e,correct_choice
+longhop-1hop-001,1,Early yoga gives me a calm mind.,A calm mind leads me to finish journaling.,,,early yoga,calm mind,finish journaling,,,"When I do early yoga, what do I end up doing?
+
+Options:
+A. check email
+B. fold laundry
+C. finish journaling
+D. water the plants
+E. take out the trash",finish journaling,check email,fold laundry,finish journaling,water the plants,take out the trash,C

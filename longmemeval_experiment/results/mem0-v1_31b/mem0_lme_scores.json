@@ -1,0 +1,96 @@
+{
+  "qa_accuracy_all": 0.3888888888888889,
+  "token_f1_all": 0.1416050053396845,
+  "qa_num": 18,
+  "retrieval": {
+    "recall@3": 0.7407407407407407,
+    "recall@5": 0.8379629629629629,
+    "recall@10": 0.875,
+    "ndcg@3": 0.7357820525742731,
+    "ndcg@5": 0.7850449824442416,
+    "ndcg@10": 0.8021798395456877
+  },
+  "per_type": {
+    "knowledge-update": {
+      "accuracy": 0.6666666666666666,
+      "num": 3
+    },
+    "multi-session": {
+      "accuracy": 0.0,
+      "num": 3
+    },
+    "single-session-assistant": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    },
+    "single-session-preference": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    },
+    "single-session-user": {
+      "accuracy": 1.0,
+      "num": 3
+    },
+    "temporal-reasoning": {
+      "accuracy": 0.0,
+      "num": 3
+    }
+  },
+  "probe": {
+    "n_total": 18,
+    "n_answerable": 18,
+    "n_abstention": 0,
+    "P4_sufficient": 0.7777777777777778,
+    "P4_n": 18,
+    "P1_sufficient": 0.0,
+    "P1_n": 4,
+    "P5_fail_given_P4": 0.5,
+    "P5_n": 14,
+    "P5b_abstain_rate": null,
+    "P5b_n": 0,
+    "verdicts": {
+      "REASONING": 7,
+      "OK": 7,
+      "SUMMARY": 4
+    },
+    "attribution": {
+      "OK": 0.3888888888888889,
+      "SUMMARY": 0.2222222222222222,
+      "RETRIEVAL": 0.0,
+      "REASONING": 0.3888888888888889,
+      "NO_WRITE": 0.0,
+      "P5b_FAIL": 0.0
+    },
+    "unknown_ratio": 0.0,
+    "judge_failures": {},
+    "scope": [
+      "session"
+    ],
+    "by_question_type": {
+      "multi-session": {
+        "REASONING": 2,
+        "SUMMARY": 1
+      },
+      "knowledge-update": {
+        "OK": 2,
+        "REASONING": 1
+      },
+      "single-session-user": {
+        "OK": 3
+      },
+      "single-session-assistant": {
+        "REASONING": 2,
+        "OK": 1
+      },
+      "temporal-reasoning": {
+        "SUMMARY": 2,
+        "REASONING": 1
+      },
+      "single-session-preference": {
+        "REASONING": 1,
+        "SUMMARY": 1,
+        "OK": 1
+      }
+    }
+  }
+}

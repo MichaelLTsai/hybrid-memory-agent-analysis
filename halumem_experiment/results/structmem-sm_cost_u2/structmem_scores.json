@@ -1,0 +1,153 @@
+{
+  "memory_integrity": {
+    "recall(all)": 0.0642570281124498,
+    "recall(valid)": 0.0642570281124498,
+    "weighted_recall(all)": 0.08734939759036145,
+    "weighted_recall(valid)": 0.08734939759036145,
+    "memory_valid_importance_sum": 373.5,
+    "memory_importance_sum": 373.5,
+    "memory_valid_num": 498,
+    "memory_num": 498
+  },
+  "memory_accuracy": {
+    "interference_accuracy(all)": 1.0,
+    "interference_accuracy(valid)": 1.0,
+    "interference_memory_valid_num": 147,
+    "interference_memory_num": 147,
+    "target_accuracy(all)": 1.0,
+    "target_accuracy(valid)": 1.0,
+    "target_memory_valid_num": 50,
+    "target_memory_num": 50,
+    "weighted_accuracy(all)": 0.9322033898305084,
+    "weighted_accuracy(valid)": 0.9322033898305084,
+    "memory_valid_num": 59,
+    "memory_num": 59
+  },
+  "memory_update": {
+    "correct_update_memory_ratio(all)": 0.018518518518518517,
+    "correct_update_memory_ratio(valid)": 0.020134228187919462,
+    "hallucination_update_memory_ratio(all)": 0.0,
+    "hallucination_update_memory_ratio(valid)": 0.0,
+    "omission_update_memory_ratio(all)": 0.9012345679012346,
+    "omission_update_memory_ratio(valid)": 0.9798657718120806,
+    "other_update_memory_ratio(all)": 0.0,
+    "other_update_memory_ratio(valid)": 0.0,
+    "update_memory_valid_num": 149,
+    "update_memory_num": 162
+  },
+  "question_answering": {
+    "correct_qa_ratio(all)": 0.23404255319148937,
+    "correct_qa_ratio(valid)": 0.23404255319148937,
+    "hallucination_qa_ratio(all)": 0.12234042553191489,
+    "hallucination_qa_ratio(valid)": 0.12234042553191489,
+    "omission_qa_ratio(all)": 0.6436170212765957,
+    "omission_qa_ratio(valid)": 0.6436170212765957,
+    "qa_valid_num": 188,
+    "qa_num": 188
+  },
+  "memory_extraction_f1": 0.12075471698113208,
+  "memory_type_accuracy": {
+    "Persona Memory": {
+      "memory_integrity_acc": 0.05947136563876652,
+      "memory_update_acc": 0.006607929515418502,
+      "memory_acc": 0.06607929515418502,
+      "total_num": 454
+    },
+    "Event Memory": {
+      "memory_integrity_acc": 0.0,
+      "memory_update_acc": 0.0,
+      "memory_acc": 0.0,
+      "total_num": 272
+    },
+    "Relationship Memory": {
+      "memory_integrity_acc": 0.06172839506172839,
+      "memory_update_acc": 0.0,
+      "memory_acc": 0.06172839506172839,
+      "total_num": 81
+    }
+  },
+  "qa_attribution": {
+    "total_wrong": 144,
+    "attributable": 1,
+    "storage_num": 0,
+    "retrieval_num": 0,
+    "generation_num": 1,
+    "unknown_num": 142,
+    "no_evidence_num": 1,
+    "storage_ratio": 0.0,
+    "retrieval_ratio": 0.0,
+    "generation_ratio": 1.0,
+    "unknown_ratio": 0.9861111111111112,
+    "judge_failures": {
+      "retrieval": 10,
+      "embedding": 132
+    },
+    "storage_topk": 25,
+    "by_question_type": {
+      "Memory Conflict": {
+        "UNKNOWN": 37
+      },
+      "Basic Fact Recall": {
+        "UNKNOWN": 43,
+        "GENERATION": 1
+      },
+      "Generalization & Application": {
+        "UNKNOWN": 40
+      },
+      "Multi-hop Inference": {
+        "UNKNOWN": 18
+      },
+      "Dynamic Update": {
+        "UNKNOWN": 4
+      },
+      "Memory Boundary": {
+        "NO_EVIDENCE": 1
+      }
+    }
+  },
+  "probe": {
+    "P4_sufficient": 0.029197080291970802,
+    "P4_n": 137,
+    "P5_fail_given_P4": 0.25,
+    "P5_n": 4,
+    "P5b_abstain_rate": 0.975609756097561,
+    "P5b_n": 41,
+    "verdicts": {
+      "OK": 43,
+      "NOT_RETRIEVED": 133,
+      "UNKNOWN": 10,
+      "REASONING": 1,
+      "P5b_FAIL": 1
+    },
+    "unknown_ratio": 0.05319148936170213,
+    "judge_failures": {
+      "retrieval": 10
+    },
+    "by_question_type": {
+      "Memory Boundary": {
+        "OK": 40,
+        "P5b_FAIL": 1
+      },
+      "Memory Conflict": {
+        "NOT_RETRIEVED": 36,
+        "UNKNOWN": 2,
+        "OK": 2
+      },
+      "Basic Fact Recall": {
+        "NOT_RETRIEVED": 35,
+        "UNKNOWN": 8,
+        "OK": 1,
+        "REASONING": 1
+      },
+      "Multi-hop Inference": {
+        "NOT_RETRIEVED": 18
+      },
+      "Generalization & Application": {
+        "NOT_RETRIEVED": 40
+      },
+      "Dynamic Update": {
+        "NOT_RETRIEVED": 4
+      }
+    }
+  }
+}

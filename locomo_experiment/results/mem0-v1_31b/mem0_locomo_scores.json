@@ -1,0 +1,144 @@
+{
+  "qa_accuracy_all": 0.457286432160804,
+  "token_f1_all": 0.10875244724045519,
+  "qa_num": 199,
+  "retrieval": {
+    "recall@3": 0.1895093062605753,
+    "recall@5": 0.20642978003384096,
+    "recall@10": 0.24450084602368868,
+    "ndcg@3": 0.15797858266976467,
+    "ndcg@5": 0.1654581084737438,
+    "ndcg@10": 0.17776795898481848
+  },
+  "retrieval_note": "exact dia_id matching (each memory carries its source dia_id)",
+  "per_category": {
+    "multi_hop": {
+      "accuracy": 0.40625,
+      "token_f1": 0.0977586877945334,
+      "num": 32
+    },
+    "temporal": {
+      "accuracy": 0.0,
+      "token_f1": 0.0220954720954721,
+      "num": 37
+    },
+    "open_domain": {
+      "accuracy": 0.38461538461538464,
+      "token_f1": 0.11943927867004792,
+      "num": 13
+    },
+    "single_hop": {
+      "accuracy": 0.4,
+      "token_f1": 0.15759786972687187,
+      "num": 70
+    },
+    "adversarial": {
+      "accuracy": 0.9574468085106383,
+      "token_f1": null,
+      "num": 47
+    }
+  },
+  "extraction": {
+    "memory_integrity_recall": 0.5163043478260869,
+    "memory_accuracy_precision": 0.8503649635036497,
+    "memory_extraction_f1": 0.642506748715567,
+    "integrity_num": 184,
+    "accuracy_num": 274,
+    "integrity_unknown": 0,
+    "accuracy_unknown": 0,
+    "unknown_ratio": 0.0,
+    "judge_failures": {},
+    "speaker_confusion_num": 1,
+    "speaker_confusion_ratio": 0.005434782608695652,
+    "scope": "session",
+    "scope_note": "session-scoped(有 turn provenance),與 HaluMem 對齊、可比",
+    "conversations_evaluated": 1,
+    "conversations_total": 1,
+    "judge_note": "沿用 HaluMem 官方 EVALUATION_PROMPT_FOR_MEMORY_INTEGRITY / _ACCURACY,strict = score 2;score 1(部分涵蓋)計為失敗",
+    "per_sample": [
+      {
+        "sample_id": "conv-26",
+        "scope": "session",
+        "integrity_recall": 0.5163043478260869,
+        "integrity_num": 184,
+        "integrity_unknown": 0,
+        "integrity_score_dist": {
+          "2": 95,
+          "0": 23,
+          "1": 66
+        },
+        "accuracy_precision": 0.8503649635036497,
+        "accuracy_num": 274,
+        "accuracy_unknown": 0,
+        "accuracy_score_dist": {
+          "2": 233,
+          "1": 24,
+          "0": 17
+        },
+        "extraction_f1": 0.642506748715567,
+        "speaker_confusion_num": 1,
+        "speaker_confusion_ratio": 0.005434782608695652
+      }
+    ]
+  },
+  "probe": {
+    "n_total": 199,
+    "n_answerable": 152,
+    "n_adversarial": 47,
+    "P4_sufficient": 0.48026315789473684,
+    "P4_n": 152,
+    "P1_scoped_sufficient": 0.36363636363636365,
+    "P1_scoped_n": 77,
+    "P5_fail_given_P4": 0.3835616438356164,
+    "P5_n": 73,
+    "P5b_avoid_rate": 0.9574468085106383,
+    "P5b_n": 47,
+    "verdicts": {
+      "OK": 90,
+      "SUMMARY": 49,
+      "RETRIEVAL": 28,
+      "NO_WRITE": 2,
+      "REASONING": 28,
+      "P5b_FAIL": 2
+    },
+    "attribution": {
+      "OK": 0.45226130653266333,
+      "SUMMARY": 0.24623115577889448,
+      "RETRIEVAL": 0.1407035175879397,
+      "REASONING": 0.1407035175879397,
+      "NO_WRITE": 0.010050251256281407,
+      "P5b_FAIL": 0.010050251256281407
+    },
+    "unknown_ratio": 0.0,
+    "judge_failures": {},
+    "by_category": {
+      "3": {
+        "OK": 5,
+        "NO_WRITE": 2,
+        "RETRIEVAL": 2,
+        "REASONING": 3,
+        "SUMMARY": 1
+      },
+      "1": {
+        "OK": 13,
+        "RETRIEVAL": 7,
+        "SUMMARY": 6,
+        "REASONING": 6
+      },
+      "2": {
+        "SUMMARY": 34,
+        "RETRIEVAL": 3
+      },
+      "4": {
+        "OK": 27,
+        "REASONING": 19,
+        "RETRIEVAL": 16,
+        "SUMMARY": 8
+      },
+      "5": {
+        "OK": 45,
+        "P5b_FAIL": 2
+      }
+    }
+  }
+}

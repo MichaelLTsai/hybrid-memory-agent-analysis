@@ -1,0 +1,133 @@
+{
+  "memory_integrity": {
+    "recall(all)": 0.7095343680709535,
+    "recall(valid)": 0.7095343680709535,
+    "weighted_recall(all)": 0.8281596452328159,
+    "weighted_recall(valid)": 0.8281596452328159,
+    "memory_valid_importance_sum": 338.25,
+    "memory_importance_sum": 338.25,
+    "memory_valid_num": 451,
+    "memory_num": 451
+  },
+  "memory_accuracy": {
+    "interference_accuracy(all)": 0.616,
+    "interference_accuracy(valid)": 0.616,
+    "interference_memory_valid_num": 125,
+    "interference_memory_num": 125,
+    "target_accuracy(all)": 0.9939138576779026,
+    "target_accuracy(valid)": 0.9939138576779026,
+    "target_memory_valid_num": 1068,
+    "target_memory_num": 1068,
+    "weighted_accuracy(all)": 0.8232359230220955,
+    "weighted_accuracy(valid)": 0.8232359230220955,
+    "memory_valid_num": 1403,
+    "memory_num": 1403
+  },
+  "memory_update": {
+    "correct_update_memory_ratio(all)": 0.4788732394366197,
+    "correct_update_memory_ratio(valid)": 0.7555555555555555,
+    "hallucination_update_memory_ratio(all)": 0.02112676056338028,
+    "hallucination_update_memory_ratio(valid)": 0.03333333333333333,
+    "omission_update_memory_ratio(all)": 0.13380281690140844,
+    "omission_update_memory_ratio(valid)": 0.2111111111111111,
+    "other_update_memory_ratio(all)": 0.0,
+    "other_update_memory_ratio(valid)": 0.0,
+    "update_memory_valid_num": 90,
+    "update_memory_num": 142
+  },
+  "question_answering": {
+    "correct_qa_ratio(all)": 0.3597560975609756,
+    "correct_qa_ratio(valid)": 0.3597560975609756,
+    "hallucination_qa_ratio(all)": 0.10975609756097561,
+    "hallucination_qa_ratio(valid)": 0.10975609756097561,
+    "omission_qa_ratio(all)": 0.5304878048780488,
+    "omission_qa_ratio(valid)": 0.5304878048780488,
+    "qa_valid_num": 164,
+    "qa_num": 164
+  },
+  "memory_extraction_f1": 0.8279864691683633,
+  "memory_type_accuracy": {
+    "Persona Memory": {
+      "memory_integrity_acc": 0.49899396378269617,
+      "memory_update_acc": 0.08853118712273642,
+      "memory_acc": 0.5875251509054326,
+      "total_num": 497
+    },
+    "Event Memory": {
+      "memory_integrity_acc": 0.4011627906976744,
+      "memory_update_acc": 0.08139534883720931,
+      "memory_acc": 0.4825581395348837,
+      "total_num": 172
+    },
+    "Relationship Memory": {
+      "memory_integrity_acc": 0.24489795918367346,
+      "memory_update_acc": 0.20408163265306123,
+      "memory_acc": 0.4489795918367347,
+      "total_num": 49
+    }
+  },
+  "qa_attribution": {
+    "total_wrong": 105,
+    "attributable": 100,
+    "storage_num": 27,
+    "retrieval_num": 24,
+    "generation_num": 49,
+    "unknown_num": 5,
+    "storage_ratio": 0.27,
+    "retrieval_ratio": 0.24,
+    "generation_ratio": 0.49,
+    "by_question_type": {
+      "Memory Conflict": {
+        "GENERATION": 23,
+        "STORAGE": 5,
+        "RETRIEVAL": 4
+      },
+      "Memory Boundary": {
+        "UNKNOWN": 5
+      },
+      "Generalization & Application": {
+        "GENERATION": 9,
+        "STORAGE": 12,
+        "RETRIEVAL": 5
+      },
+      "Multi-hop Inference": {
+        "GENERATION": 3,
+        "STORAGE": 2,
+        "RETRIEVAL": 3
+      },
+      "Basic Fact Recall": {
+        "GENERATION": 13,
+        "STORAGE": 4,
+        "RETRIEVAL": 11
+      },
+      "Dynamic Update": {
+        "STORAGE": 4,
+        "GENERATION": 1,
+        "RETRIEVAL": 1
+      }
+    }
+  },
+  "probe_update": {
+    "P0_trigger": 1.0,
+    "P0_sessions": 65,
+    "P0_mode": "per-session-delta",
+    "P1_loose": 0.8247,
+    "P1_strict": 0.5712,
+    "P1_distort": 0.3074,
+    "P1_n": 576,
+    "upd_fine": {
+      "Correct Update": 39,
+      "Correct": 68,
+      "Omission": 19,
+      "Omitted Update": 11,
+      "Partially omitted": 2,
+      "Hallucination": 3
+    },
+    "upd_n": 142,
+    "P1u_ok": 0.7535,
+    "P1u_omit": 0.2254,
+    "P4u_new_retrieved": 0.475,
+    "P4b_stale_in_ctx": 0.25,
+    "P4b_n_decidable": 120
+  }
+}

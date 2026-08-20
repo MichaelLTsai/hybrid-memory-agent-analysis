@@ -1,0 +1,41 @@
+id,hop_count,fact_1,fact_2,fact_3,fact_4,chain_1,chain_2,chain_3,chain_4,chain_5,graded_question,ground_truth_answer,choice_a,choice_b,choice_c,choice_d,choice_e,correct_choice
+longhop-1hop-001,1,Early yoga gives me a calm mind.,A calm mind leads me to finish journaling.,,,early yoga,calm mind,finish journaling,,,"When I do early yoga, what do I end up doing?
+
+Options:
+A. check email
+B. fold laundry
+C. finish journaling
+D. water the plants
+E. take out the trash",finish journaling,check email,fold laundry,finish journaling,water the plants,take out the trash,C
+longhop-1hop-002,1,Black coffee gives me jitters.,Jitters make me cancel meetings.,,,black coffee,jitters,cancel meetings,,,"After I drink black coffee, what do I end up doing?
+
+Options:
+A. buy groceries
+B. cook dinner
+C. water plants
+D. fold laundry
+E. cancel meetings",cancel meetings,buy groceries,cook dinner,water plants,fold laundry,cancel meetings,E
+longhop-1hop-003,1,Morning meditation gives me a clear head.,A clear head helps me tackle email.,,,morning meditation,clear head,tackle email,,,"When I do morning meditation, what do I end up doing?
+
+Options:
+A. bake cookies
+B. water plants
+C. fold laundry
+D. tackle email
+E. shoot hoops",tackle email,bake cookies,water plants,fold laundry,tackle email,shoot hoops,D
+longhop-1hop-004,1,I avoid noisy cafes because they trigger headaches.,Headaches push me to take a nap.,,,noisy cafes,headaches,take a nap,,,"If I'm around noisy cafes, what do I end up doing?
+
+Options:
+A. do the laundry
+B. cook dinner
+C. call a friend
+D. organize my desk
+E. take a nap",take a nap,do the laundry,cook dinner,call a friend,organize my desk,take a nap,E
+longhop-1hop-005,1,Jonas loves morning biking.,Morning biking makes Jonas eat a big breakfast.,,,Jonas,morning biking,eat a big breakfast,,,"After Jonas does his favorite routine, what does he do?
+
+Options:
+A. call a close friend
+B. eat a big breakfast
+C. pay some bills
+D. organize his bookshelf
+E. water the houseplants",eat a big breakfast,call a close friend,eat a big breakfast,pay some bills,organize his bookshelf,water the houseplants,B

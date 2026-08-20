@@ -1,0 +1,22 @@
+{
+  "qa_accuracy_all": 1.0,
+  "token_f1_all": 0.4444444444444445,
+  "qa_num": 1,
+  "retrieval": {
+    "recall@3": null,
+    "recall@5": null,
+    "recall@10": null,
+    "ndcg@3": null,
+    "ndcg@5": null,
+    "ndcg@10": null
+  },
+  "per_type": {
+    "single-session-user": {
+      "accuracy": 1.0,
+      "num": 1
+    }
+  },
+  "probe_update": {
+    "ku_n": 0
+  }
+}

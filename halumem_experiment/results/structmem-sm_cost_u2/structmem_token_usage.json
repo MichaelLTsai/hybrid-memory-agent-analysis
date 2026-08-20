@@ -1,0 +1,53 @@
+{
+  "total_tokens": 1229104,
+  "ingest": {
+    "calls": 156,
+    "prompt_tokens": 820146,
+    "completion_tokens": 136359,
+    "total_tokens": 956505,
+    "llm_seconds": 5826.38,
+    "units": 77,
+    "errors": 0,
+    "calls_per_unit": 2.026,
+    "tokens_per_unit": 12422.1,
+    "prompt_tokens_per_unit": 10651.2,
+    "completion_tokens_per_unit": 1770.9,
+    "sec_per_unit_mean": 74.96,
+    "sec_per_unit_median": 73.078,
+    "sec_per_unit_p90": 118.876
+  },
+  "qa": {
+    "calls": 188,
+    "prompt_tokens": 271384,
+    "completion_tokens": 1215,
+    "total_tokens": 272599,
+    "llm_seconds": 69.81,
+    "units": 188,
+    "errors": 0,
+    "calls_per_unit": 1.0,
+    "tokens_per_unit": 1450.0,
+    "prompt_tokens_per_unit": 1443.5,
+    "completion_tokens_per_unit": 6.5,
+    "sec_per_unit_mean": 0.399,
+    "sec_per_unit_median": 0.309,
+    "sec_per_unit_p90": 0.459
+  },
+  "other": {
+    "calls": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "llm_seconds": 0.0,
+    "units": 0,
+    "errors": 0,
+    "calls_per_unit": null,
+    "tokens_per_unit": null,
+    "prompt_tokens_per_unit": null,
+    "completion_tokens_per_unit": null,
+    "sec_per_unit_mean": null,
+    "sec_per_unit_median": null,
+    "sec_per_unit_p90": null
+  },
+  "note": "StructMem extraction 與 answer 都走同一個 NCHC proxy;ingest 桶含 add_memory 與每 10 個 session 一次的 summarize/offline_update(攤提在 calls_per_unit 裡)",
+  "granularity": "session"
+}

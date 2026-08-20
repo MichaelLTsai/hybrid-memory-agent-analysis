@@ -1,0 +1,75 @@
+{
+  "memory_integrity": {
+    "recall(all)": 0.8666666666666667,
+    "recall(valid)": 0.8666666666666667,
+    "weighted_recall(all)": 0.8666666666666667,
+    "weighted_recall(valid)": 0.8666666666666667,
+    "memory_valid_importance_sum": 11.25,
+    "memory_importance_sum": 11.25,
+    "memory_valid_num": 15,
+    "memory_num": 15
+  },
+  "memory_accuracy": {
+    "interference_accuracy(all)": 0,
+    "interference_accuracy(valid)": 0,
+    "interference_memory_valid_num": 0,
+    "interference_memory_num": 0,
+    "target_accuracy(all)": 1.0,
+    "target_accuracy(valid)": 1.0,
+    "target_memory_valid_num": 6,
+    "target_memory_num": 6,
+    "weighted_accuracy(all)": 1.0,
+    "weighted_accuracy(valid)": 1.0,
+    "memory_valid_num": 6,
+    "memory_num": 6
+  },
+  "memory_update": {
+    "correct_update_memory_ratio(all)": 0,
+    "correct_update_memory_ratio(valid)": 0,
+    "hallucination_update_memory_ratio(all)": 0,
+    "hallucination_update_memory_ratio(valid)": 0,
+    "omission_update_memory_ratio(all)": 0,
+    "omission_update_memory_ratio(valid)": 0,
+    "other_update_memory_ratio(all)": 0,
+    "other_update_memory_ratio(valid)": 0,
+    "update_memory_valid_num": 0,
+    "update_memory_num": 0
+  },
+  "question_answering": {
+    "correct_qa_ratio(all)": 0.6666666666666666,
+    "correct_qa_ratio(valid)": 0.6666666666666666,
+    "hallucination_qa_ratio(all)": 0.0,
+    "hallucination_qa_ratio(valid)": 0.0,
+    "omission_qa_ratio(all)": 0.3333333333333333,
+    "omission_qa_ratio(valid)": 0.3333333333333333,
+    "qa_valid_num": 3,
+    "qa_num": 3
+  },
+  "memory_extraction_f1": 0.9285714285714286,
+  "memory_type_accuracy": {
+    "Persona Memory": {
+      "memory_integrity_acc": 0.8666666666666667,
+      "memory_update_acc": 0.0,
+      "memory_acc": 0.8666666666666667,
+      "total_num": 15
+    },
+    "Event Memory": {
+      "memory_integrity_acc": 0,
+      "memory_update_acc": 0,
+      "memory_acc": 0,
+      "total_num": 0
+    },
+    "Relationship Memory": {
+      "memory_integrity_acc": 0,
+      "memory_update_acc": 0,
+      "memory_acc": 0,
+      "total_num": 0
+    }
+  },
+  "probe_update": {
+    "P1_loose": 0.8667,
+    "P1_strict": 0.8667,
+    "P1_distort": 0.0,
+    "P1_n": 15
+  }
+}

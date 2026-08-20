@@ -1,0 +1,135 @@
+{
+  "memory_integrity": {
+    "recall(all)": 0.8232931726907631,
+    "recall(valid)": 0.8232931726907631,
+    "weighted_recall(all)": 0.8905622489959839,
+    "weighted_recall(valid)": 0.8905622489959839,
+    "memory_valid_importance_sum": 373.5,
+    "memory_importance_sum": 373.5,
+    "memory_valid_num": 498,
+    "memory_num": 498
+  },
+  "memory_accuracy": {
+    "interference_accuracy(all)": 0.2653061224489796,
+    "interference_accuracy(valid)": 0.2653061224489796,
+    "interference_memory_valid_num": 147,
+    "interference_memory_num": 147,
+    "target_accuracy(all)": 0.9783653846153846,
+    "target_accuracy(valid)": 0.9783653846153846,
+    "target_memory_valid_num": 1040,
+    "target_memory_num": 1040,
+    "weighted_accuracy(all)": 0.6328431372549019,
+    "weighted_accuracy(valid)": 0.6328431372549019,
+    "memory_valid_num": 2040,
+    "memory_num": 2040
+  },
+  "memory_update": {
+    "correct_update_memory_ratio(all)": 0.6604938271604939,
+    "correct_update_memory_ratio(valid)": 0.8359375,
+    "hallucination_update_memory_ratio(all)": 0.018518518518518517,
+    "hallucination_update_memory_ratio(valid)": 0.0234375,
+    "omission_update_memory_ratio(all)": 0.09876543209876543,
+    "omission_update_memory_ratio(valid)": 0.125,
+    "other_update_memory_ratio(all)": 0.012345679012345678,
+    "other_update_memory_ratio(valid)": 0.015625,
+    "update_memory_valid_num": 128,
+    "update_memory_num": 162
+  },
+  "question_answering": {
+    "correct_qa_ratio(all)": 0.32978723404255317,
+    "correct_qa_ratio(valid)": 0.32978723404255317,
+    "hallucination_qa_ratio(all)": 0.09574468085106383,
+    "hallucination_qa_ratio(valid)": 0.09574468085106383,
+    "omission_qa_ratio(all)": 0.574468085106383,
+    "omission_qa_ratio(valid)": 0.574468085106383,
+    "qa_valid_num": 188,
+    "qa_num": 188
+  },
+  "memory_extraction_f1": 0.894155597112896,
+  "memory_type_accuracy": {
+    "Persona Memory": {
+      "memory_integrity_acc": 0.526431718061674,
+      "memory_update_acc": 0.16519823788546256,
+      "memory_acc": 0.6916299559471366,
+      "total_num": 454
+    },
+    "Event Memory": {
+      "memory_integrity_acc": 0.625,
+      "memory_update_acc": 0.09558823529411764,
+      "memory_acc": 0.7205882352941176,
+      "total_num": 272
+    },
+    "Relationship Memory": {
+      "memory_integrity_acc": 0.6790123456790124,
+      "memory_update_acc": 0.07407407407407407,
+      "memory_acc": 0.7530864197530864,
+      "total_num": 81
+    }
+  },
+  "qa_attribution": {
+    "total_wrong": 126,
+    "attributable": 123,
+    "storage_num": 42,
+    "retrieval_num": 42,
+    "generation_num": 39,
+    "unknown_num": 3,
+    "storage_ratio": 0.34146341463414637,
+    "retrieval_ratio": 0.34146341463414637,
+    "generation_ratio": 0.3170731707317073,
+    "by_question_type": {
+      "Memory Conflict": {
+        "GENERATION": 11,
+        "STORAGE": 9,
+        "RETRIEVAL": 8
+      },
+      "Multi-hop Inference": {
+        "STORAGE": 5,
+        "RETRIEVAL": 8,
+        "GENERATION": 4
+      },
+      "Generalization & Application": {
+        "RETRIEVAL": 15,
+        "STORAGE": 16,
+        "GENERATION": 6
+      },
+      "Basic Fact Recall": {
+        "GENERATION": 16,
+        "STORAGE": 12,
+        "RETRIEVAL": 9
+      },
+      "Memory Boundary": {
+        "UNKNOWN": 3
+      },
+      "Dynamic Update": {
+        "RETRIEVAL": 2,
+        "GENERATION": 2
+      }
+    }
+  },
+  "probe_update": {
+    "P0_trigger": 1.0,
+    "P0_sessions": 77,
+    "P0_mode": "per-session-delta",
+    "P1_loose": 0.907,
+    "P1_strict": 0.7194,
+    "P1_distort": 0.2068,
+    "P1_n": 645,
+    "upd_fine": {
+      "Correct": 107,
+      "Omitted Update": 6,
+      "Correct Update": 23,
+      "Hallucination": 3,
+      "Hallucinated Update": 1,
+      "Omission": 16,
+      "Partially omitted": 3,
+      "Other": 2,
+      "Omitted": 1
+    },
+    "upd_n": 162,
+    "P1u_ok": 0.8025,
+    "P1u_omit": 0.1543,
+    "P4u_new_retrieved": 0.6949,
+    "P4b_stale_in_ctx": 0.0932,
+    "P4b_n_decidable": 118
+  }
+}

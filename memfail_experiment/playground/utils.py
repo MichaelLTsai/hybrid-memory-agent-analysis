@@ -1,0 +1,408 @@
+"""
+Shared utilities for playground evaluation scripts.
+
+Provides:
+  - add_memory_system_args(parser)  -- registers all memory-system CLI arg groups
+  - create_memory_system(args, api_key)  -- factory that instantiates the chosen system
+  - add_api_key_arg(parser)  -- standard --api-key argument
+  - resolve_api_key(args)  -- resolves API key from args or env
+  - UUIDEncoder  -- JSON encoder that serialises uuid.UUID as strings
+"""
+
+import argparse
+import json
+import os
+import sys
+import uuid
+from pathlib import Path
+from typing import Any
+
+# Ensure the project root (parent of playground/) is on the path so that
+# `from src import ...` works regardless of where the calling script lives.
+_PROJECT_ROOT = Path(__file__).parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
+from src import (  # noqa: E402
+    AMEMMemorySystem,
+    EverMemOSMemorySystem,
+    LiCoMemoryMemorySystem,
+    Mem0MemorySystem,
+    LettaMemorySystem,
+    SimpleMemMemorySystem,
+    StructMemMemorySystem,
+)
+
+# ---------------------------------------------------------------------------
+# JSON helpers
+# ---------------------------------------------------------------------------
+
+
+class UUIDEncoder(json.JSONEncoder):
+    """JSON encoder that serialises uuid.UUID values as strings."""
+
+    def default(self, obj: Any) -> Any:
+        if isinstance(obj, uuid.UUID):
+            return str(obj)
+        return super().default(obj)
+
+
+# ---------------------------------------------------------------------------
+# Common argument helpers
+# ---------------------------------------------------------------------------
+
+
+def add_api_key_arg(parser: argparse.ArgumentParser) -> None:
+    """Add --api-key to a parser."""
+    parser.add_argument(
+        "--api-key",
+        type=str,
+        default=None,
+        help="OpenAI API key (falls back to OPENAI_API_KEY env var).",
+    )
+
+
+def resolve_api_key(args: argparse.Namespace) -> str:
+    """Return the API key from --api-key or the OPENAI_API_KEY env var."""
+    key = getattr(args, "api_key", None) or os.getenv("OPENAI_API_KEY") or ""
+    if not key:
+        raise ValueError("OpenAI API key required via --api-key or OPENAI_API_KEY env var.")
+    return key
+
+
+# ---------------------------------------------------------------------------
+# Memory-system argument groups
+# ---------------------------------------------------------------------------
+
+
+def add_memory_system_args(parser: argparse.ArgumentParser) -> None:
+    """Register all memory-system selection and configuration args on *parser*.
+
+    Adds:
+      --memory          which memory backend to use
+      --num-memories    retrieval top-k (shared across systems)
+      --shared-user-id  user-id namespace (mem0 / shared-state systems)
+
+      --mem0-*          mem0-specific options
+      --amem-*          A-MEM-specific options
+      --simplemem-*     SimpleMem-specific options
+    """
+    # ── Shared ────────────────────────────────────────────────────────────────
+    parser.add_argument(
+        "--memory",
+        type=str,
+        default="mem0",
+        choices=["mem0", "simplemem", "amem", "evermemos", "structmem", "licomemory", "letta"],
+        help="Memory system to use.",
+    )
+    parser.add_argument(
+        "--num-memories",
+        type=int,
+        default=5,
+        help="Number of memories to retrieve (top-k).",
+    )
+    parser.add_argument(
+        "--shared-user-id",
+        type=str,
+        default="eval_user",
+        help="Shared user-id for memory systems that namespace by user.",
+    )
+    parser.add_argument(
+        "--run-dir",
+        type=str,
+        default=None,
+        help=(
+            "Per-run directory rooting all memory-system state (DBs, vector "
+            "indices, generated config files). Required when running multiple "
+            "evals in parallel on one machine — each worker should pass a "
+            "unique --run-dir. When omitted, each backend uses its default "
+            "(shared) location."
+        ),
+    )
+
+    # ── mem0 ─────────────────────────────────────────────────────────────────
+    mem0 = parser.add_argument_group("mem0 options")
+    mem0.add_argument("--mem0-llm-provider", type=str, default="openai",
+                      help="LLM provider for mem0 memory operations.")
+    mem0.add_argument("--mem0-llm-model", type=str, default="gpt-5-mini",
+                      help="LLM model for mem0 memory operations.")
+    mem0.add_argument("--mem0-llm-api-key", type=str, default=None,
+                      help="API key for the mem0 LLM (e.g. LiteLLM proxy key). Falls back to global --api-key.")
+    mem0.add_argument("--mem0-llm-base-url", type=str, default=None,
+                      help="OpenAI-compatible base URL for the mem0 LLM (e.g. LiteLLM proxy).")
+    mem0.add_argument("--mem0-embedding-provider", type=str, default=None,
+                      help="Embedding provider (e.g. openai, ollama). Uses mem0 default if omitted.")
+    mem0.add_argument("--mem0-embedding-model", type=str, default=None,
+                      help="Embedding model name. Uses mem0 default if omitted.")
+    mem0.add_argument("--mem0-embedding-dims", type=int, default=None,
+                      help="Embedding dimensionality; must match the embedder (bge-m3=1024).")
+    mem0.add_argument("--mem0-ollama-base-url", type=str, default=None,
+                      help="Ollama base URL (only relevant when --mem0-embedding-provider=ollama).")
+
+    # ── Letta ─────────────────────────────────────────────────────────────────
+    letta = parser.add_argument_group("letta options")
+    letta.add_argument("--letta-base-url", type=str, default="http://localhost:8283",
+                       help="Letta server URL.")
+    letta.add_argument("--letta-llm-model", type=str, default="gemma-4-31B-it",
+                       help="Agent LLM; bare names get the openai-proxy/ prefix Letta needs.")
+    letta.add_argument("--letta-embedding-model", type=str, default="letta/letta-free",
+                       help="Embedding handle for Letta's archival store.")
+    letta.add_argument("--letta-flush", action="store_true",
+                       help="Spend a turn after each conversation telling the agent to "
+                            "commit anything still buffered, so an empty store at question "
+                            "time means 'never stored' rather than 'not yet flushed'.")
+
+    # ── A-MEM ─────────────────────────────────────────────────────────────────
+    amem = parser.add_argument_group("amem options")
+    amem.add_argument("--amem-llm-backend", type=str, default="openai",
+                      help="LLM backend for A-MEM (openai or ollama).")
+    amem.add_argument("--amem-llm-model", type=str, default="gpt-4o-mini",
+                      help="LLM model for A-MEM memory operations.")
+    amem.add_argument("--amem-api-key", type=str, default=None,
+                      help="API key for the A-MEM LLM (e.g. LiteLLM proxy key). Falls back to global --api-key.")
+    amem.add_argument("--amem-base-url", type=str, default=None,
+                      help="OpenAI-compatible base URL for A-MEM's LLM (e.g. LiteLLM proxy).")
+    amem.add_argument("--amem-embedding-model", type=str, default="all-MiniLM-L6-v2",
+                      help="Sentence-transformer embedding model for A-MEM.")
+    amem.add_argument("--amem-evo-threshold", type=int, default=100,
+                      help="Note-evolution threshold for A-MEM.")
+
+    # ── SimpleMem ─────────────────────────────────────────────────────────────
+    sm = parser.add_argument_group("simplemem options")
+    sm.add_argument("--simplemem-model", type=str, default="gpt-4.1-mini",
+                    help="LLM model for SimpleMem memory operations.")
+    sm.add_argument("--simplemem-api-key", type=str, default=None,
+                    help="API key for the SimpleMem LLM (e.g. LiteLLM proxy key). Falls back to global --api-key.")
+    sm.add_argument("--simplemem-base-url", type=str, default=None,
+                    help="OpenAI-compatible base URL for SimpleMem (e.g. LiteLLM proxy).")
+    sm.add_argument("--simplemem-db-path", type=str, default="./lancedb_data",
+                    help="LanceDB storage path for SimpleMem.")
+    sm.add_argument("--simplemem-embedding-model", type=str, default="all-MiniLM-L6-v2",
+                    help="Embedding model for SimpleMem.")
+    sm.add_argument("--simplemem-embedding-dimension", type=int, default=384)
+    sm.add_argument("--simplemem-embedding-context-length", type=int, default=512)
+    sm.add_argument("--simplemem-enable-thinking", action="store_true", default=False)
+    sm.add_argument("--simplemem-use-streaming", action="store_true", default=False)
+    sm.add_argument("--simplemem-use-json-format", action="store_true", default=False)
+    sm.add_argument("--simplemem-window-size", type=int, default=20)
+    sm.add_argument("--simplemem-overlap-size", type=int, default=2)
+    sm.add_argument("--simplemem-memory-table-name", type=str, default="memory_entries")
+    sm.add_argument("--simplemem-enable-parallel-processing", action="store_true", default=True)
+    sm.add_argument("--simplemem-max-parallel-workers", type=int, default=16)
+    sm.add_argument("--simplemem-enable-parallel-retrieval", action="store_true", default=True)
+    sm.add_argument("--simplemem-max-retrieval-workers", type=int, default=8)
+    sm.add_argument("--simplemem-enable-planning", action="store_true", default=True)
+    sm.add_argument("--simplemem-enable-reflection", action="store_true", default=True)
+    sm.add_argument("--simplemem-max-reflection-rounds", type=int, default=2)
+
+    # ── EverMemOS ─────────────────────────────────────────────────────────────
+    em = parser.add_argument_group("evermemos options")
+    em.add_argument("--evermemos-base-url", type=str, default="http://localhost:1995",
+                    help="EverCore HTTP API base URL.")
+    em.add_argument("--evermemos-llm-provider", type=str, default=None,
+                    help=("Override the EverCore boundary+extraction LLM provider "
+                          "(e.g. openai, openrouter). Server reads <PROVIDER>_API_KEY "
+                          "and <PROVIDER>_BASE_URL from its environment."))
+    em.add_argument("--evermemos-llm-model", type=str, default=None,
+                    help="Override the EverCore boundary+extraction LLM model.")
+    em.add_argument("--evermemos-retrieve-method", type=str, default="hybrid",
+                    choices=["keyword", "vector", "hybrid", "agentic"],
+                    help="EverCore retrieval method.")
+
+    # ── StructMem ─────────────────────────────────────────────────────────────
+    st = parser.add_argument_group("structmem options")
+    st.add_argument("--structmem-model", type=str, default="gpt-4.1-mini",
+                    help="LLM model for StructMem memory operations.")
+    st.add_argument("--structmem-api-key", type=str, default=None,
+                    help="API key for the StructMem LLM (e.g. LiteLLM proxy key). Falls back to global --api-key.")
+    st.add_argument("--structmem-base-url", type=str, default=None,
+                    help="OpenAI-compatible base URL for StructMem (e.g. LiteLLM proxy).")
+    st.add_argument("--structmem-embedding-model", type=str,
+                    default="sentence-transformers/all-MiniLM-L6-v2",
+                    help="HuggingFace embedding model for StructMem.")
+    st.add_argument("--structmem-embedding-dimension", type=int, default=384)
+    st.add_argument("--structmem-embedding-device", type=str, default="cpu")
+    st.add_argument("--structmem-segmenter-model", type=str, default="bert-base-uncased")
+    st.add_argument("--structmem-segmenter-device", type=str, default="cpu")
+    st.add_argument("--structmem-qdrant-path", type=str, default="./structmem_qdrant",
+                    help="On-disk Qdrant storage root for StructMem.")
+    st.add_argument("--structmem-collection-name", type=str, default="structmem")
+    st.add_argument("--structmem-disable-summary", action="store_true", default=False,
+                    help="Disable cross-event hierarchical summarization.")
+
+    # ── LiCoMemory ────────────────────────────────────────────────────────────
+    lc = parser.add_argument_group("licomemory options")
+    lc.add_argument("--licomemory-model", type=str, default="gpt-4.1-mini",
+                    help="LLM model for LiCoMemory entity/relationship extraction.")
+    lc.add_argument("--licomemory-api-key", type=str, default=None,
+                    help="API key for the LiCoMemory LLM (e.g. LiteLLM proxy key). Falls back to global --api-key.")
+    lc.add_argument("--licomemory-base-url", type=str, default=None,
+                    help="OpenAI-compatible base URL for LiCoMemory's LLM (e.g. LiteLLM proxy).")
+    lc.add_argument("--licomemory-max-tokens", type=int, default=32768)
+    lc.add_argument("--licomemory-temperature", type=float, default=0.0)
+    lc.add_argument("--licomemory-timeout", type=int, default=600)
+    lc.add_argument("--licomemory-max-concurrent", type=int, default=16)
+    lc.add_argument("--licomemory-embedding-api-type", type=str, default="hf",
+                    choices=["hf", "openai"],
+                    help="Embedding backend (hf=local sentence-transformers, openai=API).")
+    lc.add_argument("--licomemory-embedding-model", type=str, default="all-MiniLM-L6-v2",
+                    help="Sentence-transformer (or OpenAI) embedding model name.")
+    lc.add_argument("--licomemory-embedding-dimensions", type=int, default=384)
+    lc.add_argument("--licomemory-top-k-triples", type=int, default=20)
+    lc.add_argument("--licomemory-top-chunks", type=int, default=15)
+    lc.add_argument("--licomemory-enable-summary", action="store_true", default=False,
+                    help="Enable session summary generation + summary-based retrieval.")
+    lc.add_argument("--licomemory-enable-cognirank", action="store_true", default=False,
+                    help="Enable CogniRank (hierarchical temporal-semantic) reranking.")
+    lc.add_argument("--licomemory-data-type", type=str, default="LongmemEval",
+                    choices=["LongmemEval", "LOCOMO"],
+                    help="Dialogue parsing format used by LiCoMemory's chunker.")
+
+
+# ---------------------------------------------------------------------------
+# Memory-system factory
+# ---------------------------------------------------------------------------
+
+
+def create_memory_system(args: argparse.Namespace, api_key: str) -> Any:
+    """Instantiate the memory system selected by *args.memory*.
+
+    Expects *args* to contain all attributes registered by
+    :func:`add_memory_system_args`.
+    """
+    memory = args.memory
+    # No evaluate_*.py sets run_dir, so on-disk backends all defaulted to one
+    # shared path/collection. Nothing ever clears it, and tasks that share a
+    # script share a user_id too (conditional_easy/hard), so each run inherited
+    # every earlier run's memories. Anchor the store to --output-dir instead:
+    # one store per (run, dataset), which is what the results already assume.
+    run_dir = getattr(args, "run_dir", None) or getattr(args, "output_dir", None)
+
+    if memory == "mem0":
+        return Mem0MemorySystem(
+            num_memories=args.num_memories,
+            shared_user_id=args.shared_user_id,
+            llm_provider=args.mem0_llm_provider,
+            llm_model=args.mem0_llm_model,
+            llm_api_key=args.mem0_llm_api_key or api_key,
+            llm_base_url=args.mem0_llm_base_url,
+            embedding_provider=args.mem0_embedding_provider,
+            embedding_model=args.mem0_embedding_model,
+            ollama_base_url=args.mem0_ollama_base_url,
+            embedding_dims=getattr(args, 'mem0_embedding_dims', None),
+            run_dir=run_dir,
+        )
+
+    if memory == "simplemem":
+        # When --run-dir is set, route LanceDB under it unless the caller
+        # explicitly overrode --simplemem-db-path.
+        sm_db_path = args.simplemem_db_path
+        if run_dir is not None and sm_db_path == "./lancedb_data":
+            sm_db_path = None
+        return SimpleMemMemorySystem(
+            num_memories=args.num_memories,
+            api_key=args.simplemem_api_key or api_key,
+            model=args.simplemem_model,
+            base_url=args.simplemem_base_url,
+            db_path=sm_db_path,
+            clear_db=True,
+            embedding_model=args.simplemem_embedding_model,
+            embedding_dimension=args.simplemem_embedding_dimension,
+            embedding_context_length=args.simplemem_embedding_context_length,
+            enable_thinking=args.simplemem_enable_thinking,
+            use_streaming=args.simplemem_use_streaming,
+            use_json_format=args.simplemem_use_json_format,
+            window_size=args.simplemem_window_size,
+            overlap_size=args.simplemem_overlap_size,
+            memory_table_name=args.simplemem_memory_table_name,
+            enable_parallel_processing=args.simplemem_enable_parallel_processing,
+            max_parallel_workers=args.simplemem_max_parallel_workers,
+            enable_parallel_retrieval=args.simplemem_enable_parallel_retrieval,
+            max_retrieval_workers=args.simplemem_max_retrieval_workers,
+            enable_planning=args.simplemem_enable_planning,
+            enable_reflection=args.simplemem_enable_reflection,
+            max_reflection_rounds=args.simplemem_max_reflection_rounds,
+            run_dir=run_dir,
+        )
+
+    if memory == "amem":
+        return AMEMMemorySystem(
+            num_memories=args.num_memories,
+            llm_backend=args.amem_llm_backend,
+            llm_model=args.amem_llm_model,
+            embedding_model=args.amem_embedding_model,
+            evo_threshold=args.amem_evo_threshold,
+            api_key=args.amem_api_key or api_key,
+            base_url=args.amem_base_url,
+            run_dir=run_dir,
+        )
+
+    if memory == "evermemos":
+        return EverMemOSMemorySystem(
+            num_memories=args.num_memories,
+            base_url=args.evermemos_base_url,
+            shared_user_id=args.shared_user_id,
+            retrieve_method=args.evermemos_retrieve_method,
+            llm_provider=args.evermemos_llm_provider,
+            llm_model=args.evermemos_llm_model,
+            run_dir=run_dir,
+        )
+
+    if memory == "letta":
+        if LettaMemorySystem is None:
+            raise RuntimeError("letta selected but letta_client is not importable")
+        return LettaMemorySystem(
+            num_memories=args.num_memories,
+            base_url=args.letta_base_url,
+            llm_model=args.letta_llm_model,
+            embedding_model=args.letta_embedding_model,
+            flush=args.letta_flush,
+            run_dir=run_dir,
+        )
+
+    if memory == "structmem":
+        # Likewise, only honour the default qdrant path when --run-dir is unset.
+        st_qdrant_path = args.structmem_qdrant_path
+        if run_dir is not None and st_qdrant_path == "./structmem_qdrant":
+            st_qdrant_path = None
+        return StructMemMemorySystem(
+            num_memories=args.num_memories,
+            api_key=args.structmem_api_key or api_key,
+            model=args.structmem_model,
+            base_url=args.structmem_base_url,
+            segmenter_model=args.structmem_segmenter_model,
+            segmenter_device=args.structmem_segmenter_device,
+            embedding_model=args.structmem_embedding_model,
+            embedding_dimension=args.structmem_embedding_dimension,
+            embedding_device=args.structmem_embedding_device,
+            qdrant_path=st_qdrant_path,
+            collection_name=args.structmem_collection_name,
+            enable_summary=not args.structmem_disable_summary,
+            run_dir=run_dir,
+        )
+
+    if memory == "licomemory":
+        return LiCoMemoryMemorySystem(
+            num_memories=args.num_memories,
+            api_key=args.licomemory_api_key or api_key,
+            model=args.licomemory_model,
+            base_url=args.licomemory_base_url,
+            max_tokens=args.licomemory_max_tokens,
+            temperature=args.licomemory_temperature,
+            timeout=args.licomemory_timeout,
+            max_concurrent=args.licomemory_max_concurrent,
+            embedding_api_type=args.licomemory_embedding_api_type,
+            embedding_model=args.licomemory_embedding_model,
+            embedding_dimensions=args.licomemory_embedding_dimensions,
+            top_k_triples=args.licomemory_top_k_triples,
+            top_chunks=args.licomemory_top_chunks,
+            enable_summary=args.licomemory_enable_summary,
+            enable_cognirank=args.licomemory_enable_cognirank,
+            data_type=args.licomemory_data_type,
+            run_dir=run_dir,
+        )
+
+    raise ValueError(
+        f"Unknown memory system: {memory!r}. "
+        "Choose mem0, simplemem, amem, evermemos, structmem, or licomemory."
+    )

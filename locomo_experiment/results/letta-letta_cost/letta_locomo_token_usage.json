@@ -1,0 +1,53 @@
+{
+  "total_tokens": 4098855,
+  "ingest": {
+    "calls": 32,
+    "prompt_tokens": 435938,
+    "completion_tokens": 2632,
+    "total_tokens": 438570,
+    "llm_seconds": 304.41,
+    "units": 19,
+    "errors": 0,
+    "calls_per_unit": 1.684,
+    "tokens_per_unit": 23082.6,
+    "prompt_tokens_per_unit": 22944.1,
+    "completion_tokens_per_unit": 138.5,
+    "sec_per_unit_mean": 16.022,
+    "sec_per_unit_median": 15.968,
+    "sec_per_unit_p90": 28.892
+  },
+  "qa": {
+    "calls": 199,
+    "prompt_tokens": 3646212,
+    "completion_tokens": 14073,
+    "total_tokens": 3660285,
+    "llm_seconds": 1320.41,
+    "units": 199,
+    "errors": 0,
+    "calls_per_unit": 1.0,
+    "tokens_per_unit": 18393.4,
+    "prompt_tokens_per_unit": 18322.7,
+    "completion_tokens_per_unit": 70.7,
+    "sec_per_unit_mean": 6.635,
+    "sec_per_unit_median": 4.269,
+    "sec_per_unit_p90": 12.345
+  },
+  "other": {
+    "calls": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "llm_seconds": 0.0,
+    "units": 0,
+    "errors": 0,
+    "calls_per_unit": null,
+    "tokens_per_unit": null,
+    "prompt_tokens_per_unit": null,
+    "completion_tokens_per_unit": null,
+    "sec_per_unit_mean": null,
+    "sec_per_unit_median": null,
+    "sec_per_unit_p90": null
+  },
+  "note": "server-side LLM,數字來自 Letta response.usage;calls 用 usage.step_count(一次 messages.create 可能含多個 agent step)",
+  "granularity": "session"
+}

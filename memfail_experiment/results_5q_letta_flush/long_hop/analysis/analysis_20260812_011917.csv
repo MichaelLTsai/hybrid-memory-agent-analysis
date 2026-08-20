@@ -1,0 +1,41 @@
+example_id,hop_count,support_set_size,conversation_id,judge_result,error_type,correctly_invoked,selected_choice,correct_choice,final_answer_correct,ground_truth_answer,question_stem,n_facts,n_not_stored,n_summary_error,n_not_retrieved,n_correct,frac_not_stored,frac_summary_error,frac_not_retrieved,frac_correct,invocation_reasoning,eval_input_tokens,eval_output_tokens,eval_cost
+longhop-1hop-003,1,2,c5ee02ac-98ed-42c8-b40f-9820695b2f1f,incorrect,summary_error,,D,D,True,tackle email,"When I do morning meditation, what do I end up doing?
+
+Options:
+A. bake cookies
+B. water plants
+C. fold laundry
+D. tackle email
+E. shoot hoops",2,0,1,0,1,0.000,0.500,0.000,0.500,model selected D; correct choice is D,368,9,0.0
+longhop-1hop-001,1,2,dc380d50-bcea-4d62-bdae-e1371c891aa8,correct,correct,True,C,C,True,finish journaling,"When I do early yoga, what do I end up doing?
+
+Options:
+A. check email
+B. fold laundry
+C. finish journaling
+D. water the plants
+E. take out the trash",2,0,0,0,2,0.000,0.000,0.000,1.000,model selected C; correct choice is C,371,9,0.0
+longhop-1hop-002,1,2,2c9854ec-22c6-4391-9dcf-57d6f1b0b2a9,correct,correct,True,E,E,True,cancel meetings,"After I drink black coffee, what do I end up doing?
+
+Options:
+A. buy groceries
+B. cook dinner
+C. water plants
+D. fold laundry
+E. cancel meetings",2,0,0,0,2,0.000,0.000,0.000,1.000,model selected E; correct choice is E,368,9,0.0
+longhop-1hop-004,1,2,5859f122-f0a3-4a54-bdbf-a09966c444bc,correct,correct,True,E,E,True,take a nap,"If I'm around noisy cafes, what do I end up doing?
+
+Options:
+A. do the laundry
+B. cook dinner
+C. call a friend
+D. organize my desk
+E. take a nap",2,0,0,0,2,0.000,0.000,0.000,1.000,model selected E; correct choice is E,374,9,0.0
+longhop-1hop-005,1,2,276b8dac-73a3-4057-bec2-d439a946b286,correct,correct,True,B,B,True,eat a big breakfast,"After Jonas does his favorite routine, what does he do?
+
+Options:
+A. call a close friend
+B. eat a big breakfast
+C. pay some bills
+D. organize his bookshelf
+E. water the houseplants",2,0,0,0,2,0.000,0.000,0.000,1.000,model selected B; correct choice is B,374,9,0.0

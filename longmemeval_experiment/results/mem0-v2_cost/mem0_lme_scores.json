@@ -1,0 +1,98 @@
+{
+  "qa_accuracy_all": 0.4090909090909091,
+  "token_f1_all": 0.14109623572729743,
+  "qa_num": 22,
+  "retrieval": {
+    "recall@3": 0.8787878787878788,
+    "recall@5": 0.9507575757575757,
+    "recall@10": 0.9507575757575757,
+    "ndcg@3": 0.8543057949571164,
+    "ndcg@5": 0.890860631667307,
+    "ndcg@10": 0.890860631667307
+  },
+  "per_type": {
+    "knowledge-update": {
+      "accuracy": 0.42857142857142855,
+      "num": 7
+    },
+    "multi-session": {
+      "accuracy": 0.0,
+      "num": 3
+    },
+    "single-session-assistant": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    },
+    "single-session-preference": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    },
+    "single-session-user": {
+      "accuracy": 1.0,
+      "num": 3
+    },
+    "temporal-reasoning": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    }
+  },
+  "probe": {
+    "n_total": 22,
+    "n_answerable": 22,
+    "n_abstention": 0,
+    "P4_sufficient": 0.7727272727272727,
+    "P4_n": 22,
+    "P1_sufficient": 0.6,
+    "P1_n": 5,
+    "P5_fail_given_P4": 0.47058823529411764,
+    "P5_n": 17,
+    "P5b_abstain_rate": null,
+    "P5b_n": 0,
+    "verdicts": {
+      "OK": 9,
+      "REASONING": 8,
+      "SUMMARY": 2,
+      "RETRIEVAL": 3
+    },
+    "attribution": {
+      "OK": 0.4090909090909091,
+      "SUMMARY": 0.09090909090909091,
+      "RETRIEVAL": 0.13636363636363635,
+      "REASONING": 0.36363636363636365,
+      "NO_WRITE": 0.0,
+      "P5b_FAIL": 0.0
+    },
+    "unknown_ratio": 0.0,
+    "judge_failures": {},
+    "scope": [
+      "session"
+    ],
+    "by_question_type": {
+      "single-session-user": {
+        "OK": 3
+      },
+      "knowledge-update": {
+        "REASONING": 3,
+        "RETRIEVAL": 1,
+        "OK": 3
+      },
+      "multi-session": {
+        "REASONING": 2,
+        "RETRIEVAL": 1
+      },
+      "single-session-preference": {
+        "OK": 1,
+        "REASONING": 1,
+        "RETRIEVAL": 1
+      },
+      "temporal-reasoning": {
+        "SUMMARY": 2,
+        "OK": 1
+      },
+      "single-session-assistant": {
+        "REASONING": 2,
+        "OK": 1
+      }
+    }
+  }
+}

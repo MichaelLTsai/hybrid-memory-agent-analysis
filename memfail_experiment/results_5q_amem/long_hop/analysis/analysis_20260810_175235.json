@@ -1,0 +1,312 @@
+[
+  {
+    "example_id": "longhop-1hop-003",
+    "hop_count": 1,
+    "facts": [
+      "Morning meditation gives me a clear head.",
+      "A clear head helps me tackle email."
+    ],
+    "answer_chain": [
+      "morning meditation",
+      "clear head",
+      "tackle email"
+    ],
+    "ground_truth_answer": "tackle email",
+    "support_set_size": 2,
+    "question_stem": "When I do morning meditation, what do I end up doing?\n\nOptions:\nA. bake cookies\nB. water plants\nC. fold laundry\nD. tackle email\nE. shoot hoops",
+    "question": "When I do morning meditation, what do I end up doing?\n\nOptions:\nA. bake cookies\nB. water plants\nC. fold laundry\nD. tackle email\nE. shoot hoops\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "bake cookies",
+      "B": "water plants",
+      "C": "fold laundry",
+      "D": "tackle email",
+      "E": "shoot hoops"
+    },
+    "correct_choice": "D",
+    "retrieved_memories": "- Morning meditation gives me a clear head.\n- A calm mind leads me to finish journaling.\n- Early yoga gives me a calm mind.\n- Morning biking makes Jonas eat a big breakfast.\n- Jonas loves morning biking.",
+    "llm_response": "{\"selected_choice\": \"D\"}",
+    "conversation_id": "a9ee7635-1c1f-42b2-a31b-2ed8cd9e6ac4",
+    "eval_input_tokens": 318,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Morning meditation gives me a clear head.",
+        "fact_index": 0,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Morning meditation gives me a clear head' is present verbatim as the first entry in the ALL_MEMORIES list.",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Morning meditation gives me a clear head' is stored verbatim in the first memory entry. Both entities and the relation between them are perfectly preserved.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Morning meditation gives me a clear head' is present verbatim in the retrieved memories."
+      },
+      {
+        "target_message": "A clear head helps me tackle email.",
+        "fact_index": 1,
+        "category": "not_retrieved",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'A clear head helps me tackle email' is present verbatim in the memory store.",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'A clear head helps me tackle email' is stored verbatim in the memories, preserving both entities and the specific relation between them.",
+        "fact_in_retrieved": false,
+        "retrieval_reasoning": "The retrieved memories mention that morning meditation gives a clear head, but they do not contain any information relating a clear head to tackling email."
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "not_retrieved",
+    "correctly_invoked": null,
+    "invocation_reasoning": "model selected D; correct choice is D",
+    "selected_choice": "D",
+    "final_answer_correct": true,
+    "analysis_error": null
+  },
+  {
+    "example_id": "longhop-1hop-001",
+    "hop_count": 1,
+    "facts": [
+      "Early yoga gives me a calm mind.",
+      "A calm mind leads me to finish journaling."
+    ],
+    "answer_chain": [
+      "early yoga",
+      "calm mind",
+      "finish journaling"
+    ],
+    "ground_truth_answer": "finish journaling",
+    "support_set_size": 2,
+    "question_stem": "When I do early yoga, what do I end up doing?\n\nOptions:\nA. check email\nB. fold laundry\nC. finish journaling\nD. water the plants\nE. take out the trash",
+    "question": "When I do early yoga, what do I end up doing?\n\nOptions:\nA. check email\nB. fold laundry\nC. finish journaling\nD. water the plants\nE. take out the trash\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "check email",
+      "B": "fold laundry",
+      "C": "finish journaling",
+      "D": "water the plants",
+      "E": "take out the trash"
+    },
+    "correct_choice": "C",
+    "retrieved_memories": "- Early yoga gives me a calm mind.\n- A calm mind leads me to finish journaling.\n- Morning meditation gives me a clear head.\n- A clear head helps me tackle email.\n- Jonas loves morning biking.",
+    "llm_response": "{\"selected_choice\": \"C\"}",
+    "conversation_id": "cc4aa89f-593f-4dda-acb2-1283ce34efe7",
+    "eval_input_tokens": 320,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Early yoga gives me a calm mind.",
+        "fact_index": 0,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Early yoga gives me a calm mind' is present verbatim in the memory store.",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Early yoga gives me a calm mind' is stored verbatim in the memory entries. Both entities and the specific relation between them are perfectly preserved.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Early yoga gives me a calm mind' is present verbatim as the first memory in the RETRIEVED_MEMORIES list."
+      },
+      {
+        "target_message": "A calm mind leads me to finish journaling.",
+        "fact_index": 1,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'A calm mind leads me to finish journaling' is present verbatim in the memory store.",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'A calm mind leads me to finish journaling' is preserved verbatim in the memory entry 'A calm mind leads me to finish journaling.' The entities and the relation are perfectly maintained.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'A calm mind leads me to finish journaling' is explicitly present as the second bullet point in the RETRIEVED_MEMORIES."
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "model selected C; correct choice is C",
+    "selected_choice": "C",
+    "final_answer_correct": true,
+    "analysis_error": null
+  },
+  {
+    "example_id": "longhop-1hop-002",
+    "hop_count": 1,
+    "facts": [
+      "Black coffee gives me jitters.",
+      "Jitters make me cancel meetings."
+    ],
+    "answer_chain": [
+      "black coffee",
+      "jitters",
+      "cancel meetings"
+    ],
+    "ground_truth_answer": "cancel meetings",
+    "support_set_size": 2,
+    "question_stem": "After I drink black coffee, what do I end up doing?\n\nOptions:\nA. buy groceries\nB. cook dinner\nC. water plants\nD. fold laundry\nE. cancel meetings",
+    "question": "After I drink black coffee, what do I end up doing?\n\nOptions:\nA. buy groceries\nB. cook dinner\nC. water plants\nD. fold laundry\nE. cancel meetings\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "buy groceries",
+      "B": "cook dinner",
+      "C": "water plants",
+      "D": "fold laundry",
+      "E": "cancel meetings"
+    },
+    "correct_choice": "E",
+    "retrieved_memories": "- Black coffee gives me jitters.\n- Jitters make me cancel meetings.\n- I avoid noisy cafes because they trigger headaches.\n- Morning biking makes Jonas eat a big breakfast.\n- Jonas loves morning biking.",
+    "llm_response": "{\"selected_choice\": \"E\"}",
+    "conversation_id": "9815dd82-742c-4328-8de6-420e631bc383",
+    "eval_input_tokens": 316,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Black coffee gives me jitters.",
+        "fact_index": 0,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Black coffee gives me jitters' is stored verbatim in the second memory entry.",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Black coffee gives me jitters' is stored verbatim in the memory entries. The entities (Black coffee, me/jitters) and the relation between them are perfectly preserved.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Black coffee gives me jitters' is present verbatim in the retrieved memories."
+      },
+      {
+        "target_message": "Jitters make me cancel meetings.",
+        "fact_index": 1,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Jitters make me cancel meetings' is present verbatim in the memory store.",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Jitters make me cancel meetings' is stored verbatim in the memory entry 'Jitters make me cancel meetings.' Both entities and the specific relation between them are perfectly preserved.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Jitters make me cancel meetings' is present verbatim in the retrieved memories."
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "model selected E; correct choice is E",
+    "selected_choice": "E",
+    "final_answer_correct": true,
+    "analysis_error": null
+  },
+  {
+    "example_id": "longhop-1hop-004",
+    "hop_count": 1,
+    "facts": [
+      "I avoid noisy cafes because they trigger headaches.",
+      "Headaches push me to take a nap."
+    ],
+    "answer_chain": [
+      "noisy cafes",
+      "headaches",
+      "take a nap"
+    ],
+    "ground_truth_answer": "take a nap",
+    "support_set_size": 2,
+    "question_stem": "If I'm around noisy cafes, what do I end up doing?\n\nOptions:\nA. do the laundry\nB. cook dinner\nC. call a friend\nD. organize my desk\nE. take a nap",
+    "question": "If I'm around noisy cafes, what do I end up doing?\n\nOptions:\nA. do the laundry\nB. cook dinner\nC. call a friend\nD. organize my desk\nE. take a nap\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "do the laundry",
+      "B": "cook dinner",
+      "C": "call a friend",
+      "D": "organize my desk",
+      "E": "take a nap"
+    },
+    "correct_choice": "E",
+    "retrieved_memories": "- I avoid noisy cafes because they trigger headaches.\n- Jitters make me cancel meetings.\n- Black coffee gives me jitters.\n- A calm mind leads me to finish journaling.\n- Morning biking makes Jonas eat a big breakfast.",
+    "llm_response": "{\"selected_choice\": \"E\"}",
+    "conversation_id": "5ecc2d3d-3605-413b-9f10-8c1224b7e077",
+    "eval_input_tokens": 326,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "I avoid noisy cafes because they trigger headaches.",
+        "fact_index": 0,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact is present verbatim in the memory store.",
+        "summary_passed": true,
+        "summary_reasoning": "The memory entry 'I avoid noisy cafes because they trigger headaches' is a verbatim preservation of the target fact. The entities (noisy cafes, headaches) and the relation (triggering/avoidance) are perfectly preserved.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'I avoid noisy cafes because they trigger headaches' is explicitly listed as the first item in the RETRIEVED_MEMORIES."
+      },
+      {
+        "target_message": "Headaches push me to take a nap.",
+        "fact_index": 1,
+        "category": "not_retrieved",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Headaches push me to take a nap' is present verbatim in the memory store.",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Headaches push me to take a nap' is stored verbatim in the memory entry 'Headaches push me to take a nap.' Both entities and the specific relation are perfectly preserved.",
+        "fact_in_retrieved": false,
+        "retrieval_reasoning": "The retrieved memories contain the first link of the chain (noisy cafes trigger headaches), but they do not contain the target fact (headaches push me to take a nap)."
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "not_retrieved",
+    "correctly_invoked": null,
+    "invocation_reasoning": "model selected E; correct choice is E",
+    "selected_choice": "E",
+    "final_answer_correct": true,
+    "analysis_error": null
+  },
+  {
+    "example_id": "longhop-1hop-005",
+    "hop_count": 1,
+    "facts": [
+      "Jonas loves morning biking.",
+      "Morning biking makes Jonas eat a big breakfast."
+    ],
+    "answer_chain": [
+      "Jonas",
+      "morning biking",
+      "eat a big breakfast"
+    ],
+    "ground_truth_answer": "eat a big breakfast",
+    "support_set_size": 2,
+    "question_stem": "After Jonas does his favorite routine, what does he do?\n\nOptions:\nA. call a close friend\nB. eat a big breakfast\nC. pay some bills\nD. organize his bookshelf\nE. water the houseplants",
+    "question": "After Jonas does his favorite routine, what does he do?\n\nOptions:\nA. call a close friend\nB. eat a big breakfast\nC. pay some bills\nD. organize his bookshelf\nE. water the houseplants\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "call a close friend",
+      "B": "eat a big breakfast",
+      "C": "pay some bills",
+      "D": "organize his bookshelf",
+      "E": "water the houseplants"
+    },
+    "correct_choice": "B",
+    "retrieved_memories": "- Jonas loves morning biking.\n- Morning biking makes Jonas eat a big breakfast.\n- A calm mind leads me to finish journaling.\n- A clear head helps me tackle email.\n- Jitters make me cancel meetings.",
+    "llm_response": "{\"selected_choice\": \"B\"}",
+    "conversation_id": "7840ec4c-70e1-4e80-84b9-468acd7db045",
+    "eval_input_tokens": 323,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Jonas loves morning biking.",
+        "fact_index": 0,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Jonas loves morning biking' is present verbatim in the memory store.",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Jonas loves morning biking' is preserved verbatim in the memory entries. There is no corruption, swapping of entities, or loss of relation.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Jonas loves morning biking' is present verbatim as the first item in the retrieved memories."
+      },
+      {
+        "target_message": "Morning biking makes Jonas eat a big breakfast.",
+        "fact_index": 1,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Morning biking makes Jonas eat a big breakfast' is present verbatim in the memory store.",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Morning biking makes Jonas eat a big breakfast' is stored verbatim in the memories. Both entities (Morning biking, Jonas eating a big breakfast) and the causal relation between them are perfectly preserved.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Morning biking makes Jonas eat a big breakfast' is explicitly listed verbatim in the RETRIEVED_MEMORIES."
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "model selected B; correct choice is B",
+    "selected_choice": "B",
+    "final_answer_correct": true,
+    "analysis_error": null
+  }
+]

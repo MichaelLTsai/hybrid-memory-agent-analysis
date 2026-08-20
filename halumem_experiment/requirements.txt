@@ -1,0 +1,9 @@
+mem0ai
+openai
+python-dotenv
+tenacity
+tqdm
+qdrant-client
+ollama
+graphiti-core[kuzu]
+json5

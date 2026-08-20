@@ -1,0 +1,6 @@
+{
+  "extraction_llm": "gemma-4-E4B-it",
+  "judge_llm": "unknown",
+  "embed_model": "letta/letta-free",
+  "granularity": "session"
+}

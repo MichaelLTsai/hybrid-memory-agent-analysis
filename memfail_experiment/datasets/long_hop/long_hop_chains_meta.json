@@ -1,0 +1,49 @@
+{
+  "model": "gpt-5",
+  "generated_at": "2026-05-04T20:52:53.553019+00:00",
+  "hop_counts": {
+    "1": 31,
+    "2": 32,
+    "3": 29
+  },
+  "dedup_threshold": 0.7,
+  "oversample_per_hop": 37,
+  "target_per_hop": 33,
+  "seed": 42,
+  "tokens": {
+    "in": 128645,
+    "out": 294238
+  },
+  "csv_path": "/Users/ishirgarg/Github/adversarial_memory/datasets/long_hop/long_hop_chains.csv",
+  "csv_columns": [
+    "id",
+    "hop_count",
+    "fact_1",
+    "fact_2",
+    "fact_3",
+    "fact_4",
+    "chain_1",
+    "chain_2",
+    "chain_3",
+    "chain_4",
+    "chain_5",
+    "graded_question",
+    "ground_truth_answer",
+    "choice_a",
+    "choice_b",
+    "choice_c",
+    "choice_d",
+    "choice_e",
+    "correct_choice"
+  ],
+  "max_facts_per_chain": 4,
+  "max_chain_anchors": 5,
+  "num_choices": 5,
+  "choice_letters": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E"
+  ]
+}

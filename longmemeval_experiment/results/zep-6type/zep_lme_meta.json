@@ -1,0 +1,7 @@
+{
+  "extraction_llm": "zep-cloud (server-side graph; tokens not exposed)",
+  "judge_llm": "gemma-4-E4B-it",
+  "embed_model": "zep-cloud (managed)",
+  "granularity": "session",
+  "backend_detail": "Zep Cloud temporal knowledge graph; answer=shared LLM over graph facts"
+}

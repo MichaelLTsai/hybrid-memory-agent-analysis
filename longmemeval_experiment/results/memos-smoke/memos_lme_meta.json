@@ -1,0 +1,7 @@
+{
+  "extraction_llm": "gemma-4-E4B-it",
+  "judge_llm": "gemma-4-E4B-it",
+  "embed_model": "ollama/bge-m3:latest",
+  "granularity": "session",
+  "backend_detail": "MemOS tree_text (Neo4j community + Qdrant vec)"
+}

@@ -1,0 +1,41 @@
+{
+  "qa_accuracy_all": 0.5979899497487438,
+  "token_f1_all": 0.15637057933583068,
+  "qa_num": 199,
+  "retrieval": {
+    "recall@3": 0.4302030456852792,
+    "recall@5": 0.5532994923857868,
+    "recall@10": 0.6357868020304569,
+    "ndcg@3": 0.3644323508021768,
+    "ndcg@5": 0.426667667823926,
+    "ndcg@10": 0.4675250079950253
+  },
+  "retrieval_note": "exact dia_id matching (each memory carries its source dia_id)",
+  "per_category": {
+    "multi_hop": {
+      "accuracy": 0.46875,
+      "token_f1": 0.11778870113032228,
+      "num": 32
+    },
+    "temporal": {
+      "accuracy": 0.08108108108108109,
+      "token_f1": 0.06884571911325174,
+      "num": 37
+    },
+    "open_domain": {
+      "accuracy": 0.3076923076923077,
+      "token_f1": 0.08910910040672118,
+      "num": 13
+    },
+    "single_hop": {
+      "accuracy": 0.7571428571428571,
+      "token_f1": 0.2327625672914036,
+      "num": 70
+    },
+    "adversarial": {
+      "accuracy": 0.9361702127659575,
+      "token_f1": null,
+      "num": 47
+    }
+  }
+}

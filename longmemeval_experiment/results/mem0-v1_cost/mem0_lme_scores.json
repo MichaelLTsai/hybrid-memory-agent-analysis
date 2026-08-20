@@ -1,0 +1,97 @@
+{
+  "qa_accuracy_all": 0.45454545454545453,
+  "token_f1_all": 0.1621332015269261,
+  "qa_num": 22,
+  "retrieval": {
+    "recall@3": 0.8333333333333333,
+    "recall@5": 0.9507575757575757,
+    "recall@10": 0.9772727272727273,
+    "ndcg@3": 0.8256271697947775,
+    "ndcg@5": 0.8817582136901223,
+    "ndcg@10": 0.89409428897151
+  },
+  "per_type": {
+    "knowledge-update": {
+      "accuracy": 0.42857142857142855,
+      "num": 7
+    },
+    "multi-session": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    },
+    "single-session-assistant": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    },
+    "single-session-preference": {
+      "accuracy": 0.6666666666666666,
+      "num": 3
+    },
+    "single-session-user": {
+      "accuracy": 1.0,
+      "num": 3
+    },
+    "temporal-reasoning": {
+      "accuracy": 0.0,
+      "num": 3
+    }
+  },
+  "probe": {
+    "n_total": 22,
+    "n_answerable": 22,
+    "n_abstention": 0,
+    "P4_sufficient": 0.8181818181818182,
+    "P4_n": 22,
+    "P1_sufficient": 0.5,
+    "P1_n": 4,
+    "P5_fail_given_P4": 0.4444444444444444,
+    "P5_n": 18,
+    "P5b_abstain_rate": null,
+    "P5b_n": 0,
+    "verdicts": {
+      "REASONING": 8,
+      "OK": 10,
+      "SUMMARY": 2,
+      "RETRIEVAL": 2
+    },
+    "attribution": {
+      "OK": 0.45454545454545453,
+      "SUMMARY": 0.09090909090909091,
+      "RETRIEVAL": 0.09090909090909091,
+      "REASONING": 0.36363636363636365,
+      "NO_WRITE": 0.0,
+      "P5b_FAIL": 0.0
+    },
+    "unknown_ratio": 0.0,
+    "judge_failures": {},
+    "scope": [
+      "session"
+    ],
+    "by_question_type": {
+      "multi-session": {
+        "REASONING": 1,
+        "RETRIEVAL": 1,
+        "OK": 1
+      },
+      "single-session-preference": {
+        "OK": 2,
+        "RETRIEVAL": 1
+      },
+      "single-session-user": {
+        "OK": 3
+      },
+      "knowledge-update": {
+        "REASONING": 4,
+        "OK": 3
+      },
+      "single-session-assistant": {
+        "REASONING": 2,
+        "OK": 1
+      },
+      "temporal-reasoning": {
+        "SUMMARY": 2,
+        "REASONING": 1
+      }
+    }
+  }
+}

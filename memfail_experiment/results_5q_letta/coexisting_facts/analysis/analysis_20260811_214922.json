@@ -1,0 +1,372 @@
+[
+  {
+    "preference_category": "hat styles",
+    "preferences": [
+      "fedora",
+      "beanie",
+      "bucket hat"
+    ],
+    "preference_facts": [
+      "I often wear a fedora when I want to add a classic touch to my outfit.",
+      "Beanies are my go-to for staying warm and casual during chilly days.",
+      "A bucket hat is what I reach for on sunny, laid-back weekends."
+    ],
+    "ground_truth_answer": "fedora, beanie, bucket hat",
+    "question": "I'm packing for a week-long trip with mixed weather \u2014 which hats should I bring to cover all occasions?",
+    "retrieved_memories": "",
+    "llm_response": "I do not have any memories or context regarding advice on what hats to bring for a week-long trip with mixed weather. Therefore, I cannot use any past information to answer your question.",
+    "conversation_id": "cbfa6539-f0cd-40e4-bd05-d59d366b0a88",
+    "eval_input_tokens": 176,
+    "eval_output_tokens": 39,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "fedora",
+        "original_fact": "I often wear a fedora when I want to add a classic touch to my outfit.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "beanie",
+        "original_fact": "Beanies are my go-to for staying warm and casual during chilly days.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "bucket hat",
+        "original_fact": "A bucket hat is what I reach for on sunny, laid-back weekends.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "not_stored",
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "analysis_error": null
+  },
+  {
+    "preference_category": "cocktail types",
+    "preferences": [
+      "margarita",
+      "old fashioned",
+      "mojito",
+      "negroni",
+      "cosmopolitan"
+    ],
+    "preference_facts": [
+      "I usually order a margarita when I want something refreshing with a tangy kick.",
+      "An old fashioned is my choice for a strong, classic whiskey cocktail.",
+      "Mojitos are my favorite when I want a minty, light drink on a warm day.",
+      "I like negronis because their bitter complexity stands out in a crowd.",
+      "Cosmopolitans are what I pick when I want a stylish, fruity cocktail."
+    ],
+    "ground_truth_answer": "margarita, old fashioned, mojito, negroni, cosmopolitan",
+    "question": "I'm hosting a cocktail party and want to make sure I have drinks that match my tastes. What should be on the menu?",
+    "retrieved_memories": "",
+    "llm_response": "I do not have any memories or information regarding your tastes to suggest a cocktail menu for your party.\n\nI used no memories.",
+    "conversation_id": "756970e9-d6f7-4ca0-ab2f-8dcb4397e49b",
+    "eval_input_tokens": 179,
+    "eval_output_tokens": 27,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "margarita",
+        "original_fact": "I usually order a margarita when I want something refreshing with a tangy kick.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty; therefore, the preference for margaritas is not present.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "old fashioned",
+        "original_fact": "An old fashioned is my choice for a strong, classic whiskey cocktail.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "mojito",
+        "original_fact": "Mojitos are my favorite when I want a minty, light drink on a warm day.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "negroni",
+        "original_fact": "I like negronis because their bitter complexity stands out in a crowd.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "cosmopolitan",
+        "original_fact": "Cosmopolitans are what I pick when I want a stylish, fruity cocktail.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "not_stored",
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "analysis_error": null
+  },
+  {
+    "preference_category": "animals",
+    "preferences": [
+      "cats",
+      "parrots",
+      "rabbits"
+    ],
+    "preference_facts": [
+      "Cats are my favorite pets because they\u2019re independent yet affectionate.",
+      "I enjoy having parrots around because their colorful feathers and chatter brighten the room.",
+      "Rabbits appeal to me for their gentle nature and soft fur."
+    ],
+    "ground_truth_answer": "cats, parrots, rabbits",
+    "question": "I'm thinking of adopting a pet that fits my lifestyle and preferences \u2014 which animals should I consider?",
+    "retrieved_memories": "",
+    "llm_response": "I do not have any specific memories about your lifestyle or preferences, so I cannot give you personalized recommendations for a pet. To help you decide, could you tell me more about:\n\n*   **How much time you can dedicate to a pet daily?** (e.g., a few minutes, hours)\n*   **Your living situation?** (e.g., apartment, house with a yard)\n*   **Your exercise level?**\n*   **Whether you prefer a low-maintenance or a very interactive companion?**\n\nOnce I have this information, I can offer some suggestions! I used no memories.",
+    "conversation_id": "e8287793-40f4-4477-bbdc-c8313ed3bd1d",
+    "eval_input_tokens": 173,
+    "eval_output_tokens": 130,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "cats",
+        "original_fact": "Cats are my favorite pets because they\u2019re independent yet affectionate.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "parrots",
+        "original_fact": "I enjoy having parrots around because their colorful feathers and chatter brighten the room.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "rabbits",
+        "original_fact": "Rabbits appeal to me for their gentle nature and soft fur.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "not_stored",
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "analysis_error": null
+  },
+  {
+    "preference_category": "bag styles",
+    "preferences": [
+      "backpack",
+      "tote bag",
+      "messenger bag",
+      "clutch"
+    ],
+    "preference_facts": [
+      "I rely on my backpack for carrying books and gadgets comfortably.",
+      "A tote bag is perfect when I need something roomy but simple for errands.",
+      "My messenger bag is what I use when I want easy access to my laptop on the go.",
+      "I pick a clutch for evenings out when I want to travel light and stylish."
+    ],
+    "ground_truth_answer": "backpack, tote bag, messenger bag, clutch",
+    "question": "I'm deciding which bags to take for a busy day that includes work, shopping, and dinner plans. What should I bring?",
+    "retrieved_memories": "",
+    "llm_response": "I don't have any prior information or memories about what you have owned or what you might need for your busy day, so I can't give you a specific recommendation.\n\nHowever, for a busy day involving work, shopping, and dinner plans, you might want to consider a bag that is:\n\n*   **Spacious:** To fit work essentials (laptop, documents, notebooks), shopping items, and personal items.\n*   **Comfortable:** If you'll be walking a lot (like while shopping).\n*   **Versatile:** Something that looks appropriate for a work setting, a shopping trip, and an evening dinner.\n\nPerhaps a large tote bag or a stylish but durable backpack would work well!",
+    "conversation_id": "c85cdcb0-1bc0-4f8f-b905-399ac956e993",
+    "eval_input_tokens": 179,
+    "eval_output_tokens": 149,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "backpack",
+        "original_fact": "I rely on my backpack for carrying books and gadgets comfortably.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "tote bag",
+        "original_fact": "A tote bag is perfect when I need something roomy but simple for errands.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "messenger bag",
+        "original_fact": "My messenger bag is what I use when I want easy access to my laptop on the go.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "clutch",
+        "original_fact": "I pick a clutch for evenings out when I want to travel light and stylish.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty; therefore, the preference is not present.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "not_stored",
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "analysis_error": null
+  },
+  {
+    "preference_category": "conversation topics",
+    "preferences": [
+      "travel",
+      "technology",
+      "books",
+      "music",
+      "food"
+    ],
+    "preference_facts": [
+      "I love chatting about travel because it inspires new adventures.",
+      "Technology fascinates me, so I enjoy discussing the latest gadgets and trends.",
+      "Books are a favorite topic since I\u2019m always looking for new recommendations.",
+      "Music always gets me excited, especially when sharing favorite artists or concerts.",
+      "Food is a go-to conversation, especially when swapping recipes or restaurant tips."
+    ],
+    "ground_truth_answer": "travel, technology, books, music, food",
+    "question": "I\u2019m meeting new people at a social event and want to steer conversations to topics I genuinely enjoy. What should I bring up?",
+    "retrieved_memories": "",
+    "llm_response": "I do not have any memories of a previous conversation that suggests specific topics you enjoy, so I cannot give you advice based on past conversation history.\n\nIf you tell me a few topics you genuinely enjoy, I can help you brainstorm ways to steer conversations toward them!\n\nNo memories were used.",
+    "conversation_id": "f7ceddd1-f9b1-4606-8255-9e21fa450a38",
+    "eval_input_tokens": 179,
+    "eval_output_tokens": 60,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "travel",
+        "original_fact": "I love chatting about travel because it inspires new adventures.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty; therefore, the preference for travel is not present.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "technology",
+        "original_fact": "Technology fascinates me, so I enjoy discussing the latest gadgets and trends.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty, so the preference for technology is not present.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "books",
+        "original_fact": "Books are a favorite topic since I\u2019m always looking for new recommendations.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "music",
+        "original_fact": "Music always gets me excited, especially when sharing favorite artists or concerts.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "preference": "food",
+        "original_fact": "Food is a go-to conversation, especially when swapping recipes or restaurant tips.",
+        "category": "not_stored",
+        "fact_in_store": false,
+        "storage_reasoning": "The memory store is empty.",
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "not_stored",
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "analysis_error": null
+  }
+]

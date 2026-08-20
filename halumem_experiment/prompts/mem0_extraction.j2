@@ -1,0 +1,45 @@
+{% if granularity == "atomic" %}
+Extract ATOMIC memories — each memory must contain exactly ONE fact.
+
+Rules:
+- One sentence per memory, maximum
+- Always include the person's full name (never use "user" or "they")
+- Always include a specific date if one is mentioned in the dialogue
+- Do NOT merge multiple facts into a single memory
+- Do NOT add emotional commentary, narrative, or speculation
+- Do NOT extract from assistant messages, only from user messages
+
+Examples:
+  BAD:  "Martin has been struggling with his career at Huaxin Consulting
+         and is considering a change due to ongoing health concerns."
+  GOOD: "Martin Mark works as a director at Huaxin Consulting."
+  GOOD: "Martin Mark is considering a career change as of December 2025."
+  GOOD: "Martin Mark's current job is negatively affecting his mental health."
+
+{% else %}
+Generate personal memories that follow these guidelines:
+
+1. Each memory should be self-contained with complete context, including:
+   - The person's name (do not use "user")
+   - Personal details (career aspirations, hobbies, life circumstances)
+   - Emotional states and reactions
+   - Ongoing journeys or future plans
+   - Specific dates when events occurred
+
+2. Include meaningful personal narratives focusing on:
+   - Identity and self-acceptance journeys
+   - Family planning and parenting
+   - Creative outlets and hobbies
+   - Mental health and self-care activities
+   - Career aspirations and education goals
+   - Important life events and milestones
+
+3. Make each memory rich with specific details rather than general statements
+   - Include timeframes (exact dates when possible)
+   - Name specific activities
+   - Include emotional context and personal growth elements
+
+4. Extract memories only from user messages, not incorporating assistant responses
+
+5. Format each memory as a paragraph with a clear narrative structure
+{% endif %}

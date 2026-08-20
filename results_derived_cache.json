@@ -1,0 +1,246 @@
+{
+ "halumem_per_type": {
+  "amem-amem_cost_u2": {
+   "Basic Fact Recall": 0.5111111111111111,
+   "Dynamic Update": 0.75,
+   "Generalization & Application": 0.3,
+   "Memory Boundary": 0.8536585365853658,
+   "Memory Conflict": 0.725,
+   "Multi-hop Inference": 0.5
+  },
+  "amem-user2nd_gemma431b_probe": {
+   "Basic Fact Recall": 0.5111111111111111,
+   "Dynamic Update": 0.5,
+   "Generalization & Application": 0.35,
+   "Memory Boundary": 0.6585365853658537,
+   "Memory Conflict": 0.75,
+   "Multi-hop Inference": 0.4444444444444444
+  },
+  "letta-u2_ctx": {
+   "Basic Fact Recall": 0.6222222222222222,
+   "Dynamic Update": 0.5,
+   "Generalization & Application": 0.075,
+   "Memory Boundary": 0.926829268292683,
+   "Memory Conflict": 0.9,
+   "Multi-hop Inference": 0.1111111111111111
+  },
+  "letta-user2nd_gemma431b_probe": {
+   "Basic Fact Recall": 0.5777777777777777,
+   "Dynamic Update": 0.5,
+   "Generalization & Application": 0.175,
+   "Memory Boundary": 0.926829268292683,
+   "Memory Conflict": 0.825,
+   "Multi-hop Inference": 0.16666666666666666
+  },
+  "mem0_oss-v1_31b_u2": {
+   "Basic Fact Recall": 0.1111111111111111,
+   "Dynamic Update": 0.0,
+   "Generalization & Application": 0.15,
+   "Memory Boundary": 0.975609756097561,
+   "Memory Conflict": 0.4,
+   "Multi-hop Inference": 0.16666666666666666
+  },
+  "mem0_oss-v1_cost_u2": {
+   "Basic Fact Recall": 0.13333333333333333,
+   "Dynamic Update": 0.0,
+   "Generalization & Application": 0.15,
+   "Memory Boundary": 0.9512195121951219,
+   "Memory Conflict": 0.4,
+   "Multi-hop Inference": 0.05555555555555555
+  },
+  "mem0_oss-v1_cost_u34": {
+   "Basic Fact Recall": 0.10144927536231885,
+   "Dynamic Update": 0.18181818181818182,
+   "Generalization & Application": 0.09375,
+   "Memory Boundary": 0.9428571428571428,
+   "Memory Conflict": 0.23880597014925373,
+   "Multi-hop Inference": 0.12
+  },
+  "mem0_oss-v2_31b_u2": {
+   "Basic Fact Recall": 0.2,
+   "Dynamic Update": 0.0,
+   "Generalization & Application": 0.075,
+   "Memory Boundary": 0.9024390243902439,
+   "Memory Conflict": 0.375,
+   "Multi-hop Inference": 0.1111111111111111
+  },
+  "mem0_oss-v2_cost_u2": {
+   "Basic Fact Recall": 0.17777777777777778,
+   "Dynamic Update": 0.0,
+   "Generalization & Application": 0.05,
+   "Memory Boundary": 0.926829268292683,
+   "Memory Conflict": 0.4,
+   "Multi-hop Inference": 0.1111111111111111
+  },
+  "mem0_oss-v2_cost_u34": {
+   "Basic Fact Recall": 0.17391304347826086,
+   "Dynamic Update": 0.24242424242424243,
+   "Generalization & Application": 0.19791666666666666,
+   "Memory Boundary": 0.9285714285714286,
+   "Memory Conflict": 0.29850746268656714,
+   "Multi-hop Inference": 0.12
+  },
+  "structmem-sm_cost_u2": {
+   "Basic Fact Recall": 0.022222222222222223,
+   "Dynamic Update": 0.0,
+   "Generalization & Application": 0.0,
+   "Memory Boundary": 0.975609756097561,
+   "Memory Conflict": 0.075,
+   "Multi-hop Inference": 0.0
+  },
+  "structmem-sm_cost_u34": {
+   "Basic Fact Recall": 0.043478260869565216,
+   "Dynamic Update": 0.030303030303030304,
+   "Generalization & Application": 0.0,
+   "Memory Boundary": 0.9714285714285714,
+   "Memory Conflict": 0.029850746268656716,
+   "Multi-hop Inference": 0.0
+  },
+  "structmem-user2nd_gemma431b_probe": {
+   "Basic Fact Recall": 0.3111111111111111,
+   "Dynamic Update": 0.25,
+   "Generalization & Application": 0.2,
+   "Memory Boundary": 0.926829268292683,
+   "Memory Conflict": 0.65,
+   "Multi-hop Inference": 0.1111111111111111
+  }
+ },
+ "store_size": {
+  "halumem/amem-amem_cost_u2": [
+   3242,
+   null
+  ],
+  "halumem/amem-user2nd_gemma431b_probe": [
+   3242,
+   null
+  ],
+  "halumem/letta-letta_cost_u2": [
+   159,
+   null
+  ],
+  "halumem/letta-u2_ctx": [
+   51,
+   null
+  ],
+  "halumem/letta-user2nd_gemma431b_probe": [
+   56,
+   null
+  ],
+  "halumem/mem0_oss-v1_31b_u2": [
+   528,
+   null
+  ],
+  "halumem/mem0_oss-v1_cost_u2": [
+   532,
+   null
+  ],
+  "halumem/mem0_oss-v1_cost_u34": [
+   929,
+   null
+  ],
+  "halumem/mem0_oss-v2_31b_u2": [
+   673,
+   null
+  ],
+  "halumem/mem0_oss-v2_cost_u2": [
+   673,
+   null
+  ],
+  "halumem/mem0_oss-v2_cost_u34": [
+   1076,
+   null
+  ],
+  "halumem/structmem-sm_cost_u2": [
+   59,
+   null
+  ],
+  "halumem/structmem-sm_cost_u34": [
+   150,
+   null
+  ],
+  "halumem/structmem-user2nd_gemma431b_probe": [
+   3573,
+   null
+  ],
+  "locomo/amem-amem_31b": [
+   419,
+   null
+  ],
+  "locomo/amem-amem_cost": [
+   419,
+   null
+  ],
+  "locomo/letta-ctx_31b": [
+   27,
+   null
+  ],
+  "locomo/letta-letta_31b": [
+   25,
+   null
+  ],
+  "locomo/letta-letta_cost": [
+   25,
+   null
+  ],
+  "locomo/mem0-v1_31b": [
+   274,
+   null
+  ],
+  "locomo/mem0-v1_cost": [
+   284,
+   null
+  ],
+  "locomo/mem0-v2_31b": [
+   272,
+   null
+  ],
+  "locomo/mem0-v2_cost": [
+   276,
+   null
+  ],
+  "locomo/structmem-sm_31b": [
+   572,
+   null
+  ],
+  "locomo/structmem-sm_cost": [
+   548,
+   null
+  ],
+  "longmem/amem-amem_31b": [
+   8949,
+   485.0
+  ],
+  "longmem/amem-amem_cost": [
+   10868,
+   487.0
+  ],
+  "longmem/letta-letta_31b": [
+   202,
+   7.5
+  ],
+  "longmem/mem0-v1_31b": [
+   11857,
+   663.5
+  ],
+  "longmem/mem0-v1_cost": [
+   17129,
+   838.0
+  ],
+  "longmem/mem0-v2_31b": [
+   15490,
+   855.5
+  ],
+  "longmem/mem0-v2_cost": [
+   20787,
+   986.0
+  ],
+  "longmem/structmem-sm_31b": [
+   3710,
+   193.5
+  ],
+  "longmem/structmem-sm_cost": [
+   4619,
+   208.5
+  ]
+ }
+}

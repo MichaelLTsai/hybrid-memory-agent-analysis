@@ -1,0 +1,90 @@
+{
+  "qa_accuracy_all": 0.5555555555555556,
+  "token_f1_all": 0.21924486588551345,
+  "qa_num": 18,
+  "retrieval": {
+    "recall@3": 0.013888888888888888,
+    "recall@5": 0.09722222222222222,
+    "recall@10": 0.1527777777777778,
+    "ndcg@3": 0.01644899505365918,
+    "ndcg@5": 0.05228039274370633,
+    "ndcg@10": 0.07206968091637424
+  },
+  "per_type": {
+    "knowledge-update": {
+      "accuracy": 1.0,
+      "num": 3
+    },
+    "multi-session": {
+      "accuracy": 0.0,
+      "num": 3
+    },
+    "single-session-assistant": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    },
+    "single-session-preference": {
+      "accuracy": 1.0,
+      "num": 3
+    },
+    "single-session-user": {
+      "accuracy": 0.6666666666666666,
+      "num": 3
+    },
+    "temporal-reasoning": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    }
+  },
+  "probe": {
+    "n_total": 18,
+    "n_answerable": 18,
+    "n_abstention": 0,
+    "P4_sufficient": 0.1111111111111111,
+    "P4_n": 18,
+    "P1_sufficient": 0.0,
+    "P1_n": 16,
+    "P5_fail_given_P4": 0.0,
+    "P5_n": 2,
+    "P5b_abstain_rate": null,
+    "P5b_n": 0,
+    "verdicts": {
+      "SUMMARY": 16,
+      "OK": 2
+    },
+    "attribution": {
+      "OK": 0.1111111111111111,
+      "SUMMARY": 0.8888888888888888,
+      "RETRIEVAL": 0.0,
+      "REASONING": 0.0,
+      "NO_WRITE": 0.0,
+      "P5b_FAIL": 0.0
+    },
+    "unknown_ratio": 0.0,
+    "judge_failures": {},
+    "scope": [
+      "global"
+    ],
+    "by_question_type": {
+      "multi-session": {
+        "SUMMARY": 3
+      },
+      "single-session-user": {
+        "SUMMARY": 3
+      },
+      "knowledge-update": {
+        "SUMMARY": 3
+      },
+      "single-session-preference": {
+        "SUMMARY": 1,
+        "OK": 2
+      },
+      "temporal-reasoning": {
+        "SUMMARY": 3
+      },
+      "single-session-assistant": {
+        "SUMMARY": 3
+      }
+    }
+  }
+}

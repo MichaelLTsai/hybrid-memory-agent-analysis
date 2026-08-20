@@ -1,0 +1,163 @@
+{
+  "memory_integrity": {
+    "recall(all)": 0.7108433734939759,
+    "recall(valid)": 0.7108433734939759,
+    "weighted_recall(all)": 0.8142570281124498,
+    "weighted_recall(valid)": 0.8142570281124498,
+    "memory_valid_importance_sum": 373.5,
+    "memory_importance_sum": 373.5,
+    "memory_valid_num": 498,
+    "memory_num": 498
+  },
+  "memory_accuracy": {
+    "interference_accuracy(all)": 0.3673469387755102,
+    "interference_accuracy(valid)": 0.3673469387755102,
+    "interference_memory_valid_num": 147,
+    "interference_memory_num": 147,
+    "target_accuracy(all)": 0.9980842911877394,
+    "target_accuracy(valid)": 0.9980842911877394,
+    "target_memory_valid_num": 522,
+    "target_memory_num": 522,
+    "weighted_accuracy(all)": 0.9190193164933135,
+    "weighted_accuracy(valid)": 0.9190193164933135,
+    "memory_valid_num": 673,
+    "memory_num": 673
+  },
+  "memory_update": {
+    "correct_update_memory_ratio(all)": 0.7407407407407407,
+    "correct_update_memory_ratio(valid)": 0.821917808219178,
+    "hallucination_update_memory_ratio(all)": 0.024691358024691357,
+    "hallucination_update_memory_ratio(valid)": 0.0273972602739726,
+    "omission_update_memory_ratio(all)": 0.13580246913580246,
+    "omission_update_memory_ratio(valid)": 0.1506849315068493,
+    "other_update_memory_ratio(all)": 0.0,
+    "other_update_memory_ratio(valid)": 0.0,
+    "update_memory_valid_num": 146,
+    "update_memory_num": 162
+  },
+  "question_answering": {
+    "correct_qa_ratio(all)": 0.35106382978723405,
+    "correct_qa_ratio(valid)": 0.35106382978723405,
+    "hallucination_qa_ratio(all)": 0.10106382978723404,
+    "hallucination_qa_ratio(valid)": 0.10106382978723404,
+    "omission_qa_ratio(all)": 0.5478723404255319,
+    "omission_qa_ratio(valid)": 0.5478723404255319,
+    "qa_valid_num": 188,
+    "qa_num": 188
+  },
+  "memory_extraction_f1": 0.830323739549709,
+  "memory_type_accuracy": {
+    "Persona Memory": {
+      "memory_integrity_acc": 0.42731277533039647,
+      "memory_update_acc": 0.19383259911894274,
+      "memory_acc": 0.6211453744493391,
+      "total_num": 454
+    },
+    "Event Memory": {
+      "memory_integrity_acc": 0.5845588235294118,
+      "memory_update_acc": 0.09558823529411764,
+      "memory_acc": 0.6801470588235294,
+      "total_num": 272
+    },
+    "Relationship Memory": {
+      "memory_integrity_acc": 0.4567901234567901,
+      "memory_update_acc": 0.07407407407407407,
+      "memory_acc": 0.5308641975308641,
+      "total_num": 81
+    }
+  },
+  "qa_attribution": {
+    "total_wrong": 122,
+    "attributable": 37,
+    "storage_num": 0,
+    "retrieval_num": 0,
+    "generation_num": 37,
+    "unknown_num": 82,
+    "no_evidence_num": 3,
+    "storage_ratio": 0.0,
+    "retrieval_ratio": 0.0,
+    "generation_ratio": 1.0,
+    "unknown_ratio": 0.6721311475409836,
+    "judge_failures": {
+      "embedding": 77,
+      "retrieval": 5
+    },
+    "storage_topk": 25,
+    "by_question_type": {
+      "Memory Conflict": {
+        "GENERATION": 9,
+        "UNKNOWN": 15
+      },
+      "Multi-hop Inference": {
+        "GENERATION": 4,
+        "UNKNOWN": 12
+      },
+      "Generalization & Application": {
+        "UNKNOWN": 25,
+        "GENERATION": 13
+      },
+      "Basic Fact Recall": {
+        "UNKNOWN": 27,
+        "GENERATION": 10
+      },
+      "Memory Boundary": {
+        "NO_EVIDENCE": 3
+      },
+      "Dynamic Update": {
+        "UNKNOWN": 3,
+        "GENERATION": 1
+      }
+    }
+  },
+  "probe": {
+    "P4_sufficient": 0.4014084507042254,
+    "P4_n": 142,
+    "P5_fail_given_P4": 0.6491228070175439,
+    "P5_n": 57,
+    "P5b_abstain_rate": 0.926829268292683,
+    "P5b_n": 41,
+    "verdicts": {
+      "OK": 58,
+      "REASONING": 37,
+      "NOT_RETRIEVED": 85,
+      "P5b_FAIL": 3,
+      "UNKNOWN": 5
+    },
+    "unknown_ratio": 0.026595744680851064,
+    "judge_failures": {
+      "retrieval": 5
+    },
+    "by_question_type": {
+      "Memory Boundary": {
+        "OK": 38,
+        "P5b_FAIL": 3
+      },
+      "Memory Conflict": {
+        "REASONING": 9,
+        "OK": 10,
+        "NOT_RETRIEVED": 20,
+        "UNKNOWN": 1
+      },
+      "Basic Fact Recall": {
+        "OK": 7,
+        "NOT_RETRIEVED": 24,
+        "REASONING": 10,
+        "UNKNOWN": 4
+      },
+      "Multi-hop Inference": {
+        "REASONING": 4,
+        "NOT_RETRIEVED": 12,
+        "OK": 2
+      },
+      "Generalization & Application": {
+        "NOT_RETRIEVED": 26,
+        "REASONING": 13,
+        "OK": 1
+      },
+      "Dynamic Update": {
+        "NOT_RETRIEVED": 3,
+        "REASONING": 1
+      }
+    }
+  }
+}

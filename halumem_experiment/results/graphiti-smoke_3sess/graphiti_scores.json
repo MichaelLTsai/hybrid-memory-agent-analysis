@@ -1,0 +1,78 @@
+{
+  "memory_integrity": {
+    "recall(all)": 0.06,
+    "recall(valid)": 0.06,
+    "weighted_recall(all)": 0.075,
+    "weighted_recall(valid)": 0.075,
+    "memory_valid_importance_sum": 75.0,
+    "memory_importance_sum": 75.0,
+    "memory_valid_num": 100,
+    "memory_num": 100
+  },
+  "memory_accuracy": {
+    "interference_accuracy(all)": 0,
+    "interference_accuracy(valid)": 0,
+    "interference_memory_valid_num": 0,
+    "interference_memory_num": 0,
+    "target_accuracy(all)": 0.9166666666666666,
+    "target_accuracy(valid)": 0.9166666666666666,
+    "target_memory_valid_num": 6,
+    "target_memory_num": 6,
+    "weighted_accuracy(all)": 0.2608695652173913,
+    "weighted_accuracy(valid)": 0.2608695652173913,
+    "memory_valid_num": 23,
+    "memory_num": 23
+  },
+  "memory_update": {
+    "correct_update_memory_ratio(all)": 0,
+    "correct_update_memory_ratio(valid)": 0,
+    "hallucination_update_memory_ratio(all)": 0,
+    "hallucination_update_memory_ratio(valid)": 0,
+    "omission_update_memory_ratio(all)": 0,
+    "omission_update_memory_ratio(valid)": 0,
+    "other_update_memory_ratio(all)": 0,
+    "other_update_memory_ratio(valid)": 0,
+    "update_memory_valid_num": 0,
+    "update_memory_num": 0
+  },
+  "question_answering": {
+    "correct_qa_ratio(all)": 0.4444444444444444,
+    "correct_qa_ratio(valid)": 0.4444444444444444,
+    "hallucination_qa_ratio(all)": 0.0,
+    "hallucination_qa_ratio(valid)": 0.0,
+    "omission_qa_ratio(all)": 0.5555555555555556,
+    "omission_qa_ratio(valid)": 0.5555555555555556,
+    "qa_valid_num": 9,
+    "qa_num": 9
+  },
+  "memory_extraction_f1": 0.11262798634812286,
+  "memory_type_accuracy": {
+    "Persona Memory": {
+      "memory_integrity_acc": 0.061855670103092786,
+      "memory_update_acc": 0.0,
+      "memory_acc": 0.061855670103092786,
+      "total_num": 97
+    },
+    "Event Memory": {
+      "memory_integrity_acc": 0,
+      "memory_update_acc": 0,
+      "memory_acc": 0,
+      "total_num": 0
+    },
+    "Relationship Memory": {
+      "memory_integrity_acc": 0.0,
+      "memory_update_acc": 0.0,
+      "memory_acc": 0.0,
+      "total_num": 3
+    }
+  },
+  "probe_update": {
+    "P0_trigger": 0.6667,
+    "P0_sessions": 3,
+    "P0_mode": "snapshot-delta",
+    "P1_loose": 0.09,
+    "P1_strict": 0.06,
+    "P1_distort": 0.3333,
+    "P1_n": 100
+  }
+}
