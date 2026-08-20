@@ -1,0 +1,96 @@
+# ─────────────────────────────────────────────────────────────
+# Credentials: never commit
+# ─────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# ─────────────────────────────────────────────────────────────
+# Virtual environments and Python artifacts
+# ─────────────────────────────────────────────────────────────
+venv_*/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# ─────────────────────────────────────────────────────────────
+# Datasets: public third-party data, too large to track.
+# Fetch with scripts/download_data.sh
+# ─────────────────────────────────────────────────────────────
+*/data/
+*/data_subsets/
+*.jsonl.gz
+
+# ─────────────────────────────────────────────────────────────
+# Vector and graph store runtime state (rebuilt by re-running)
+# ─────────────────────────────────────────────────────────────
+qdrant_data/
+qdrant_structmem/
+*/qdrant_data/
+*/qdrant_structmem/
+**/qdrant/
+**/kuzu_data/
+**/chroma*/
+*.sqlite
+*.sqlite3
+*.lock
+.memos/
+
+# ─────────────────────────────────────────────────────────────
+# Logs
+# ─────────────────────────────────────────────────────────────
+*/logs/
+logs_*.out
+nohup.out
+
+# ─────────────────────────────────────────────────────────────
+# Results: excluded by default, with the auditable summaries added back.
+# The per-question raw output (*_eval_results.jsonl / *_detail.jsonl) runs to
+# tens of megabytes per file, exceeds GitHub's per-file limit, and does not help
+# anyone audit the findings, so it is excluded entirely.
+# ─────────────────────────────────────────────────────────────
+*/results/**
+!*/results/
+!*/results/**/
+!*/results/**/*_scores.json
+!*/results/**/*_token_usage.json
+!*/results/**/*_meta.json
+!*/results/**/*_probe_detail.jsonl
+
+# MemFail uses a different result layout: keep the analysis/ summaries,
+# exclude the per-question traces
+memfail_experiment/results_*/**
+!memfail_experiment/results_*/
+!memfail_experiment/results_*/**/
+!memfail_experiment/results_*/**/analysis/*.json
+!memfail_experiment/results_*/**/analysis/*.csv
+!memfail_experiment/results_*/mem0_version.txt
+
+# Scratch output
+**/tmp/
+*.bak
+*.bak_*
+
+# ─────────────────────────────────────────────────────────────
+# Thesis: a separate repository, not merged in here
+# ─────────────────────────────────────────────────────────────
+thesis/
+CLIPLab_Thesis_Template.zip
+
+# ─────────────────────────────────────────────────────────────
+# Large external specification files
+# ─────────────────────────────────────────────────────────────
+openapi_letta.json
+
+# ─────────────────────────────────────────────────────────────
+# macOS and editors
+# ─────────────────────────────────────────────────────────────
+.DS_Store
+.vscode/
+.idea/
+.claude/

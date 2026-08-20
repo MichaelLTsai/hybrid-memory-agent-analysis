@@ -1,0 +1,8 @@
+# Minimal dependencies for rebuilding the aggregate tables (bash run.sh matrix)
+# and for downloading the datasets. Packages needed to actually run the
+# experiments live in each experiment's own requirements / venv; see the README.
+#
+#     python3 -m venv venv_memos
+#     ./venv_memos/bin/pip install -r requirements-tools.txt
+openpyxl>=3.1
+huggingface_hub>=0.20
