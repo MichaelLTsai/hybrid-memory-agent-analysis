@@ -1,0 +1,51 @@
+{
+  "total_tokens": 933082,
+  "ingest": {
+    "calls": 192,
+    "prompt_tokens": 300304,
+    "completion_tokens": 48798,
+    "total_tokens": 349102,
+    "llm_seconds": 1105.77,
+    "units": 19,
+    "errors": 0,
+    "calls_per_unit": 10.105,
+    "tokens_per_unit": 18373.8,
+    "prompt_tokens_per_unit": 15805.5,
+    "completion_tokens_per_unit": 2568.3,
+    "sec_per_unit_mean": 31.725,
+    "sec_per_unit_median": 33.139,
+    "sec_per_unit_p90": 43.119
+  },
+  "qa": {
+    "calls": 199,
+    "prompt_tokens": 579022,
+    "completion_tokens": 4958,
+    "total_tokens": 583980,
+    "llm_seconds": 139.35,
+    "units": 199,
+    "errors": 0,
+    "calls_per_unit": 1.0,
+    "tokens_per_unit": 2934.6,
+    "prompt_tokens_per_unit": 2909.7,
+    "completion_tokens_per_unit": 24.9,
+    "sec_per_unit_mean": 0.752,
+    "sec_per_unit_median": 0.695,
+    "sec_per_unit_p90": 1.091
+  },
+  "other": {
+    "calls": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "llm_seconds": 0.0,
+    "units": 0,
+    "errors": 0,
+    "calls_per_unit": null,
+    "tokens_per_unit": null,
+    "prompt_tokens_per_unit": null,
+    "completion_tokens_per_unit": null,
+    "sec_per_unit_mean": null,
+    "sec_per_unit_median": null,
+    "sec_per_unit_p90": null
+  }
+}

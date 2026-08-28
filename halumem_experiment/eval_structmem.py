@@ -52,9 +52,23 @@ EMBED     = os.getenv("STRUCTMEM_EMBED", "sentence-transformers/all-MiniLM-L6-v2
 QDRANT_BASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "qdrant_structmem")
 # Cross-event consolidation is expensive; run it every N sessions.
 SUMMARIZE_EVERY = int(os.getenv("STRUCTMEM_SUMMARIZE_EVERY", "10"))
+# Sessions between partial dumps, so a late failure cannot cost the whole run.
+CHECKPOINT_EVERY = int(os.getenv("STRUCTMEM_CHECKPOINT_EVERY", "10"))
 
 TEMPLATE_SM = """Memories for user {user_id}:
 {memories}"""
+
+# M4 QA conditioning. Only reaches the prompt when enable_m4_state_qa is on.
+_STATE_QA_RULES = {
+    "current": ("- CURRENT MEMORY controls the present-state answer.\n"
+                "- HISTORICAL MEMORY is context only and must not be given as the current value."),
+    "historical": ("- Answer with the past state the question asks about.\n"
+                   "- Do not let a newer CURRENT MEMORY override the historical target."),
+    "transition": ("- Describe the change: state the before value and the after value.\n"
+                   "- Use TRANSITION evidence for when and how it changed."),
+    "neutral": ("- Answer by ordinary relevance.\n"
+                "- Do not force a temporal narrative."),
+}
 
 DATE_FORMAT = "%b %d, %Y, %H:%M:%S"
 
@@ -76,8 +90,24 @@ def setup_logger(log_dir, uuid):
     return logger
 
 
-def _build_config(tag, llm_model):
+def _state_ablation(trace_dir=None):
+    """Resolve the M1/M3/M4 arm from the environment.
+
+    STRUCTMEM_EXPERIMENT selects one of E0_baseline / E1_m1 / E2_m1_m3 /
+    E3_m1_m4 / E4_full. Defaults to E0, so an unset environment reproduces the
+    original StructMem behaviour exactly.
+    """
+    from lightmem.memory.state import config as _state_config
+
+    cfg = _state_config.from_env()
+    if trace_dir:
+        cfg.trace_dir = trace_dir
+    return cfg
+
+
+def _build_config(tag, llm_model, state_cfg=None):
     return {
+        "state_ablation": state_cfg,
         "pre_compress":    False,
         "topic_segment":   False,
         "messages_use":    "hybrid",
@@ -147,10 +177,15 @@ def process_user(user_data, top_k, save_path, log_dir, smoke_session_limit=None,
     os.makedirs(tmp_dir, exist_ok=True)
     tmp_file = os.path.join(tmp_dir, uuid + ".json")
 
-    tag = re.sub(r"[^a-zA-Z0-9]", "", uuid)[:28]
+    # Each ablation arm owns its own event and summary collections so two arms
+    # can never write into the same store.
+    state_cfg = _state_ablation(trace_dir=os.path.join(save_path, "traces"))
+    tag = re.sub(r"[^a-zA-Z0-9]", "", uuid)[:28] + state_cfg.collection_suffix()
+    tag = re.sub(r"[^a-zA-Z0-9_]", "", tag)
     import shutil
     shutil.rmtree(os.path.join(QDRANT_BASE, tag), ignore_errors=True)          # isolation
     shutil.rmtree(os.path.join(QDRANT_BASE, tag + "_sum"), ignore_errors=True)
+    logger.info(f"Ablation arm: {state_cfg.to_manifest()}")
 
     sessions = user_data["sessions"]
     if smoke_session_limit:
@@ -161,7 +196,7 @@ def process_user(user_data, top_k, save_path, log_dir, smoke_session_limit=None,
     lm = None
 
     try:
-        lm = LightMemory.from_config(_build_config(tag, llm_model))
+        lm = LightMemory.from_config(_build_config(tag, llm_model, state_cfg))
 
         for sid, session in enumerate(tqdm(sessions, desc="User " + user_name)):
             new_session = {"memory_points": session["memory_points"],
@@ -191,12 +226,6 @@ def process_user(user_data, top_k, save_path, log_dir, smoke_session_limit=None,
             did_sum = False
             if (sid + 1) % SUMMARIZE_EVERY == 0:
                 with _tk.phase("ingest"):
-                    try:
-                        lm.summarize(process_all=True, enable_cross_event=True,
-                                     retrieval_scope="global", top_k_seeds=15)
-                        did_sum = True
-                    except Exception as e:
-                        logger.warning("S" + str(sid) + " summarize error: " + str(e))
                     # Conflict resolution. summarize() only consolidates across
                     # events and never replaces an old value with a new one.
                     # LightMem's update mechanism is these two offline batch
@@ -204,12 +233,36 @@ def process_user(user_data, top_k, save_path, log_dir, smoke_session_limit=None,
                     # memory_update score measured a disabled feature rather than a
                     # poor mechanism. Set STRUCTMEM_OFFLINE_UPDATE=0 to disable it
                     # again as a control.
-                    if os.getenv("STRUCTMEM_OFFLINE_UPDATE", "1") == "1":
+                    #
+                    # Ordering is the M3 switch: with summary sync on, the state
+                    # commit has to land BEFORE the summaries are written, so the
+                    # summariser sees active/superseded labels. With it off the
+                    # original order is preserved and summaries may go stale,
+                    # which is exactly the E1/E3 condition.
+                    def _run_update():
+                        if os.getenv("STRUCTMEM_OFFLINE_UPDATE", "1") != "1":
+                            return
                         try:
                             lm.construct_update_queue_all_entries(top_k=20, keep_top_n=10)
                             lm.offline_update_all_entries(score_threshold=0.9)
                         except Exception as e:
                             logger.warning(f"offline_update error: {e}")
+
+                    def _run_summarize():
+                        try:
+                            lm.summarize(process_all=True, enable_cross_event=True,
+                                         retrieval_scope="global", top_k_seeds=15)
+                            return True
+                        except Exception as e:
+                            logger.warning("S" + str(sid) + " summarize error: " + str(e))
+                            return False
+
+                    if lm.state_ablation.enable_m3_summary_sync:
+                        _run_update()
+                        did_sum = _run_summarize()
+                    else:
+                        did_sum = _run_summarize()
+                        _run_update()
 
             if session.get("is_generated_qa_session", False):
                 new_session["add_dialogue_duration_ms"] = add_ms
@@ -255,13 +308,28 @@ def process_user(user_data, top_k, save_path, log_dir, smoke_session_limit=None,
             for qa in session["questions"]:
                 with _tk.unit("qa"):              # one question is one qa unit
                     t0 = time.time()
+                    packet = None
                     try:
-                        mems = lm.retrieve(qa["question"], limit=top_k)
+                        # Dual-circuit by default (entries + cross-event
+                        # summaries). With M4 on this also applies the query
+                        # view and the state labels; with M4 off it is the
+                        # untouched baseline ordering.
+                        mems, packet = lm.retrieve_for_qa(qa["question"], limit=top_k)
                     except Exception:
                         mems = []
                     search_ms = (time.time() - t0) * 1000
                     context = TEMPLATE_SM.format(user_id=user_name,
                                 memories=json.dumps(mems, indent=4, ensure_ascii=False))
+                    if packet is not None:
+                        # M4 only: tell the reader which state the question asks
+                        # for, so a labelled historical line cannot be answered
+                        # as if it were current.
+                        context = (
+                            f"QUERY STATE VIEW: {packet.query_view.upper()}\n"
+                            + context
+                            + "\n\nState rules:\n"
+                            + _STATE_QA_RULES.get(packet.query_view, _STATE_QA_RULES["neutral"])
+                        )
                     prompt  = PROMPT_MEMZERO.format(context=context, question=qa["question"])
                     t0 = time.time()
                     response = llm_request(prompt)
@@ -274,8 +342,26 @@ def process_user(user_data, top_k, save_path, log_dir, smoke_session_limit=None,
 
             new_user_data["sessions"].append(new_session)
 
+            # Periodic partial dump. A long ingest previously lost 59 sessions
+            # of work because nothing was written until the whole user
+            # finished; this caps the damage from any late failure at the
+            # checkpoint interval. Written to a side file so a crashed run can
+            # never be mistaken for a complete one.
+            if (sid + 1) % CHECKPOINT_EVERY == 0:
+                try:
+                    with open(tmp_file + ".partial", "w", encoding="utf-8") as f:
+                        json.dump(new_user_data, f, ensure_ascii=False)
+                    logger.info("checkpoint written at S" + str(sid))
+                except Exception as e:
+                    logger.warning("checkpoint failed: " + str(e))
+
         with open(tmp_file, "w", encoding="utf-8") as f:
             json.dump(new_user_data, f, ensure_ascii=False, indent=2)
+        if os.path.exists(tmp_file + ".partial"):
+            try:
+                os.remove(tmp_file + ".partial")
+            except OSError:
+                pass
         logger.info("User " + user_name + " complete -> " + tmp_file)
         return {"uuid": uuid, "status": "ok", "path": tmp_file}
 

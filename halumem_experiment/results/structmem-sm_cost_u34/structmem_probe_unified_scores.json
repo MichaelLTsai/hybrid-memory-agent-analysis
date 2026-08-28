@@ -1,0 +1,20 @@
+{
+  "run": "structmem-sm_cost_u34",
+  "n": 290,
+  "P1_fail": 0.9069,
+  "P4_fail": 0.0103,
+  "P5_fail": 0.0621,
+  "not_counted": 0,
+  "abstain_n": 70,
+  "unadjudicated": 0,
+  "verdicts": {
+    "OK": 6,
+    "P5b_OK": 68,
+    "SUMMARY": 263,
+    "REASONING": 18,
+    "P5b_FAIL": 2,
+    "RETRIEVAL": 3
+  },
+  "judge_failures": {},
+  "attributable_error_rate": 0.9793
+}

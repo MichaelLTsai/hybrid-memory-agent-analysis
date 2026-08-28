@@ -1,0 +1,92 @@
+{
+  "qa_accuracy_all": 0.4090909090909091,
+  "token_f1_all": 0.1709977965916331,
+  "qa_num": 22,
+  "retrieval": {
+    "recall@3": 0.06818181818181818,
+    "recall@5": 0.13636363636363635,
+    "recall@10": 0.17045454545454544,
+    "ndcg@3": 0.0556430762542961,
+    "ndcg@5": 0.08637512614856953,
+    "ndcg@10": 0.10108208464620459
+  },
+  "per_type": {
+    "knowledge-update": {
+      "accuracy": 0.7142857142857143,
+      "num": 7
+    },
+    "multi-session": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    },
+    "single-session-assistant": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    },
+    "single-session-preference": {
+      "accuracy": 0.0,
+      "num": 3
+    },
+    "single-session-user": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    },
+    "temporal-reasoning": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    }
+  },
+  "probe": {
+    "n_total": 22,
+    "n_answerable": 22,
+    "n_abstention": 0,
+    "P4_sufficient": 0.09090909090909091,
+    "P4_n": 22,
+    "P1_sufficient": 0.0,
+    "P1_n": 20,
+    "P5_fail_given_P4": 0.5,
+    "P5_n": 2,
+    "P5b_abstain_rate": null,
+    "P5b_n": 0,
+    "verdicts": {
+      "SUMMARY": 20,
+      "REASONING": 1,
+      "OK": 1
+    },
+    "attribution": {
+      "OK": 0.045454545454545456,
+      "SUMMARY": 0.9090909090909091,
+      "RETRIEVAL": 0.0,
+      "REASONING": 0.045454545454545456,
+      "NO_WRITE": 0.0,
+      "P5b_FAIL": 0.0
+    },
+    "unknown_ratio": 0.0,
+    "judge_failures": {},
+    "scope": [
+      "global"
+    ],
+    "by_question_type": {
+      "knowledge-update": {
+        "SUMMARY": 5,
+        "REASONING": 1,
+        "OK": 1
+      },
+      "temporal-reasoning": {
+        "SUMMARY": 3
+      },
+      "single-session-user": {
+        "SUMMARY": 3
+      },
+      "single-session-preference": {
+        "SUMMARY": 3
+      },
+      "multi-session": {
+        "SUMMARY": 3
+      },
+      "single-session-assistant": {
+        "SUMMARY": 3
+      }
+    }
+  }
+}

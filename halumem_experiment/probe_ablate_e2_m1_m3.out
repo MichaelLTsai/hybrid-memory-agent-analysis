@@ -1,0 +1,5 @@
+共 1 個 run，並行度 2
+
+  structmem-ablate_e2_m1_m3              N= 125  P1=0.04  P4=0.24  P5=0.36  錯誤率=0.64  矇對=0  排除=0
+
+已寫入 /Users/stud113/Documents/lintsai/Memory_Experience/halumem_experiment/probe_unified_summary.json

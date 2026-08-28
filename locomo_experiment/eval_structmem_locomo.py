@@ -102,6 +102,29 @@ def _to_messages(turns, ts):
             for t in turns if t.get("text")]
 
 
+# M4 QA conditioning. Only reaches the prompt when enable_m4_state_qa is on.
+_STATE_QA_RULES = {
+    "current": ("- CURRENT MEMORY controls the present-state answer.\n"
+                "- HISTORICAL MEMORY is context only, never the current value."),
+    "historical": ("- Answer with the past state the question asks about.\n"
+                   "- Do not let a newer CURRENT MEMORY override the historical target."),
+    "transition": ("- Describe the change: the before value and the after value.\n"
+                   "- Use TRANSITION evidence for when and how it changed."),
+    "neutral": ("- Answer by ordinary relevance.\n"
+                "- Do not force a temporal narrative."),
+}
+
+
+def _state_ablation(trace_dir=None):
+    """Resolve the M1/M3/M4 arm from STRUCTMEM_EXPERIMENT (default E0)."""
+    from lightmem.memory.state import config as _state_config
+
+    cfg = _state_config.from_env()
+    if trace_dir:
+        cfg.trace_dir = trace_dir
+    return cfg
+
+
 def process_conversation(sample, top_k, save_path, log_dir, llm_model=None,
                          session_limit=None, qa_limit=None):
     from lightmem.memory.lightmem import LightMemory
@@ -115,7 +138,11 @@ def process_conversation(sample, top_k, save_path, log_dir, llm_model=None,
     os.makedirs(tmp_dir, exist_ok=True)
     tmp_file = os.path.join(tmp_dir, f"{cid}.json")
 
-    tag = re.sub(r"[^a-zA-Z0-9]", "", cid)[:28]
+    # Each ablation arm owns its own collections so no two arms share a store.
+    state_cfg = _state_ablation(trace_dir=os.path.join(save_path, "traces"))
+    tag = re.sub(r"[^a-zA-Z0-9]", "", cid)[:28] + state_cfg.collection_suffix()
+    tag = re.sub(r"[^a-zA-Z0-9_]", "", tag)
+    logger.info(f"Ablation arm: {state_cfg.to_manifest()}")
     shutil.rmtree(os.path.join(QDRANT_BASE, tag), ignore_errors=True)          # isolation
     shutil.rmtree(os.path.join(QDRANT_BASE, tag + "_sum"), ignore_errors=True)
 
@@ -125,6 +152,7 @@ def process_conversation(sample, top_k, save_path, log_dir, llm_model=None,
 
     try:
         cfg = _build_config(tag, llm_model)
+        cfg["state_ablation"] = state_cfg
         # Point the retrievers at this experiment's own qdrant dir, not halumem's.
         cfg["embedding_retriever"]["configs"]["path"] = os.path.join(QDRANT_BASE, tag)
         cfg["summary_retriever"]["configs"]["path"]   = os.path.join(QDRANT_BASE, tag + "_sum")
@@ -154,30 +182,69 @@ def process_conversation(sample, top_k, save_path, log_dir, llm_model=None,
             # bucket without counting a unit (amortized into calls_per_unit).
             if n and n % SUMMARIZE_EVERY == 0:
                 with _tk.phase("ingest"):
-                    try:
-                        lm.summarize(process_all=True, enable_cross_event=True,
-                                     retrieval_scope="global", top_k_seeds=15)
-                    except Exception as e:
-                        logger.warning(f"{sk} summarize error: {e}")
                     # Conflict resolution. summarize() only consolidates across
                     # events and never replaces an old value with a new one.
                     # LightMem's update mechanism is these two offline batch
-                    # methods, which earlier runs never invoked, so HaluMem's low
-                    # memory_update score measured a disabled feature rather than a
-                    # poor mechanism. Set STRUCTMEM_OFFLINE_UPDATE=0 to disable it
+                    # methods. Set STRUCTMEM_OFFLINE_UPDATE=0 to disable it
                     # again as a control.
-                    if os.getenv("STRUCTMEM_OFFLINE_UPDATE", "1") == "1":
+                    #
+                    # Ordering is the M3 switch: with summary sync on, the state
+                    # commit must land BEFORE the summaries are written so the
+                    # summariser sees active/superseded labels. With it off the
+                    # original order is kept and summaries may go stale, which is
+                    # exactly the E1/E3 condition.
+                    def _run_update():
+                        if os.getenv("STRUCTMEM_OFFLINE_UPDATE", "1") != "1":
+                            return
                         try:
                             lm.construct_update_queue_all_entries(top_k=20, keep_top_n=10)
                             lm.offline_update_all_entries(score_threshold=0.9)
                         except Exception as e:
                             logger.warning(f"offline_update error: {e}")
 
+                    def _run_summarize():
+                        try:
+                            lm.summarize(process_all=True, enable_cross_event=True,
+                                         retrieval_scope="global", top_k_seeds=15)
+                        except Exception as e:
+                            logger.warning(f"{sk} summarize error: {e}")
+
+                    if lm.state_ablation.enable_m3_summary_sync:
+                        _run_update()
+                        _run_summarize()
+                    else:
+                        _run_summarize()
+                        _run_update()
+
             # Entries new since the previous session belong to this session.
             for entry in _store_dump(lm):
                 if entry["id"] not in seen:
                     seen.add(entry["id"])
                     id2sess[entry["id"]] = snum
+        # Final flush: the loop only fires every SUMMARIZE_EVERY sessions, so
+        # without this the tail would never be consolidated or state-audited.
+        with _tk.phase("ingest"):
+            def _final_update():
+                if os.getenv("STRUCTMEM_OFFLINE_UPDATE", "1") != "1":
+                    return
+                try:
+                    lm.construct_update_queue_all_entries(top_k=20, keep_top_n=10)
+                    lm.offline_update_all_entries(score_threshold=0.9)
+                except Exception as e:
+                    logger.warning(f"final offline_update error: {e}")
+
+            def _final_summarize():
+                try:
+                    lm.summarize(process_all=True, enable_cross_event=True,
+                                 retrieval_scope="global", top_k_seeds=15)
+                except Exception as e:
+                    logger.warning(f"final summarize error: {e}")
+
+            if lm.state_ablation.enable_m3_summary_sync:
+                _final_update(); _final_summarize()
+            else:
+                _final_summarize(); _final_update()
+
         logger.info(f"Fed {n} sessions in {(time.time()-t0):.0f}s")
 
         # ── ② Full memory-store dump → extraction_locomo.py (P1) ─────────
@@ -200,16 +267,23 @@ def process_conversation(sample, top_k, save_path, log_dir, llm_model=None,
         for qa in qa_list:
             with _tk.unit("qa"):              # one question is one qa unit
                 t0 = time.time()
+                packet = None
                 try:
-                    mems = lm.retrieve(qa["question"], limit=top_k)
+                    # Dual-circuit retrieval (entries + cross-event summaries);
+                    # state-aware ordering and labels only when M4 is on.
+                    mems, packet = lm.retrieve_for_qa(qa["question"], limit=top_k)
                 except Exception as e:
                     logger.warning(f"retrieve error: {e}")
                     mems = []
                 mems = [m if isinstance(m, str) else str(m) for m in mems]
                 search_ms = (time.time() - t0) * 1000
 
-                prompt = QA_PROMPT.format(context="\n".join(f"  - {m}" for m in mems) or "  (none)",
-                                          question=qa["question"])
+                context = "\n".join(f"  - {m}" for m in mems) or "  (none)"
+                if packet is not None:
+                    context = (f"  QUERY STATE VIEW: {packet.query_view.upper()}\n"
+                               + context + "\n  State rules:\n  "
+                               + _STATE_QA_RULES.get(packet.query_view, _STATE_QA_RULES["neutral"]))
+                prompt = QA_PROMPT.format(context=context, question=qa["question"])
                 t0 = time.time()
                 response = llm_request(prompt)
 

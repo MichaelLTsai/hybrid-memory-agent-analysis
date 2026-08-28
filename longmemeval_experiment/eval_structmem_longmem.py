@@ -70,6 +70,29 @@ def _sm_time(s: str) -> str:
     return datetime.now().strftime("%Y/%m/%d (%a) %H:%M")
 
 
+# M4 QA conditioning. Only reaches the prompt when enable_m4_state_qa is on.
+_STATE_QA_RULES = {
+    "current": ("- CURRENT MEMORY controls the present-state answer.\n"
+                "  - HISTORICAL MEMORY is context only, never the current value."),
+    "historical": ("- Answer with the past state the question asks about.\n"
+                   "  - Do not let a newer CURRENT MEMORY override the historical target."),
+    "transition": ("- Describe the change: the before value and the after value.\n"
+                   "  - Use TRANSITION evidence for when and how it changed."),
+    "neutral": ("- Answer by ordinary relevance.\n"
+                "  - Do not force a temporal narrative."),
+}
+
+
+def _state_ablation(trace_dir=None):
+    """Resolve the M1/M3/M4 arm from STRUCTMEM_EXPERIMENT (default E0)."""
+    from lightmem.memory.state import config as _state_config
+
+    cfg = _state_config.from_env()
+    if trace_dir:
+        cfg.trace_dir = trace_dir
+    return cfg
+
+
 def _stratified_sample(data, n):
     """Sample ~n questions evenly across question_type (data is grouped by type).
 
@@ -127,9 +150,13 @@ def process_question(q, top_k, save_path, log_dir, session_limit=None, llm_model
     os.makedirs(tmp_dir, exist_ok=True)
     tmp_file = os.path.join(tmp_dir, f"{qid}.json")
 
-    tag = re.sub(r"[^a-zA-Z0-9]", "", qid)[:28]
+    # Each ablation arm gets its own collections so no two arms share a store.
+    state_cfg = _state_ablation(trace_dir=os.path.join(save_path, "traces"))
+    tag = re.sub(r"[^a-zA-Z0-9]", "", qid)[:28] + state_cfg.collection_suffix()
+    tag = re.sub(r"[^a-zA-Z0-9_]", "", tag)
     shutil.rmtree(os.path.join(QDRANT_BASE, tag), ignore_errors=True)          # fresh store
     shutil.rmtree(os.path.join(QDRANT_BASE, tag + "_sum"), ignore_errors=True)
+    logger.info(f"Ablation arm: {state_cfg.to_manifest()}")
 
     sessions = q.get("haystack_sessions", [])
     sess_ids = q.get("haystack_session_ids", [])
@@ -141,6 +168,7 @@ def process_question(q, top_k, save_path, log_dir, session_limit=None, llm_model
     lm = None
     try:
         cfg = _build_config(tag, llm_model)
+        cfg["state_ablation"] = state_cfg
         cfg["embedding_retriever"]["configs"]["path"] = os.path.join(QDRANT_BASE, tag)
         cfg["summary_retriever"]["configs"]["path"]   = os.path.join(QDRANT_BASE, tag + "_sum")
         lm = LightMemory.from_config(cfg)
@@ -168,16 +196,70 @@ def process_question(q, top_k, save_path, log_dir, session_limit=None, llm_model
             # the ingest bucket without counting a unit.
             if n_ok and n_ok % SUMMARIZE_EVERY == 0:
                 with _tk.phase("ingest"):
-                    try:
-                        lm.summarize(process_all=True, enable_cross_event=True,
-                                     retrieval_scope="global", top_k_seeds=15)
-                    except Exception as e:
-                        logger.warning(f"{sid} summarize error: {e}")
+                    # LightMem's offline update was never wired into this
+                    # adapter, so knowledge-update was previously measured with
+                    # no update mechanism running at all. It is enabled here for
+                    # every arm: E0 gets the original update/delete/ignore, the
+                    # M1 arms get the state commit. Set STRUCTMEM_OFFLINE_UPDATE=0
+                    # to restore the old no-update condition.
+                    def _run_update():
+                        if os.getenv("STRUCTMEM_OFFLINE_UPDATE", "1") != "1":
+                            return
+                        try:
+                            lm.construct_update_queue_all_entries(top_k=20, keep_top_n=10)
+                            lm.offline_update_all_entries(score_threshold=0.9)
+                        except Exception as e:
+                            logger.warning(f"{sid} offline_update error: {e}")
+
+                    def _run_summarize():
+                        try:
+                            lm.summarize(process_all=True, enable_cross_event=True,
+                                         retrieval_scope="global", top_k_seeds=15)
+                        except Exception as e:
+                            logger.warning(f"{sid} summarize error: {e}")
+
+                    # M3 needs the state commit to land before summaries are
+                    # written; without it the original order is preserved.
+                    if lm.state_ablation.enable_m3_summary_sync:
+                        _run_update()
+                        _run_summarize()
+                    else:
+                        _run_summarize()
+                        _run_update()
 
             for entry in _store_dump(lm):
                 if entry["id"] not in seen:
                     seen.add(entry["id"])
                     id2sid[entry["id"]] = sid
+        # Final flush: the loop above only fires every SUMMARIZE_EVERY sessions,
+        # so without this the tail of the haystack would never be consolidated
+        # or state-audited. Applied identically to every arm.
+        with _tk.phase("ingest"):
+            def _final_update():
+                if os.getenv("STRUCTMEM_OFFLINE_UPDATE", "1") != "1":
+                    return
+                try:
+                    lm.construct_update_queue_all_entries(top_k=20, keep_top_n=10)
+                    lm.offline_update_all_entries(score_threshold=0.9)
+                except Exception as e:
+                    logger.warning(f"final offline_update error: {e}")
+
+            def _final_summarize():
+                try:
+                    lm.summarize(process_all=True, enable_cross_event=True,
+                                 retrieval_scope="global", top_k_seeds=15)
+                except Exception as e:
+                    logger.warning(f"final summarize error: {e}")
+
+            # Same ordering rule as the in-loop flush, so the E1/E3 stale-summary
+            # condition stays genuine.
+            if lm.state_ablation.enable_m3_summary_sync:
+                _final_update()
+                _final_summarize()
+            else:
+                _final_summarize()
+                _final_update()
+
         logger.info(f"Fed {n_ok}/{len(sessions)} sessions in {(time.time()-t0):.0f}s")
 
         # ── ② Full store dump → probe_longmem.py (P1: was it ever stored?) ──
@@ -192,8 +274,11 @@ def process_question(q, top_k, save_path, log_dir, session_limit=None, llm_model
         # ── ③ Answer the single question ─────────────────────────────────
         # Each question builds its own store, so one question is one qa unit.
         with _tk.unit("qa"):
+            packet = None
             try:
-                mems = lm.retrieve(q["question"], limit=top_k)
+                # Dual-circuit retrieval (entries + cross-event summaries);
+                # state-aware ordering and labels only when M4 is on.
+                mems, packet = lm.retrieve_for_qa(q["question"], limit=top_k)
             except Exception as e:
                 logger.warning(f"retrieve error: {e}")
                 mems = []
@@ -201,7 +286,15 @@ def process_question(q, top_k, save_path, log_dir, session_limit=None, llm_model
             # session-level extraction → no per-memory session id at retrieval time
             retrieved = [{"text": m, "session_id": None} for m in mems]
 
-            prompt = QA_PROMPT.format(context="\n".join(f"  - {m}" for m in mems) or "  (none)",
+            context = "\n".join(f"  - {m}" for m in mems) or "  (none)"
+            if packet is not None:
+                context = (
+                    f"  QUERY STATE VIEW: {packet.query_view.upper()}\n"
+                    + context
+                    + "\n  State rules:\n  "
+                    + _STATE_QA_RULES.get(packet.query_view, _STATE_QA_RULES["neutral"])
+                )
+            prompt = QA_PROMPT.format(context=context,
                                       date=q.get("question_date", ""), question=q["question"])
             t0 = time.time()
             response = llm_request(prompt)

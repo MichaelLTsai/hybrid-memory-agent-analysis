@@ -1,0 +1,372 @@
+[
+  {
+    "preference_category": "hat styles",
+    "preferences": [
+      "fedora",
+      "beanie",
+      "bucket hat"
+    ],
+    "preference_facts": [
+      "I often wear a fedora when I want to add a classic touch to my outfit.",
+      "Beanies are my go-to for staying warm and casual during chilly days.",
+      "A bucket hat is what I reach for on sunny, laid-back weekends."
+    ],
+    "ground_truth_answer": "fedora, beanie, bucket hat",
+    "question": "I'm packing for a week-long trip with mixed weather \u2014 which hats should I bring to cover all occasions?",
+    "retrieved_memories": "- User prefers wearing a bucket hat on sunny, laid-back weekends\n- User relies on their backpack for carrying books and gadgets comfortably\n- User prefers wearing beanies to stay warm and maintain a casual look during chilly days\n- User prefers using a clutch for evenings out when they want to travel light and stylish\n- User finds a tote bag perfect for errands when they need something roomy but simple",
+    "llm_response": "To cover mixed weather, you should bring both a **bucket hat** and a **beanie**.\n\n*   The **bucket hat** is suitable for sunny, laid-back weekends.\n*   The **beanie** is perfect for chilly days when you want to stay warm and maintain a casual look.\n\nI used the relevant memories regarding your preferences for hats.",
+    "conversation_id": "35c8b2cf-72d8-4a73-964a-e05a74f4b445",
+    "eval_input_tokens": 257,
+    "eval_output_tokens": 76,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "fedora",
+        "original_fact": "I often wear a fedora when I want to add a classic touch to my outfit.",
+        "category": "not_retrieved",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference is explicitly stated in the memory: 'User often wears a fedora when they want to add a classic touch to their outfit'.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory 'User often wears a fedora when they want to add a classic touch to their outfit' is an exact match to the original fact and preserves the specific preference for a fedora without overgeneralization or corruption.",
+        "fact_in_retrieved": false,
+        "retrieval_reasoning": "The retrieved memories mention bucket hats and beanies, but there is no mention of the user's preference for wearing a fedora."
+      },
+      {
+        "preference": "beanie",
+        "original_fact": "Beanies are my go-to for staying warm and casual during chilly days.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference for beanies is explicitly stored: 'User prefers wearing beanies to stay warm and maintain a casual look during chilly days', which closely matches both the original preference and the original fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User prefers wearing beanies to stay warm and maintain a casual look during chilly days\" faithfully preserves the specific preference for beanies and includes the original context.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The original preference for 'beanie' and the associated fact regarding using them to stay warm and casual are explicitly included in the retrieved memories: 'User prefers wearing beanies to stay warm and maintain a casual look during chilly days'."
+      },
+      {
+        "preference": "bucket hat",
+        "original_fact": "A bucket hat is what I reach for on sunny, laid-back weekends.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'User prefers wearing a bucket hat on sunny, laid-back weekends' directly contains the preference for a bucket hat.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory 'User prefers wearing a bucket hat on sunny, laid-back weekends' perfectly preserves the specific item (bucket hat) and the context (sunny, laid-back weekends) from the original fact.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The original preference for a 'bucket hat' is explicitly mentioned in the first retrieved memory: 'User prefers wearing a bucket hat on sunny, laid-back weekends'."
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "not_retrieved",
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "analysis_error": null
+  },
+  {
+    "preference_category": "cocktail types",
+    "preferences": [
+      "margarita",
+      "old fashioned",
+      "mojito",
+      "negroni",
+      "cosmopolitan"
+    ],
+    "preference_facts": [
+      "I usually order a margarita when I want something refreshing with a tangy kick.",
+      "An old fashioned is my choice for a strong, classic whiskey cocktail.",
+      "Mojitos are my favorite when I want a minty, light drink on a warm day.",
+      "I like negronis because their bitter complexity stands out in a crowd.",
+      "Cosmopolitans are what I pick when I want a stylish, fruity cocktail."
+    ],
+    "ground_truth_answer": "margarita, old fashioned, mojito, negroni, cosmopolitan",
+    "question": "I'm hosting a cocktail party and want to make sure I have drinks that match my tastes. What should be on the menu?",
+    "retrieved_memories": "- User prefers Cosmopolitans when they want a stylish, fruity cocktail\n- User usually orders a margarita when they want a refreshing drink with a tangy kick\n- User chooses an Old Fashioned when they want a strong, classic whiskey cocktail\n- User's favorite drink for warm days is a Mojito, as they prefer something minty and light\n- User enjoys discussing food, particularly when swapping recipes or sharing restaurant tips",
+    "llm_response": "Based on your past preferences, here are a few suggestions for your cocktail party menu:\n\n*   **For a stylish, fruity option:** A Cosmopolitan.\n*   **For a refreshing drink with a tangy kick:** A Margarita.\n*   **For a strong, classic whiskey option:** An Old Fashioned.\n*   **For a light, minty drink (especially if the weather is warm):** A Mojito.\n\nI used the following memories:\n- User prefers Cosmopolitans when they want a stylish, fruity cocktail\n- User usually orders a margarita when they want a refreshing drink with a tangy kick\n- User chooses an Old Fashioned when they want a strong, classic whiskey cocktail\n- User's favorite drink for warm days is a Mojito, as they prefer something minty and light",
+    "conversation_id": "a487b442-4537-403c-b474-878677a8c5f3",
+    "eval_input_tokens": 266,
+    "eval_output_tokens": 169,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "margarita",
+        "original_fact": "I usually order a margarita when I want something refreshing with a tangy kick.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference for a margarita is explicitly stated in the memory: 'User usually orders a margarita when they want a refreshing drink with a tangy kick'.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User usually orders a margarita when they want a refreshing drink with a tangy kick\" faithfully preserves the specific drink (margarita) and the context (refreshing with a tangy kick) from the original preference.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The retrieved memories explicitly include the sentence: 'User usually orders a margarita when they want a refreshing drink with a tangy kick', which matches the original preference and fact."
+      },
+      {
+        "preference": "old fashioned",
+        "original_fact": "An old fashioned is my choice for a strong, classic whiskey cocktail.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory store contains the entry 'User chooses an Old Fashioned when they want a strong, classic whiskey cocktail', which directly matches the original preference and fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User chooses an Old Fashioned when they want a strong, classic whiskey cocktail\" perfectly preserves the specific drink and the context provided in the original fact.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The retrieved memories explicitly state: 'User chooses an Old Fashioned when they want a strong, classic whiskey cocktail', which directly matches the original preference and fact."
+      },
+      {
+        "preference": "mojito",
+        "original_fact": "Mojitos are my favorite when I want a minty, light drink on a warm day.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'User's favorite drink for warm days is a Mojito, as they prefer something minty and light' directly corresponds to the original preference for mojitos and the accompanying fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User's favorite drink for warm days is a Mojito, as they prefer something minty and light\" perfectly preserves the specific drink (Mojito) and the context (warm days, minty, light) from the original preference.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for mojitos is explicitly mentioned in the fourth bullet point: 'User's favorite drink for warm days is a Mojito, as they prefer something minty and light'."
+      },
+      {
+        "preference": "negroni",
+        "original_fact": "I like negronis because their bitter complexity stands out in a crowd.",
+        "category": "not_retrieved",
+        "fact_in_store": true,
+        "storage_reasoning": "The original preference for Negronis and the reason (bitter complexity) are explicitly present in the memory: 'User likes Negronis because they appreciate the drink's bitter complexity'.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory ('User likes Negronis because they appreciate the drink's bitter complexity') faithfully preserves the specific drink preference and the reasoning provided in the original fact without overgeneralizing or losing critical details.",
+        "fact_in_retrieved": false,
+        "retrieval_reasoning": "The retrieved memories list preferences for Cosmopolitans, Margaritas, Old Fashioneds, and Mojitos, but there is no mention of Negronis."
+      },
+      {
+        "preference": "cosmopolitan",
+        "original_fact": "Cosmopolitans are what I pick when I want a stylish, fruity cocktail.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'User prefers Cosmopolitans when they want a stylish, fruity cocktail' directly matches the original preference and fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory 'User prefers Cosmopolitans when they want a stylish, fruity cocktail' perfectly preserves the specific drink and the reason for the preference from the original text.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The original preference for Cosmopolitans is explicitly mentioned in the first bullet point of the RETRIEVED_MEMORIES: 'User prefers Cosmopolitans when they want a stylish, fruity cocktail.'"
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "not_retrieved",
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "analysis_error": null
+  },
+  {
+    "preference_category": "animals",
+    "preferences": [
+      "cats",
+      "parrots",
+      "rabbits"
+    ],
+    "preference_facts": [
+      "Cats are my favorite pets because they\u2019re independent yet affectionate.",
+      "I enjoy having parrots around because their colorful feathers and chatter brighten the room.",
+      "Rabbits appeal to me for their gentle nature and soft fur."
+    ],
+    "ground_truth_answer": "cats, parrots, rabbits",
+    "question": "I'm thinking of adopting a pet that fits my lifestyle and preferences \u2014 which animals should I consider?",
+    "retrieved_memories": "- User's favorite pets are cats because they are independent yet affectionate\n- User is attracted to rabbits because of their gentle nature and soft fur\n- User enjoys having parrots around because their colorful feathers and chatter brighten the room\n- User prefers wearing beanies to stay warm and maintain a casual look during chilly days\n- User considers books a favorite topic and is always looking for new book recommendations",
+    "llm_response": "Based on your preferences, you might consider the following pets:\n\n*   **Cats:** You mentioned that you like cats because they are independent yet affectionate.\n*   **Rabbits:** You are attracted to rabbits because of their gentle nature and soft fur.\n*   **Parrots:** You enjoy having parrots around because their colorful feathers and chatter brighten the room.\n\nI used the relevant memories to answer your question.",
+    "conversation_id": "6885164c-7511-420b-aa0e-b51a63df461b",
+    "eval_input_tokens": 253,
+    "eval_output_tokens": 87,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "cats",
+        "original_fact": "Cats are my favorite pets because they\u2019re independent yet affectionate.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'User's favorite pets are cats because they are independent yet affectionate' directly matches the original preference and fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User's favorite pets are cats because they are independent yet affectionate\" perfectly preserves the original preference and the accompanying fact without any overgeneralization or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The original preference for 'cats' is explicitly mentioned in the first memory: 'User's favorite pets are cats because they are independent yet affectionate'."
+      },
+      {
+        "preference": "parrots",
+        "original_fact": "I enjoy having parrots around because their colorful feathers and chatter brighten the room.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'User enjoys having parrots around because their colorful feathers and chatter brighten the room' is a direct match for the original preference and fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User enjoys having parrots around because their colorful feathers and chatter brighten the room\" is a verbatim preservation of the original fact and preference. No overgeneralization or loss of detail occurred.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The memory 'User enjoys having parrots around because their colorful feathers and chatter brighten the room' explicitly contains the preference for parrots."
+      },
+      {
+        "preference": "rabbits",
+        "original_fact": "Rabbits appeal to me for their gentle nature and soft fur.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'User is attracted to rabbits because of their gentle nature and soft fur' directly captures both the preference for rabbits and the specific reasoning mentioned in the original fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory 'User is attracted to rabbits because of their gentle nature and soft fur' perfectly preserves both the specific preference (rabbits) and the reasoning provided in the original fact.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The RETRIEVED_MEMORIES explicitly states, 'User is attracted to rabbits because of their gentle nature and soft fur,' which directly matches the original preference and fact."
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "The model mentioned all three expected preferences: cats, rabbits, and parrots.",
+    "analysis_error": null
+  },
+  {
+    "preference_category": "bag styles",
+    "preferences": [
+      "backpack",
+      "tote bag",
+      "messenger bag",
+      "clutch"
+    ],
+    "preference_facts": [
+      "I rely on my backpack for carrying books and gadgets comfortably.",
+      "A tote bag is perfect when I need something roomy but simple for errands.",
+      "My messenger bag is what I use when I want easy access to my laptop on the go.",
+      "I pick a clutch for evenings out when I want to travel light and stylish."
+    ],
+    "ground_truth_answer": "backpack, tote bag, messenger bag, clutch",
+    "question": "I'm deciding which bags to take for a busy day that includes work, shopping, and dinner plans. What should I bring?",
+    "retrieved_memories": "- User uses a messenger bag when they want easy access to their laptop while on the go\n- User finds a tote bag perfect for errands when they need something roomy but simple\n- User relies on their backpack for carrying books and gadgets comfortably\n- User prefers using a clutch for evenings out when they want to travel light and stylish\n- User prefers wearing a bucket hat on sunny, laid-back weekends",
+    "llm_response": "For a busy day with work, shopping, and dinner plans, you might consider a combination of bags based on your needs for each part of the day:\n\n*   **For Work/On the Go:** You might use your **messenger bag** for easy access to your laptop.\n*   **For Shopping/Errands:** A **tote bag** would be perfect since you mentioned it's roomy and simple for errands.\n*   **For Dinner Plans:** You would want your **clutch** for evenings out, allowing you to travel light and stylish.\n\nI used the following memories:\n*   User uses a messenger bag when they want easy access to their laptop while on the go\n*   User finds a tote bag perfect for errands when they need something roomy but simple\n*   User prefers using a clutch for evenings out when they want to travel light and stylish",
+    "conversation_id": "160fd428-4e8b-4011-b66c-531fcc62a904",
+    "eval_input_tokens": 261,
+    "eval_output_tokens": 181,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "backpack",
+        "original_fact": "I rely on my backpack for carrying books and gadgets comfortably.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'User relies on their backpack for carrying books and gadgets comfortably' is an exact match for the original fact and explicitly contains the preference for a backpack.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory 'User relies on their backpack for carrying books and gadgets comfortably' is a verbatim preservation of the original fact and specifically maintains the identity of the 'backpack' preference without overgeneralization or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The original preference/fact regarding the backpack ('I rely on my backpack for carrying books and gadgets comfortably') is explicitly listed in the RETRIEVED_MEMORIES as 'User relies on their backpack for carrying books and gadgets comfortably'."
+      },
+      {
+        "preference": "tote bag",
+        "original_fact": "A tote bag is perfect when I need something roomy but simple for errands.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The original preference ('tote bag') and the associated fact ('perfect when I need something roomy but simple for errands') are explicitly preserved in the memory: 'User finds a tote bag perfect for errands when they need something roomy but simple'.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User finds a tote bag perfect for errands when they need something roomy but simple\" faithfully preserves the original preference and fact without overgeneralizing or losing critical details.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The original preference/fact regarding the tote bag being perfect for errands when something roomy but simple is needed is directly present in the retrieved memories."
+      },
+      {
+        "preference": "messenger bag",
+        "original_fact": "My messenger bag is what I use when I want easy access to my laptop on the go.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'User uses a messenger bag when they want easy access to their laptop while on the go' is a direct match for the original preference and fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User uses a messenger bag when they want easy access to their laptop while on the go\" perfectly preserves the specific item (messenger bag) and the reasoning (easy access to laptop on the go) from the original preference.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The original preference/fact regarding the messenger bag is explicitly listed as the first item in the RETRIEVED_MEMORIES."
+      },
+      {
+        "preference": "clutch",
+        "original_fact": "I pick a clutch for evenings out when I want to travel light and stylish.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'User prefers using a clutch for evenings out when they want to travel light and stylish' is a direct match to the original fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User prefers using a clutch for evenings out when they want to travel light and stylish\" perfectly preserves the original preference and the associated context without any overgeneralization or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The retrieved memories explicitly include the sentence: 'User prefers using a clutch for evenings out when they want to travel light and stylish', which directly corresponds to the original preference for a clutch."
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "reasoning_error",
+    "correctly_invoked": false,
+    "invocation_reasoning": "The model mentioned the messenger bag, tote bag, and clutch, but it completely omitted the 'backpack' preference.",
+    "analysis_error": null
+  },
+  {
+    "preference_category": "conversation topics",
+    "preferences": [
+      "travel",
+      "technology",
+      "books",
+      "music",
+      "food"
+    ],
+    "preference_facts": [
+      "I love chatting about travel because it inspires new adventures.",
+      "Technology fascinates me, so I enjoy discussing the latest gadgets and trends.",
+      "Books are a favorite topic since I\u2019m always looking for new recommendations.",
+      "Music always gets me excited, especially when sharing favorite artists or concerts.",
+      "Food is a go-to conversation, especially when swapping recipes or restaurant tips."
+    ],
+    "ground_truth_answer": "travel, technology, books, music, food",
+    "question": "I\u2019m meeting new people at a social event and want to steer conversations to topics I genuinely enjoy. What should I bring up?",
+    "retrieved_memories": "- User loves chatting about travel because it inspires new adventures\n- User enjoys discussing food, particularly when swapping recipes or sharing restaurant tips\n- User is fascinated by technology and enjoys discussing the latest gadgets and trends\n- User gets excited by music, particularly when sharing their favorite artists or discussing concert experiences\n- User considers books a favorite topic and is always looking for new book recommendations",
+    "llm_response": "You should bring up topics you genuinely enjoy, which include:\n\n*   **Travel:** Since you love chatting about travel because it inspires new adventures.\n*   **Food:** You enjoy discussing food, especially when sharing recipes or restaurant tips.\n*   **Technology:** You are fascinated by technology and enjoy discussing the latest gadgets and trends.\n*   **Music:** You get excited by music, particularly when sharing your favorite artists or discussing concert experiences.\n*   **Books:** You consider books a favorite topic and are always looking for new book recommendations.\n\nI used the **Relevant Memories** to answer this question.",
+    "conversation_id": "21a2de28-1951-485a-a3fe-489ba25b0490",
+    "eval_input_tokens": 255,
+    "eval_output_tokens": 127,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "travel",
+        "original_fact": "I love chatting about travel because it inspires new adventures.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The original preference 'travel' and the associated fact 'I love chatting about travel because it inspires new adventures' are explicitly recorded in the first memory: 'User loves chatting about travel because it inspires new adventures'.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User loves chatting about travel because it inspires new adventures\" perfectly preserves the original preference and the accompanying fact without any overgeneralization or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The original preference 'travel' is explicitly included in the first retrieved memory: 'User loves chatting about travel because it inspires new adventures'."
+      },
+      {
+        "preference": "technology",
+        "original_fact": "Technology fascinates me, so I enjoy discussing the latest gadgets and trends.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference is explicitly stated in the memory: 'User is fascinated by technology and enjoys discussing the latest gadgets and trends', which is an almost identical match to the original fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The memory entry 'User is fascinated by technology and enjoys discussing the latest gadgets and trends' is a verbatim preservation of the original fact and accurately captures the specific preference for technology.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The original preference (technology) and fact (fascination with latest gadgets and trends) are explicitly present in the third bullet point of the retrieved memories."
+      },
+      {
+        "preference": "books",
+        "original_fact": "Books are a favorite topic since I\u2019m always looking for new recommendations.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The original preference 'books' and the fact 'Books are a favorite topic since I\u2019m always looking for new recommendations' are explicitly captured in the memory: 'User considers books a favorite topic and is always looking for new book recommendations'.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User considers books a favorite topic and is always looking for new book recommendations\" faithfully preserves both the subject (books) and the specific context (seeking recommendations) from the original preference.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The original preference for 'books' is explicitly included in the retrieved memories: 'User considers books a favorite topic and is always looking for new book recommendations'."
+      },
+      {
+        "preference": "music",
+        "original_fact": "Music always gets me excited, especially when sharing favorite artists or concerts.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'User gets excited by music, particularly when sharing their favorite artists or discussing concert experiences' is a direct paraphrase of the original fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory ('User gets excited by music, particularly when sharing their favorite artists or discussing concert experiences') faithfully preserves the original preference and fact without overgeneralization or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for music is explicitly mentioned in the fourth bullet point: 'User gets excited by music, particularly when sharing their favorite artists or discussing concert experiences,' which closely mirrors the original fact."
+      },
+      {
+        "preference": "food",
+        "original_fact": "Food is a go-to conversation, especially when swapping recipes or restaurant tips.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The original fact states that 'Food is a go-to conversation, especially when swapping recipes or restaurant tips.' This is clearly present in the memory: 'User enjoys discussing food, particularly when swapping recipes or sharing restaurant tips.'",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"User enjoys discussing food, particularly when swapping recipes or sharing restaurant tips\" faithfully preserves the identity and the specific details of the original preference and fact.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The original preference 'food' and the accompanying fact about swapping recipes and restaurant tips are explicitly present in the second memory bullet point: 'User enjoys discussing food, particularly when swapping recipes or sharing restaurant tips'."
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "The model explicitly listed all five expected preferences: travel, food, technology, music, and books.",
+    "analysis_error": null
+  }
+]

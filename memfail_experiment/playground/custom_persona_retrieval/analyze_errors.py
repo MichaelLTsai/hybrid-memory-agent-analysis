@@ -933,7 +933,12 @@ def main() -> None:
 
     # max_retries lets the OpenAI client respect 429 Retry-After headers with
     # its own exponential backoff before our outer retry loop kicks in.
-    client = OpenAI(api_key=api_key, max_retries=8, timeout=120.0)
+    # Honour OPENAI_BASE_URL so the judge can run on an OpenAI-compatible
+    # proxy (NCHC). Without it the client silently targets api.openai.com
+    # and every judge call fails to parse, scoring the whole run 0.
+    _base = os.getenv("OPENAI_BASE_URL")
+    client = (OpenAI(api_key=api_key, base_url=_base, max_retries=8, timeout=120.0)
+              if _base else OpenAI(api_key=api_key, max_retries=8, timeout=120.0))
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     results, in_tok, out_tok = analyze_run(

@@ -92,7 +92,9 @@ def _load_meta(run_dir, frame):
 
 def scan_runs():
     runs = []
-    for frame in ["mem0", "rag", "graphiti", "amem", "letta"]:
+    # structmem was missing from this list, so no StructMem run has ever
+    # appeared in the LoCoMo workbook.
+    for frame in ["mem0", "rag", "graphiti", "amem", "letta", "structmem"]:
         for scores_path in sorted(glob.glob(os.path.join(RESULTS_DIR, f"{frame}-*", f"{frame}_locomo_scores.json"))):
             run_dir = os.path.dirname(scores_path)
             version = os.path.basename(run_dir)[len(frame) + 1:]
@@ -111,7 +113,7 @@ def scan_runs():
             row = {
                 "run_name": f"{frame}-{version}",
                 "date": datetime.fromtimestamp(os.path.getmtime(scores_path)).strftime("%Y-%m-%d"),
-                "backend": {"mem0": "Mem0 OSS", "rag": "RAG", "graphiti": "Graphiti", "amem": "A-MEM", "letta": "Letta"}.get(frame, frame),
+                "backend": {"mem0": "Mem0 OSS", "rag": "RAG", "graphiti": "Graphiti", "amem": "A-MEM", "letta": "Letta", "structmem": "StructMem"}.get(frame, frame),
                 "granularity":    meta.get("granularity"),
                 "extraction_llm": meta.get("extraction_llm"),
                 "judge_llm":      meta.get("judge_llm"),

@@ -1,6 +1,6 @@
 # HaluMem Experiment Results
 
-_Last updated: 2026-08-20 22:17_
+_Last updated: 2026-08-27 10:05_
 
 ## Configuration
 
@@ -30,18 +30,26 @@ _Last updated: 2026-08-20 22:17_
 | `graphiti-smoke_graphiti` | 2026-04-28 | Graphiti | `gemma-4-E4B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 1 |
 | `graphiti-user2_graphiti_fix` | 2026-05-29 | Graphiti | `Llama-4-Scout-17B-16E-Instruct-FP8` | `mxbai-embed-large` | `gemma-4-E4B-it` | 2 | 142 |
 | `amem-amem_cost_u2` | 2026-08-20 | A-MEM | `gemma-4-31B-it` | `all-MiniLM-L6-v2` | `gemma-4-E4B-it` | 1 | 77 |
+| `amem-amem_cost_u34` | 2026-08-20 | A-MEM | `gemma-4-31B-it` | `all-MiniLM-L6-v2` | `gemma-4-E4B-it` | 2 | 139 |
 | `amem-full_user1_amem` | 2026-05-26 | A-MEM | `gemma-4-E4B-it` | `all-MiniLM-L6-v2` | `gemma-4-E4B-it` | 1 | 65 |
 | `amem-full_user1_amem_31b` | 2026-05-26 | A-MEM | `gemma-4-31B-it` | `all-MiniLM-L6-v2` | `gemma-4-E4B-it` | 1 | 65 |
 | `amem-smoke_amem` | 2026-05-26 | A-MEM | `gemma-4-E4B-it` | `all-MiniLM-L6-v2` | `gemma-4-E4B-it` | 1 | 1 |
 | `amem-user2nd_gemma431b_probe` | 2026-08-08 | A-MEM | `gemma-4-31B-it` | `all-MiniLM-L6-v2` | `gemma-4-E4B-it` | 1 | 77 |
 | `memwave-user2_memwave` | 2026-05-28 | MemWave | `openai/gemma-4-E4B-it` | `bge-m3:latest` | `gemma-4-E4B-it` | 2 | 142 |
 | `rag-user1` | 2026-07-07 | RAG | `none (raw turns)` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 65 |
+| `letta-letta_cost_u2` | 2026-08-21 | Letta | `openai-proxy/gemma-4-31B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 77 |
+| `letta-letta_cost_u34` | 2026-08-21 | Letta | `openai-proxy/gemma-4-31B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 2 | 139 |
 | `letta-u2_ctx` | 2026-08-17 | Letta | `openai-proxy/gemma-4-31B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 77 |
 | `letta-user1` | 2026-07-07 | Letta | `openai-proxy/gemma-4-E4B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 65 |
 | `letta-user2nd_gemma431b_probe` | 2026-08-08 | Letta | `openai-proxy/gemma-4-31B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 77 |
 | `zep-user0-65s` | 2026-07-31 | Zep Cloud | `unknown` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 65 |
 | `zep-user2nd_gemma431b_probe` | 2026-08-08 | Zep Cloud | `unknown` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 77 |
 | `memos-user2nd_gemma431b_probe` | 2026-08-08 | MemOS | `gemma-4-31B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 77 |
+| `structmem-ablate_e0_baseline` | 2026-08-26 | StructMem | `gemma-4-E4B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 65 |
+| `structmem-ablate_e1_m1` | 2026-08-25 | StructMem | `gemma-4-E4B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 65 |
+| `structmem-ablate_e2_m1_m3` | 2026-08-25 | StructMem | `gemma-4-E4B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 65 |
+| `structmem-ablate_e3_m1_m4` | 2026-08-25 | StructMem | `gemma-4-E4B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 65 |
+| `structmem-ablate_e4_full` | 2026-08-25 | StructMem | `gemma-4-E4B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 65 |
 | `structmem-sm_cost_u2` | 2026-08-19 | StructMem | `gemma-4-31B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 77 |
 | `structmem-sm_cost_u34` | 2026-08-20 | StructMem | `gemma-4-31B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 2 | 139 |
 | `structmem-u2_upd` | 2026-08-17 | StructMem | `gemma-4-31B-it` | `mxbai-embed-large` | `gemma-4-E4B-it` | 1 | 77 |
@@ -75,18 +83,26 @@ _Last updated: 2026-08-20 22:17_
 | `graphiti-smoke_graphiti` | — | 0.333 | **1.000** | 0.500 | 0.000 | **1.000** | 0.000 | **0.000** | 0.333 | **0.000** | 0.667 |
 | `graphiti-user2_graphiti_fix` | — | 0.006 | **1.000** | 0.013 | 0.978 | 0.015 | 0.000 | 0.987 | 0.224 | 0.009 | 0.767 |
 | `amem-amem_cost_u2` | 5,624,886 | 0.829 | 0.975 | 0.896 | 0.109 | 0.659 | 0.790 | 0.117 | 0.590 | 0.176 | 0.234 |
+| `amem-amem_cost_u34` | 10,489,125 | 0.857 | 0.982 | 0.915 | 0.127 | 0.775 | 0.806 | 0.134 | 0.489 | 0.183 | 0.328 |
 | `amem-full_user1_amem` | — | 0.712 | 0.995 | 0.830 | 0.600 | 0.826 | 0.507 | 0.176 | 0.555 | 0.177 | 0.268 |
 | `amem-full_user1_amem_31b` | 2,076,257 | 0.692 | 0.994 | 0.816 | 0.624 | 0.838 | 0.549 | 0.162 | 0.561 | 0.165 | 0.274 |
 | `amem-smoke_amem` | — | **1.000** | **1.000** | **1.000** | 0.000 | 0.833 | 0.000 | **0.000** | 0.667 | 0.333 | **0.000** |
 | `amem-user2nd_gemma431b_probe` | 5,642,742 | 0.823 | 0.966 | 0.889 | 0.082 | 0.657 | 0.735 | 0.123 | 0.553 | 0.213 | 0.234 |
 | `memwave-user2_memwave` | 175,647 | 0.357 | 0.998 | 0.526 | 0.651 | 0.873 | 0.000 | **0.000** | 0.230 | 0.009 | 0.761 |
 | `rag-user1` | 182,068 | 0.710 | 0.994 | 0.828 | 0.616 | 0.823 | 0.479 | 0.134 | 0.360 | 0.110 | 0.530 |
+| `letta-letta_cost_u2` | 6,101,196 | 0.737 | 0.988 | 0.844 | 0.313 | 0.063 | 0.654 | 0.241 | 0.564 | 0.383 | 0.053 |
+| `letta-letta_cost_u34` | 11,280,670 | 0.696 | 0.995 | 0.819 | 0.342 | 0.076 | 0.585 | 0.271 | 0.506 | 0.467 | 0.028 |
 | `letta-u2_ctx` | 5,782,036 | 0.629 | 0.991 | 0.769 | 0.367 | 0.063 | 0.543 | 0.222 | 0.580 | 0.399 | 0.021 |
 | `letta-user1` | — | 0.488 | 0.953 | 0.645 | 0.544 | 0.056 | 0.289 | 0.592 | 0.537 | 0.293 | 0.171 |
 | `letta-user2nd_gemma431b_probe` | 5,475,397 | 0.673 | 0.975 | 0.796 | 0.286 | 0.059 | 0.556 | 0.235 | 0.580 | 0.372 | 0.048 |
 | `zep-user0-65s` | 139,210 | 0.661 | 0.989 | 0.792 | 0.472 | 0.602 | 0.415 | 0.169 | 0.378 | 0.116 | 0.506 |
 | `zep-user2nd_gemma431b_probe` | 152,841 | 0.621 | 0.993 | 0.764 | 0.381 | 0.675 | 0.261 | 0.298 | 0.351 | 0.064 | 0.585 |
 | `memos-user2nd_gemma431b_probe` | 1,941,768 | 0.823 | 0.978 | 0.894 | 0.265 | 0.633 | 0.660 | 0.099 | 0.330 | 0.096 | 0.574 |
+| `structmem-ablate_e0_baseline` | 5,117,424 | 0.880 | 0.995 | 0.934 | 0.160 | 0.855 | 0.718 | 0.085 | 0.530 | 0.140 | 0.329 |
+| `structmem-ablate_e1_m1` | 3,201,363 | 0.845 | 0.996 | 0.914 | 0.216 | 0.840 | 0.739 | 0.092 | 0.457 | 0.171 | 0.372 |
+| `structmem-ablate_e2_m1_m3` | 3,435,712 | 0.902 | 0.996 | 0.947 | 0.168 | 0.844 | 0.641 | 0.120 | 0.470 | 0.183 | 0.348 |
+| `structmem-ablate_e3_m1_m4` | 3,333,726 | 0.874 | 0.996 | 0.931 | 0.192 | 0.842 | 0.711 | 0.099 | 0.494 | 0.152 | 0.354 |
+| `structmem-ablate_e4_full` | 3,663,843 | 0.880 | 0.997 | 0.935 | 0.176 | 0.832 | 0.725 | 0.099 | 0.500 | 0.165 | 0.335 |
 | `structmem-sm_cost_u2` | 1,229,104 | 0.064 | **1.000** | 0.121 | **1.000** | 0.932 | 0.019 | 0.901 | 0.234 | 0.122 | 0.644 |
 | `structmem-sm_cost_u34` | 2,230,806 | 0.049 | **1.000** | 0.093 | 0.996 | 0.893 | 0.067 | 0.839 | 0.206 | 0.064 | 0.731 |
 | `structmem-u2_upd` | 1,225,702 | 0.078 | **1.000** | 0.145 | **1.000** | 0.932 | 0.006 | 0.889 | 0.234 | 0.133 | 0.633 |

@@ -1,0 +1,21 @@
+{
+  "run": "letta-u2_ctx",
+  "n": 147,
+  "P1_fail": 0.2041,
+  "P4_fail": 0.0544,
+  "P5_fail": 0.2585,
+  "not_counted": 43,
+  "abstain_n": 41,
+  "unadjudicated": 0,
+  "verdicts": {
+    "OK": 28,
+    "P5b_OK": 38,
+    "SUMMARY": 30,
+    "NOT_COUNTED": 43,
+    "REASONING": 38,
+    "P5b_FAIL": 3,
+    "RETRIEVAL": 8
+  },
+  "judge_failures": {},
+  "attributable_error_rate": 0.517
+}

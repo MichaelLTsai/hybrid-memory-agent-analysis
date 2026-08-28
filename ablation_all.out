@@ -1,0 +1,32 @@
+=== LME E0_baseline started (pid 97569) ===
+=== LME E1_m1 started (pid 97584) ===
+=== LME E2_m1_m3 started (pid 97593) ===
+=== LME E3_m1_m4 started (pid 97610) ===
+=== LME E4_full started (pid 97625) ===
+=== HaluMem E0_baseline started (pid 97635) ===
+=== HaluMem E1_m1 started (pid 97650) ===
+=== HaluMem E2_m1_m3 started (pid 97663) ===
+=== HaluMem E3_m1_m4 started (pid 97689) ===
+=== HaluMem E4_full started (pid 97705) ===
+=== 10 lines running, waiting ===
+./run_state_ablation.sh: line 32: 97571 Terminated: 15          STRUCTMEM_EXPERIMENT="$arm" LME_TYPE_QUOTA="$LME_QUOTA" "$PY" run_longmem.py --backend structmem --version "$ver" --max-questions 5 > "logs_${ver}.out" 2>&1
+LME E0_baseline exit=143
+./run_state_ablation.sh: line 32: 97595 Terminated: 15          STRUCTMEM_EXPERIMENT="$arm" LME_TYPE_QUOTA="$LME_QUOTA" "$PY" run_longmem.py --backend structmem --version "$ver" --max-questions 5 > "logs_${ver}.out" 2>&1
+./run_state_ablation.sh: line 32: 97586 Terminated: 15          STRUCTMEM_EXPERIMENT="$arm" LME_TYPE_QUOTA="$LME_QUOTA" "$PY" run_longmem.py --backend structmem --version "$ver" --max-questions 5 > "logs_${ver}.out" 2>&1
+LME E2_m1_m3 exit=143
+./run_state_ablation.sh: line 32: 97612 Terminated: 15          STRUCTMEM_EXPERIMENT="$arm" LME_TYPE_QUOTA="$LME_QUOTA" "$PY" run_longmem.py --backend structmem --version "$ver" --max-questions 5 > "logs_${ver}.out" 2>&1
+LME E1_m1 exit=143
+LME E3_m1_m4 exit=143
+./run_state_ablation.sh: line 32: 97627 Terminated: 15          STRUCTMEM_EXPERIMENT="$arm" LME_TYPE_QUOTA="$LME_QUOTA" "$PY" run_longmem.py --backend structmem --version "$ver" --max-questions 5 > "logs_${ver}.out" 2>&1
+LME E4_full exit=143
+./run_state_ablation.sh: line 46: 97637 Terminated: 15          STRUCTMEM_EXPERIMENT="$arm" "$PY" run.py --backend structmem --version "$ver" --max-users 1 > "logs_${ver}.out" 2>&1
+HaluMem E0_baseline exit=143
+./run_state_ablation.sh: line 46: 97690 Killed: 9               STRUCTMEM_EXPERIMENT="$arm" "$PY" run.py --backend structmem --version "$ver" --max-users 1 > "logs_${ver}.out" 2>&1
+HaluMem E3_m1_m4 exit=137
+./run_state_ablation.sh: line 46: 97652 Killed: 9               STRUCTMEM_EXPERIMENT="$arm" "$PY" run.py --backend structmem --version "$ver" --max-users 1 > "logs_${ver}.out" 2>&1
+HaluMem E1_m1 exit=137
+./run_state_ablation.sh: line 46: 97664 Killed: 9               STRUCTMEM_EXPERIMENT="$arm" "$PY" run.py --backend structmem --version "$ver" --max-users 1 > "logs_${ver}.out" 2>&1
+HaluMem E2_m1_m3 exit=137
+./run_state_ablation.sh: line 46: 97707 Killed: 9               STRUCTMEM_EXPERIMENT="$arm" "$PY" run.py --backend structmem --version "$ver" --max-users 1 > "logs_${ver}.out" 2>&1
+HaluMem E4_full exit=137
+=== ALL ARMS FINISHED ===

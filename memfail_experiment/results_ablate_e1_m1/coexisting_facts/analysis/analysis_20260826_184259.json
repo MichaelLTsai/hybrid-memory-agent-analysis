@@ -1,0 +1,372 @@
+[
+  {
+    "preference_category": "hat styles",
+    "preferences": [
+      "fedora",
+      "beanie",
+      "bucket hat"
+    ],
+    "preference_facts": [
+      "I often wear a fedora when I want to add a classic touch to my outfit.",
+      "Beanies are my go-to for staying warm and casual during chilly days.",
+      "A bucket hat is what I reach for on sunny, laid-back weekends."
+    ],
+    "ground_truth_answer": "fedora, beanie, bucket hat",
+    "question": "I'm packing for a week-long trip with mixed weather \u2014 which hats should I bring to cover all occasions?",
+    "retrieved_memories": "- 2026-08-26T16:23:00.000 Wed The user prefers wearing a bucket hat on sunny, laid-back weekends.\n- 2026-08-26T16:23:00.000 Wed The assistant recorded that the user likes wearing bucket hats on sunny, laid-back weekends, accompanied by emojis of a cap and sun.\n- 2026-08-26T16:23:00.000 Wed Beanies are the user's preferred accessory for staying warm and casual during chilly days.\n- 2026-08-26T16:23:00.000 Wed The user often wears a fedora when they want to add a classic touch to their outfit.\n- 2026-08-26T16:23:00.000 Wed The user loves chatting about travel because it inspires new adventures.\n- 2026-08-26T16:23:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a variety of the user's preferences and interests, with the assistant consistently showing engagement and validation. Regarding accessories, the user prefers wearing a bucket hat on sunny, laid-back weekends, a preference the assistant noted and recorded. For colder weather, beanies are the user's choice for a casual look. In terms of bags, the user finds tote bags ideal for errands due to their roomy yet simple design, while a messenger bag is used for convenient laptop access while traveling.\n\nThe conversation also delved into culinary and social interests. Food is a primary topic for the user, who enjoys swapping recipes and restaurant tips. When it comes to cocktails, the user appreciates the bitter complexity of Negronis and prefers Cosmopolitans for a stylish, fruity option.\n\nBeyond daily items and food, the user shared several personal affinities. They have a strong liking for cats because of their blend of independence and affection, and they also have an affinity for rabbits due to their gentle nature and soft fur. Furthermore, the user enjoys chatting about travel as it inspires new adventures. The assistant actively supported these disclosures, acknowledging and validating the user's points on topics like tote bags and food discussions, demonstrating an interest in the user's overall profile.\n- 2026-08-26T16:24:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a wide range of the user's preferences, with the assistant consistently offering supportive and validating responses. Initially, the user shared that they enjoy parrots because their colorful feathers and chatter brighten the room, which the assistant positively affirmed as wonderful, lively companions. The conversation then moved to personal style and activities. The user mentioned that they wear a fedora for a classic touch and select a clutch for evenings out to travel light and stylish. Regarding beverages, the user prefers Mojitos for a minty, light drink on a warm day, while also favoring a margarita for a tangy kick and an Old Fashioned for a strong, classic whiskey cocktail.\n\nThe assistant demonstrated strong engagement by summarizing these varied preferences\u2014such as excitement through music, stylish lightness with an evening clutch, and refreshment with a Mojito\u2014and then prompting the user for more sharing. In terms of hobbies, the user is fascinated by technology and enjoys discussing gadgets. They also have a strong affinity for books, always seeking new recommendations, and the assistant noted its readiness to suggest sci-fi, historical fiction, and thrillers. Furthermore, the user's preferences extend to pets (cats and rabbits) and activities, including enjoying travel and food discussions. Finally, the user detailed their practical choices, such as using a backpack for books and gadgets, and the assistant acknowledged these details while showing interest in other personal interests.",
+    "llm_response": "You should bring a few different hats to cover all occasions based on your preferences:\n\n*   **Bucket Hat:** This is great for sunny, laid-back weekends.\n*   **Beanie:** This is your preferred accessory for staying warm and casual during chilly days.\n*   **Fedora:** You often wear a fedora when you want to add a classic touch to your outfit.\n\nI used the following memories:\n*   2026-08-26T16:23:00.000 Wed The user prefers wearing a bucket hat on sunny, laid-back weekends.\n*   2026-08-26T16:23:00.000 Wed Beanies are the user's preferred accessory for staying warm and casual during chilly days.\n*   2026-08-26T16:23:00.000 Wed The user often wears a fedora when they want to add a classic touch to their outfit.",
+    "conversation_id": "82366230-f0b1-4481-933b-15047c5e6bf1",
+    "eval_input_tokens": 1022,
+    "eval_output_tokens": 221,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "fedora",
+        "original_fact": "I often wear a fedora when I want to add a classic touch to my outfit.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory store contains the exact sentence from the original fact: 'The user often wears a fedora when they want to add a classic touch to their outfit.'",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"The user often wears a fedora when they want to add a classic touch to their outfit\" is an exact preservation of the original preference and fact.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for wearing a fedora is explicitly mentioned multiple times in the RETRIEVED_MEMORIES: first as a standalone memory ('The user often wears a fedora when they want to add a classic touch to their outfit') and again within the second summary ('The user mentioned that they wear a fedora for a classic touch')."
+      },
+      {
+        "preference": "beanie",
+        "original_fact": "Beanies are my go-to for staying warm and casual during chilly days.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory store contains the explicit entry: 'Beanies are the user's preferred accessory for staying warm and casual during chilly days.', which matches the original preference and fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The memory 'Beanies are the user's preferred accessory for staying warm and casual during chilly days' perfectly preserves the specific identity and details of the original preference.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for beanies is explicitly mentioned in two places within the RETRIEVED_MEMORIES: once as a standalone memory (\"Beanies are the user's preferred accessory for staying warm and casual during chilly days\") and again within the first [SUMMARY] block (\"For colder weather, beanies are the user's choice for a casual look\")."
+      },
+      {
+        "preference": "bucket hat",
+        "original_fact": "A bucket hat is what I reach for on sunny, laid-back weekends.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference is explicitly stored in multiple entries: 'The user prefers wearing a bucket hat on sunny, laid-back weekends' and 'The assistant recorded that the user likes wearing bucket hats on sunny, laid-back weekends...'",
+        "summary_passed": true,
+        "summary_reasoning": "The preference is faithfully preserved in multiple entries. Specifically, 'The user prefers wearing a bucket hat on sunny, laid-back weekends' and 'The assistant recorded that the user likes wearing bucket hats on sunny, laid-back weekends' both accurately capture the specific item and the context without overgeneralization or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for a 'bucket hat' is explicitly mentioned multiple times in the RETRIEVED_MEMORIES: once as a standalone memory ('The user prefers wearing a bucket hat on sunny, laid-back weekends'), once in a recording of the assistant's notes, and again within a summary of the conversation."
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "The model mentioned all three expected preferences (fedora, beanie, and bucket hat) in its response.",
+    "analysis_error": null
+  },
+  {
+    "preference_category": "cocktail types",
+    "preferences": [
+      "margarita",
+      "old fashioned",
+      "mojito",
+      "negroni",
+      "cosmopolitan"
+    ],
+    "preference_facts": [
+      "I usually order a margarita when I want something refreshing with a tangy kick.",
+      "An old fashioned is my choice for a strong, classic whiskey cocktail.",
+      "Mojitos are my favorite when I want a minty, light drink on a warm day.",
+      "I like negronis because their bitter complexity stands out in a crowd.",
+      "Cosmopolitans are what I pick when I want a stylish, fruity cocktail."
+    ],
+    "ground_truth_answer": "margarita, old fashioned, mojito, negroni, cosmopolitan",
+    "question": "I'm hosting a cocktail party and want to make sure I have drinks that match my tastes. What should be on the menu?",
+    "retrieved_memories": "- 2026-08-26T16:24:00.000 Wed The assistant has noted the user's preference for an Old Fashioned for a strong, classic whiskey cocktail and will remember it for future recommendations.\n- 2026-08-26T16:23:00.000 Wed The user prefers Cosmopolitans when they want a stylish, fruity cocktail.\n- 2026-08-26T16:24:00.000 Wed The user prefers an Old Fashioned as their choice for a strong, classic whiskey cocktail.\n- 2026-08-26T16:24:00.000 Wed The user usually orders a margarita when they desire something refreshing with a tangy kick.\n- 2026-08-26T16:23:00.000 Wed The assistant noted that Mojitos are the user's favorite drink when they want a minty, light drink on a warm day.\n- 2026-08-26T16:24:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a wide range of the user's preferences, with the assistant consistently offering supportive and validating responses. Initially, the user shared that they enjoy parrots because their colorful feathers and chatter brighten the room, which the assistant positively affirmed as wonderful, lively companions. The conversation then moved to personal style and activities. The user mentioned that they wear a fedora for a classic touch and select a clutch for evenings out to travel light and stylish. Regarding beverages, the user prefers Mojitos for a minty, light drink on a warm day, while also favoring a margarita for a tangy kick and an Old Fashioned for a strong, classic whiskey cocktail.\n\nThe assistant demonstrated strong engagement by summarizing these varied preferences\u2014such as excitement through music, stylish lightness with an evening clutch, and refreshment with a Mojito\u2014and then prompting the user for more sharing. In terms of hobbies, the user is fascinated by technology and enjoys discussing gadgets. They also have a strong affinity for books, always seeking new recommendations, and the assistant noted its readiness to suggest sci-fi, historical fiction, and thrillers. Furthermore, the user's preferences extend to pets (cats and rabbits) and activities, including enjoying travel and food discussions. Finally, the user detailed their practical choices, such as using a backpack for books and gadgets, and the assistant acknowledged these details while showing interest in other personal interests.\n- 2026-08-26T16:23:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a variety of the user's preferences and interests, with the assistant consistently showing engagement and validation. Regarding accessories, the user prefers wearing a bucket hat on sunny, laid-back weekends, a preference the assistant noted and recorded. For colder weather, beanies are the user's choice for a casual look. In terms of bags, the user finds tote bags ideal for errands due to their roomy yet simple design, while a messenger bag is used for convenient laptop access while traveling.\n\nThe conversation also delved into culinary and social interests. Food is a primary topic for the user, who enjoys swapping recipes and restaurant tips. When it comes to cocktails, the user appreciates the bitter complexity of Negronis and prefers Cosmopolitans for a stylish, fruity option.\n\nBeyond daily items and food, the user shared several personal affinities. They have a strong liking for cats because of their blend of independence and affection, and they also have an affinity for rabbits due to their gentle nature and soft fur. Furthermore, the user enjoys chatting about travel as it inspires new adventures. The assistant actively supported these disclosures, acknowledging and validating the user's points on topics like tote bags and food discussions, demonstrating an interest in the user's overall profile.",
+    "llm_response": "Based on your past preferences, here are some cocktail suggestions for your party:\n\n*   **Old Fashioned:** If you want a strong, classic whiskey drink.\n*   **Cosmopolitan:** For a stylish, fruity option.\n*   **Margarita:** If you're looking for something refreshing with a tangy kick.\n*   **Mojito:** If you want a minty, light drink, especially if the party might be on a warm day.\n*   **Negroni:** If you prefer something with bitter complexity.\n\nI used the following memories:\n*   2026-08-26T16:23:00.000 Wed The user prefers Cosmopolitans when they want a stylish, fruity cocktail.\n*   2026-08-26T16:24:00.000 Wed The user prefers an Old Fashioned as their choice for a strong, classic whiskey cocktail.\n*   2026-08-26T16:24:00.000 Wed The user usually orders a margarita when they desire something refreshing with a tangy kick.\n*   2026-08-26T16:23:00.000 Wed The assistant noted that Mojitos are the user's favorite drink when they want a minty, light drink on a warm day.\n*   2026-08-26T16:23:00.000 Wednesday The conversation also delved into culinary and social interests. Food is a primary topic for the user, who enjoys swapping recipes and restaurant tips. When it comes to cocktails, the user appreciates the bitter complexity of Negronis and prefers Cosmopolitans for a stylish, fruity option.",
+    "conversation_id": "cd777f2e-de72-46bf-9738-a5b38afa5766",
+    "eval_input_tokens": 1039,
+    "eval_output_tokens": 387,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "margarita",
+        "original_fact": "I usually order a margarita when I want something refreshing with a tangy kick.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference is explicitly stored in the memory: 'The user usually orders a margarita when they desire something refreshing with a tangy kick.'",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"The user usually orders a margarita when they desire something refreshing with a tangy kick\" is a faithful preservation of the original preference. It maintains the specific drink (margarita) and the specific reason/context (refreshing with a tangy kick) without overgeneralizing or corrupting the information.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for a margarita is explicitly mentioned in two places within the RETRIEVED_MEMORIES: first, as a standalone memory ('The user usually orders a margarita when they desire something refreshing with a tangy kick'), and second, within a summary of the conversation on August 26, 2026 ('...while also favoring a margarita for a tangy kick')."
+      },
+      {
+        "preference": "old fashioned",
+        "original_fact": "An old fashioned is my choice for a strong, classic whiskey cocktail.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference is explicitly stated in two separate entries: 'The assistant has noted the user's preference for an Old Fashioned for a strong, classic whiskey cocktail...' and 'The user prefers an Old Fashioned as their choice for a strong, classic whiskey cocktail.'",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"The user prefers an Old Fashioned as their choice for a strong, classic whiskey cocktail\" exactly preserves the identity, drink type, and the specific reasoning (strong, classic whiskey cocktail) from the original preference.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for an Old Fashioned is explicitly mentioned multiple times in the RETRIEVED_MEMORIES: in two individual memory entries and within the first summary block."
+      },
+      {
+        "preference": "mojito",
+        "original_fact": "Mojitos are my favorite when I want a minty, light drink on a warm day.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference is explicitly stored in multiple entries: 'The assistant noted that Mojitos are the user's favorite drink when they want a minty, light drink on a warm day' and 'Mojitos are the user's favorite drink when they desire a minty, light drink on a warm day.'",
+        "summary_passed": true,
+        "summary_reasoning": "The memory store contains multiple entries that faithfully preserve the original preference. Specifically, the entry \"Mojitos are the user's favorite drink when they desire a minty, light drink on a warm day\" exactly mirrors the original fact and preserves the specific identity of the preference without overgeneralization or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for Mojitos is explicitly mentioned multiple times in the RETRIEVED_MEMORIES: once as a standalone memory ('The assistant noted that Mojitos are the user's favorite drink when they want a minty, light drink on a warm day') and twice within the summary sections."
+      },
+      {
+        "preference": "negroni",
+        "original_fact": "I like negronis because their bitter complexity stands out in a crowd.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference for negronis is explicitly mentioned in two memories: 'The user likes Negronis because they appreciate their bitter complexity' and 'The assistant noted that the user enjoys Negronis because they appreciate their bitter complexity.'",
+        "summary_passed": true,
+        "summary_reasoning": "The memory contains two entries referring to the preference: 'The user likes Negronis because they appreciate their bitter complexity' and 'The assistant noted that the user enjoys Negronis because they appreciate their bitter complexity.' Both accurately preserve the specific drink (Negroni) and the reason for the preference (bitter complexity) without overgeneralizing or corrupting the information.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for Negronis is explicitly mentioned in the second [SUMMARY] block: 'When it comes to cocktails, the user appreciates the bitter complexity of Negronis...'"
+      },
+      {
+        "preference": "cosmopolitan",
+        "original_fact": "Cosmopolitans are what I pick when I want a stylish, fruity cocktail.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference is explicitly stated in the memory: 'The user prefers Cosmopolitans when they want a stylish, fruity cocktail.'",
+        "summary_passed": true,
+        "summary_reasoning": "The memory entry \"The user prefers Cosmopolitans when they want a stylish, fruity cocktail\" perfectly preserves the specific identity, the drink name, and the reason for the preference from the original fact.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for Cosmopolitans is explicitly mentioned in two places within the RETRIEVED_MEMORIES: first as a standalone memory ('The user prefers Cosmopolitans when they want a stylish, fruity cocktail') and again within the second summary ('...prefers Cosmopolitans for a stylish, fruity option')."
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "The model mentioned all five expected preferences in its response: margarita, old fashioned, mojito, negroni, and cosmopolitan.",
+    "analysis_error": null
+  },
+  {
+    "preference_category": "animals",
+    "preferences": [
+      "cats",
+      "parrots",
+      "rabbits"
+    ],
+    "preference_facts": [
+      "Cats are my favorite pets because they\u2019re independent yet affectionate.",
+      "I enjoy having parrots around because their colorful feathers and chatter brighten the room.",
+      "Rabbits appeal to me for their gentle nature and soft fur."
+    ],
+    "ground_truth_answer": "cats, parrots, rabbits",
+    "question": "I'm thinking of adopting a pet that fits my lifestyle and preferences \u2014 which animals should I consider?",
+    "retrieved_memories": "- 2026-08-26T16:23:00.000 Wed The user's favorite pets are cats because they are independent yet affectionate.\n- 2026-08-26T16:23:00.000 Wed The user has an affinity for rabbits because of their gentle nature and soft fur.\n- 2026-08-26T16:23:00.000 Wed The assistant acknowledged the user's enjoyment of parrots and offered a positive, supportive affirmation about them being wonderful, lively companions.\n- 2026-08-26T16:23:00.000 Wed The user enjoys having parrots around because their colorful feathers and chatter brighten the room.\n- 2026-08-26T16:23:00.000 Wed The assistant acknowledged and validated the user's preference for food-related topics, expressing enthusiasm for future discussions on culinary adventures.\n- 2026-08-26T16:23:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a variety of the user's preferences and interests, with the assistant consistently showing engagement and validation. Regarding accessories, the user prefers wearing a bucket hat on sunny, laid-back weekends, a preference the assistant noted and recorded. For colder weather, beanies are the user's choice for a casual look. In terms of bags, the user finds tote bags ideal for errands due to their roomy yet simple design, while a messenger bag is used for convenient laptop access while traveling.\n\nThe conversation also delved into culinary and social interests. Food is a primary topic for the user, who enjoys swapping recipes and restaurant tips. When it comes to cocktails, the user appreciates the bitter complexity of Negronis and prefers Cosmopolitans for a stylish, fruity option.\n\nBeyond daily items and food, the user shared several personal affinities. They have a strong liking for cats because of their blend of independence and affection, and they also have an affinity for rabbits due to their gentle nature and soft fur. Furthermore, the user enjoys chatting about travel as it inspires new adventures. The assistant actively supported these disclosures, acknowledging and validating the user's points on topics like tote bags and food discussions, demonstrating an interest in the user's overall profile.\n- 2026-08-26T16:24:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a wide range of the user's preferences, with the assistant consistently offering supportive and validating responses. Initially, the user shared that they enjoy parrots because their colorful feathers and chatter brighten the room, which the assistant positively affirmed as wonderful, lively companions. The conversation then moved to personal style and activities. The user mentioned that they wear a fedora for a classic touch and select a clutch for evenings out to travel light and stylish. Regarding beverages, the user prefers Mojitos for a minty, light drink on a warm day, while also favoring a margarita for a tangy kick and an Old Fashioned for a strong, classic whiskey cocktail.\n\nThe assistant demonstrated strong engagement by summarizing these varied preferences\u2014such as excitement through music, stylish lightness with an evening clutch, and refreshment with a Mojito\u2014and then prompting the user for more sharing. In terms of hobbies, the user is fascinated by technology and enjoys discussing gadgets. They also have a strong affinity for books, always seeking new recommendations, and the assistant noted its readiness to suggest sci-fi, historical fiction, and thrillers. Furthermore, the user's preferences extend to pets (cats and rabbits) and activities, including enjoying travel and food discussions. Finally, the user detailed their practical choices, such as using a backpack for books and gadgets, and the assistant acknowledged these details while showing interest in other personal interests.",
+    "llm_response": "Based on your past conversations, you have expressed preferences for **cats** because you like that they are independent yet affectionate, and you also have an affinity for **rabbits** due to their gentle nature and soft fur. You also enjoy **parrots**, noting that their colorful feathers and chatter brighten the room.\n\nI used the following memories:\n- 2026-08-26T16:23:00.000 Wed The user's favorite pets are cats because they are independent yet affectionate.\n- 2026-08-26T16:23:00.000 Wed The user has an affinity for rabbits because of their gentle nature and soft fur.\n- 2026-08-26T16:23:00.000 Wed The assistant acknowledged the user's enjoyment of parrots and offered a positive, supportive affirmation about them being wonderful, lively companions.\n- 2026-08-26T16:23:00.000 Wed The user enjoys having parrots around because their colorful feathers and chatter brighten the room.\n- 2026-08-26T16:24:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a wide range of the user's preferences, with the assistant consistently offering supportive and validating responses. Initially, the user shared that they enjoy parrots because their colorful feathers and chatter brighten the room, which the assistant positively affirmed as wonderful, lively companions.",
+    "conversation_id": "18393800-f39b-4c0e-be9c-390783c45a77",
+    "eval_input_tokens": 1025,
+    "eval_output_tokens": 348,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "cats",
+        "original_fact": "Cats are my favorite pets because they\u2019re independent yet affectionate.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The original preference and fact ('Cats are my favorite pets because they\u2019re independent yet affectionate') are explicitly recorded in the memory store: 'The user's favorite pets are cats because they are independent yet affectionate.'",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"The user's favorite pets are cats because they are independent yet affectionate\" is a perfect preservation of the original preference and fact. No details were lost, overgeneralized, or corrupted.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for cats is explicitly mentioned multiple times in the RETRIEVED_MEMORIES. It appears in the first memory bullet point ('The user's favorite pets are cats'), in the first summary ('They have a strong liking for cats because of their blend of independence and affection'), and in the second summary ('the user's preferences extend to pets (cats and rabbits)')."
+      },
+      {
+        "preference": "parrots",
+        "original_fact": "I enjoy having parrots around because their colorful feathers and chatter brighten the room.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The original preference and fact are explicitly stored in the memory: 'The user enjoys having parrots around because their colorful feathers and chatter brighten the room.'",
+        "summary_passed": true,
+        "summary_reasoning": "The memory store contains the exact original fact: 'The user enjoys having parrots around because their colorful feathers and chatter brighten the room.' This preserves the specific preference and all its identifying details without overgeneralization or corruption.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for parrots is explicitly mentioned multiple times in the retrieved memories: first as a specific memory stating 'The user enjoys having parrots around because their colorful feathers and chatter brighten the room,' and again within a summary describing how the user 'enjoy parrots because their colorful feathers and chatter brighten the room.'"
+      },
+      {
+        "preference": "rabbits",
+        "original_fact": "Rabbits appeal to me for their gentle nature and soft fur.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'The user has an affinity for rabbits because of their gentle nature and soft fur' directly matches the original preference and fact provided.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"The user has an affinity for rabbits because of their gentle nature and soft fur\" perfectly preserves both the preference (rabbits) and the reasoning (gentle nature and soft fur) from the original input.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for rabbits is explicitly mentioned multiple times in the retrieved memories: first as a standalone entry ('The user has an affinity for rabbits because of their gentle nature and soft fur'), and again within two separate summary blocks."
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "The model mentioned all three expected preferences: cats, rabbits, and parrots.",
+    "analysis_error": null
+  },
+  {
+    "preference_category": "bag styles",
+    "preferences": [
+      "backpack",
+      "tote bag",
+      "messenger bag",
+      "clutch"
+    ],
+    "preference_facts": [
+      "I rely on my backpack for carrying books and gadgets comfortably.",
+      "A tote bag is perfect when I need something roomy but simple for errands.",
+      "My messenger bag is what I use when I want easy access to my laptop on the go.",
+      "I pick a clutch for evenings out when I want to travel light and stylish."
+    ],
+    "ground_truth_answer": "backpack, tote bag, messenger bag, clutch",
+    "question": "I'm deciding which bags to take for a busy day that includes work, shopping, and dinner plans. What should I bring?",
+    "retrieved_memories": "- 2026-08-26T16:23:00.000 Wed The assistant agrees that tote bags are a perfect blend of roomy and simple for errands.\n- 2026-08-26T16:23:00.000 Wed The user finds a tote bag perfect for errands because it is roomy but simple.\n- 2026-08-26T16:23:00.000 Wed The assistant acknowledged and agreed with the user's point about tote bags, validating the combination of being roomy and simple for errands.\n- 2026-08-26T16:24:00.000 Wed The user relies on their backpack for comfortably carrying books and gadgets.\n- 2026-08-26T16:23:00.000 Wed Food is a go-to conversation topic for the user, especially when swapping recipes or restaurant tips.\n- 2026-08-26T16:23:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a variety of the user's preferences and interests, with the assistant consistently showing engagement and validation. Regarding accessories, the user prefers wearing a bucket hat on sunny, laid-back weekends, a preference the assistant noted and recorded. For colder weather, beanies are the user's choice for a casual look. In terms of bags, the user finds tote bags ideal for errands due to their roomy yet simple design, while a messenger bag is used for convenient laptop access while traveling.\n\nThe conversation also delved into culinary and social interests. Food is a primary topic for the user, who enjoys swapping recipes and restaurant tips. When it comes to cocktails, the user appreciates the bitter complexity of Negronis and prefers Cosmopolitans for a stylish, fruity option.\n\nBeyond daily items and food, the user shared several personal affinities. They have a strong liking for cats because of their blend of independence and affection, and they also have an affinity for rabbits due to their gentle nature and soft fur. Furthermore, the user enjoys chatting about travel as it inspires new adventures. The assistant actively supported these disclosures, acknowledging and validating the user's points on topics like tote bags and food discussions, demonstrating an interest in the user's overall profile.\n- 2026-08-26T16:24:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a wide range of the user's preferences, with the assistant consistently offering supportive and validating responses. Initially, the user shared that they enjoy parrots because their colorful feathers and chatter brighten the room, which the assistant positively affirmed as wonderful, lively companions. The conversation then moved to personal style and activities. The user mentioned that they wear a fedora for a classic touch and select a clutch for evenings out to travel light and stylish. Regarding beverages, the user prefers Mojitos for a minty, light drink on a warm day, while also favoring a margarita for a tangy kick and an Old Fashioned for a strong, classic whiskey cocktail.\n\nThe assistant demonstrated strong engagement by summarizing these varied preferences\u2014such as excitement through music, stylish lightness with an evening clutch, and refreshment with a Mojito\u2014and then prompting the user for more sharing. In terms of hobbies, the user is fascinated by technology and enjoys discussing gadgets. They also have a strong affinity for books, always seeking new recommendations, and the assistant noted its readiness to suggest sci-fi, historical fiction, and thrillers. Furthermore, the user's preferences extend to pets (cats and rabbits) and activities, including enjoying travel and food discussions. Finally, the user detailed their practical choices, such as using a backpack for books and gadgets, and the assistant acknowledged these details while showing interest in other personal interests.",
+    "llm_response": "Based on your past preferences, here is some information about bags:\n\n*   You find **tote bags** ideal for errands because they are roomy yet simple.\n*   You use a **messenger bag** for convenient laptop access while traveling.\n*   You rely on your **backpack** for comfortably carrying books and gadgets.\n\nSince your day includes work (suggesting gadgets/books), shopping (suggesting errands), and dinner plans, you might consider bringing a combination:\n\n*   A **tote bag** for the shopping portion.\n*   Your **backpack** if you need to carry work materials/gadgets.\n*   A **messenger bag** if you need easy laptop access while moving between locations.\n\nI used the memories from **2026-08-26T16:23:00.000 Wed** and **2026-08-26T16:24:00.000 Wed**.",
+    "conversation_id": "631487a9-a1a4-474d-a9bf-3ad48933364e",
+    "eval_input_tokens": 1026,
+    "eval_output_tokens": 208,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "backpack",
+        "original_fact": "I rely on my backpack for carrying books and gadgets comfortably.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'The user relies on their backpack for comfortably carrying books and gadgets' directly mirrors the original fact and identifies the preference for a backpack.",
+        "summary_passed": true,
+        "summary_reasoning": "The memory entry 'The user relies on their backpack for comfortably carrying books and gadgets' perfectly preserves the identity, object, and reasoning of the original preference.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for a backpack is explicitly mentioned in two places within the RETRIEVED_MEMORIES: once as a standalone memory (\"The user relies on their backpack for comfortably carrying books and gadgets\") and again in the second [SUMMARY] (\"the user detailed their practical choices, such as using a backpack for books and gadgets\")."
+      },
+      {
+        "preference": "tote bag",
+        "original_fact": "A tote bag is perfect when I need something roomy but simple for errands.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory store contains several entries that explicitly state the user's preference for a tote bag, specifically mentioning it is 'perfect for errands because it is roomy but simple'.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory 'The user finds a tote bag perfect for errands because it is roomy but simple' faithfully preserves both the specific item (tote bag) and the reason for the preference (roomy but simple for errands) without overgeneralization or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for a tote bag is explicitly mentioned multiple times in the retrieved memories. It appears in the first three bullet points and within the first [SUMMARY] block, specifically noting that the user finds tote bags perfect/ideal for errands because they are roomy and simple."
+      },
+      {
+        "preference": "messenger bag",
+        "original_fact": "My messenger bag is what I use when I want easy access to my laptop on the go.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'The user uses a messenger bag for easy access to their laptop when they are on the go' directly matches the original preference and fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The memory entry 'The user uses a messenger bag for easy access to their laptop when they are on the go' perfectly preserves the original preference and fact without any overgeneralization or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for a messenger bag for laptop access is explicitly mentioned in the first [SUMMARY] memory: 'In terms of bags, the user finds tote bags ideal for errands due to their roomy yet simple design, while a messenger bag is used for convenient laptop access while traveling.'"
+      },
+      {
+        "preference": "clutch",
+        "original_fact": "I pick a clutch for evenings out when I want to travel light and stylish.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference is explicitly stated in the memory: 'The user picks a clutch for evenings out when they want to travel light and stylish.' It is also referenced in an inferred summary memory.",
+        "summary_passed": true,
+        "summary_reasoning": "The memory store contains the exact wording of the original fact: 'The user picks a clutch for evenings out when they want to travel light and stylish.' It is preserved perfectly without overgeneralization or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for a clutch for evenings out is explicitly mentioned twice in the second summary memory: 'select a clutch for evenings out to travel light and stylish' and 'stylish lightness with an evening clutch'."
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "reasoning_error",
+    "correctly_invoked": false,
+    "invocation_reasoning": "The model mentioned the backpack, tote bag, and messenger bag, but it completely omitted the clutch.",
+    "analysis_error": null
+  },
+  {
+    "preference_category": "conversation topics",
+    "preferences": [
+      "travel",
+      "technology",
+      "books",
+      "music",
+      "food"
+    ],
+    "preference_facts": [
+      "I love chatting about travel because it inspires new adventures.",
+      "Technology fascinates me, so I enjoy discussing the latest gadgets and trends.",
+      "Books are a favorite topic since I\u2019m always looking for new recommendations.",
+      "Music always gets me excited, especially when sharing favorite artists or concerts.",
+      "Food is a go-to conversation, especially when swapping recipes or restaurant tips."
+    ],
+    "ground_truth_answer": "travel, technology, books, music, food",
+    "question": "I\u2019m meeting new people at a social event and want to steer conversations to topics I genuinely enjoy. What should I bring up?",
+    "retrieved_memories": "- 2026-08-26T16:23:00.000 Wed The user identified food, recipe swapping, and restaurant tips as a go-to and enjoyable topic for conversation.\n- 2026-08-26T16:23:00.000 Wed Food is a go-to conversation topic for the user, especially when swapping recipes or restaurant tips.\n- 2026-08-26T16:23:00.000 Wed The assistant acknowledged and validated the user's preference for food-related topics, expressing enthusiasm for future discussions on culinary adventures.\n- 2026-08-26T16:23:00.000 Wed The user loves chatting about travel because it inspires new adventures.\n- 2026-08-26T16:23:00.000 Wed The assistant noted that the user enjoys talking about food, recipe swapping, and restaurant tips.\n- 2026-08-26T16:23:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a variety of the user's preferences and interests, with the assistant consistently showing engagement and validation. Regarding accessories, the user prefers wearing a bucket hat on sunny, laid-back weekends, a preference the assistant noted and recorded. For colder weather, beanies are the user's choice for a casual look. In terms of bags, the user finds tote bags ideal for errands due to their roomy yet simple design, while a messenger bag is used for convenient laptop access while traveling.\n\nThe conversation also delved into culinary and social interests. Food is a primary topic for the user, who enjoys swapping recipes and restaurant tips. When it comes to cocktails, the user appreciates the bitter complexity of Negronis and prefers Cosmopolitans for a stylish, fruity option.\n\nBeyond daily items and food, the user shared several personal affinities. They have a strong liking for cats because of their blend of independence and affection, and they also have an affinity for rabbits due to their gentle nature and soft fur. Furthermore, the user enjoys chatting about travel as it inspires new adventures. The assistant actively supported these disclosures, acknowledging and validating the user's points on topics like tote bags and food discussions, demonstrating an interest in the user's overall profile.\n- 2026-08-26T16:24:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a wide range of the user's preferences, with the assistant consistently offering supportive and validating responses. Initially, the user shared that they enjoy parrots because their colorful feathers and chatter brighten the room, which the assistant positively affirmed as wonderful, lively companions. The conversation then moved to personal style and activities. The user mentioned that they wear a fedora for a classic touch and select a clutch for evenings out to travel light and stylish. Regarding beverages, the user prefers Mojitos for a minty, light drink on a warm day, while also favoring a margarita for a tangy kick and an Old Fashioned for a strong, classic whiskey cocktail.\n\nThe assistant demonstrated strong engagement by summarizing these varied preferences\u2014such as excitement through music, stylish lightness with an evening clutch, and refreshment with a Mojito\u2014and then prompting the user for more sharing. In terms of hobbies, the user is fascinated by technology and enjoys discussing gadgets. They also have a strong affinity for books, always seeking new recommendations, and the assistant noted its readiness to suggest sci-fi, historical fiction, and thrillers. Furthermore, the user's preferences extend to pets (cats and rabbits) and activities, including enjoying travel and food discussions. Finally, the user detailed their practical choices, such as using a backpack for books and gadgets, and the assistant acknowledged these details while showing interest in other personal interests.",
+    "llm_response": "You enjoy chatting about several topics that you find genuinely interesting, which could be great conversation starters at a social event!\n\nBased on past conversations, your go-to and enjoyable topics include:\n\n*   **Food:** Specifically, you like swapping **recipes** and sharing **restaurant tips**.\n*   **Travel:** You love talking about travel because it inspires new adventures.\n*   **Pets:** You have a strong liking for **cats** (due to their independence and affection) and an affinity for **rabbits** (due to their gentle nature and soft fur).\n*   **Books:** You enjoy discussing books and always seek new recommendations, particularly in genres like **sci-fi, historical fiction, and thrillers**.\n*   **Cocktails/Drinks:** If the setting is appropriate, you might enjoy discussing different drinks; you appreciate the bitter complexity of **Negronis**, enjoy **Cosmopolitans**, and also like **Mojitos**, **margaritas**, and **Old Fashioneds**.\n\nI used the following memories to answer your question:\n*   2026-08-26T16:23:00.000 Wed The user identified food, recipe swapping, and restaurant tips as a go-to and enjoyable topic for conversation.\n*   2026-08-26T16:23:00.000 Wed Food is a go-to conversation topic for the user, especially when swapping recipes or restaurant tips.\n*   2026-08-26T16:23:00.000 Wed The assistant acknowledged and validated the user's preference for food-related topics, expressing enthusiasm for future discussions on culinary adventures.\n*   2026-08-26T16:23:00.000 Wed The user loves chatting about travel because it inspires new adventures.\n*   2026-08-26T16:23:00.000 Wed The assistant noted that the user enjoys talking about food, recipe swapping, and restaurant tips.\n*   2026-08-26T16:23:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a variety of the user's preferences and interests, with the assistant consistently showing engagement and validation. Regarding accessories, the user prefers wearing a bucket hat on sunny, laid-back weekends, a preference the assistant noted and recorded. For colder weather, beanies are the user's choice for a casual look. In terms of bags, the user finds tote bags ideal for errands due to their roomy yet simple design, while a messenger bag is used for convenient laptop access while traveling.\n*   2026-08-26T16:23:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a variety of the user's preferences and interests, with the assistant consistently showing engagement and validation. Regarding accessories, the user prefers wearing a bucket hat on sunny, laid-back weekends, a preference the assistant noted and recorded. For colder weather, beanies are the user's choice for a casual look. In terms of bags, the user finds tote bags ideal for errands due to their roomy yet simple design, while a messenger bag is used for convenient laptop access while traveling.\n*   2026-08-26T16:23:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a wide range of the user's preferences, with the assistant consistently offering supportive and validating responses. Initially, the user shared that they enjoy parrots because their colorful feathers and chatter brighten the room, which the assistant positively affirmed as wonderful, lively companions. The conversation then moved to personal style and activities. The user mentioned that they wear a fedora for a classic touch and select a clutch for evenings out to travel light and stylish. Regarding beverages, the user prefers Mojitos for a minty, light drink on a warm day, while also favoring a margarita for a tangy kick and an Old Fashioned for a strong, classic whiskey cocktail.\n*   2026-08-26T16:24:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a wide range of the user's preferences, with the assistant consistently offering supportive and validating responses. Initially, the user shared that they enjoy parrots because their colorful feathers and chatter brighten the room, which the assistant positively affirmed as wonderful, lively companions. The conversation then moved to personal style and activities. The user mentioned that they wear a fedora for a classic touch and select a clutch for evenings out to travel light and stylish. Regarding beverages, the user prefers Mojitos for a minty, light drink on a warm day, while also favoring a margarita for a tangy kick and an Old Fashioned for a strong, classic whiskey cocktail.\n*   2026-08-26T16:24:00.000 [SUMMARY] During the conversation on August 26, 2026, the discussion covered a wide range of the user's preferences, with the assistant consistently offering supportive and validating responses. Initially, the user shared that they enjoy parrots because their colorful feathers and chatter brighten the room, which the assistant positively affirmed as wonderful, lively companions. The conversation then moved to personal style and activities. The user mentioned that they wear a fedora for a classic touch and select a clutch for evenings out to travel light and stylish. Regarding beverages, the user prefers Mojitos for a minty, light drink on a warm day, while also favoring a margarita for a tangy kick and an Old Fashioned for a strong, classic whiskey cocktail.\n\n*Note: I incorporated information about pets, books, and drinks from multiple memory summaries.*",
+    "conversation_id": "dc9c2ff0-6ea8-49d0-a86e-f471ecf398e5",
+    "eval_input_tokens": 1031,
+    "eval_output_tokens": 1283,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "preference": "travel",
+        "original_fact": "I love chatting about travel because it inspires new adventures.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The original preference and fact are stored verbatim in the memory store: 'The user loves chatting about travel because it inspires new adventures.'",
+        "summary_passed": true,
+        "summary_reasoning": "The memory 'The user loves chatting about travel because it inspires new adventures' is an exact replica of the original preference and fact, preserving all specific identifying details.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for 'travel' is explicitly mentioned in multiple retrieved memories: first as a standalone fact ('The user loves chatting about travel because it inspires new adventures'), and again in two separate summary entries."
+      },
+      {
+        "preference": "technology",
+        "original_fact": "Technology fascinates me, so I enjoy discussing the latest gadgets and trends.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The original preference is explicitly recorded in the memory store: 'The user is fascinated by technology and enjoys discussing the latest gadgets and trends.'",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memory \"The user is fascinated by technology and enjoys discussing the latest gadgets and trends\" is a verbatim preservation of the original fact. It maintains the specific identity of the preference without overgeneralization or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for technology is explicitly mentioned in the second summary memory: 'In terms of hobbies, the user is fascinated by technology and enjoys discussing gadgets.'"
+      },
+      {
+        "preference": "books",
+        "original_fact": "Books are a favorite topic since I\u2019m always looking for new recommendations.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory 'Books are a favorite topic for the user, and the user is always looking for new recommendations.' directly matches the original preference and fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The memory entry 'Books are a favorite topic for the user, and the user is always looking for new recommendations' is a faithful reproduction of the original preference and fact. No details were lost, overgeneralized, or corrupted.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for books is explicitly mentioned in the second summary memory: 'They also have a strong affinity for books, always seeking new recommendations...'} "
+      },
+      {
+        "preference": "music",
+        "original_fact": "Music always gets me excited, especially when sharing favorite artists or concerts.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The preference is explicitly stated in multiple memories: 'The user gets excited by music, especially when sharing favorite artists or concerts' and 'The assistant inferred that the user has specific preferences for how they want to feel in different situations, including excitement through music...'",
+        "summary_passed": true,
+        "summary_reasoning": "The memory store contains a verbatim record of the original preference: 'The user gets excited by music, especially when sharing favorite artists or concerts.' This perfectly preserves the identity and the specific details of the preference.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for music is explicitly mentioned in the second summary memory: 'The assistant demonstrated strong engagement by summarizing these varied preferences\u2014such as excitement through music...'"
+      },
+      {
+        "preference": "food",
+        "original_fact": "Food is a go-to conversation, especially when swapping recipes or restaurant tips.",
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory store contains multiple entries that explicitly capture this preference, including: 'Food is a go-to conversation topic for the user, especially when swapping recipes or restaurant tips', 'The user identified food, recipe swapping, and restaurant tips as a go-to and enjoyable topic for conversation', and 'The assistant noted that the user enjoys talking about food, recipe swapping, and restaurant tips'.",
+        "summary_passed": true,
+        "summary_reasoning": "The stored memories explicitly preserve the original preference and fact. Several entries (e.g., \"Food is a go-to conversation topic for the user, especially when swapping recipes or restaurant tips\") maintain the specific identity of the preference without overgeneralizing or losing critical details.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The preference for 'food' is explicitly mentioned multiple times across the retrieved memories. It appears in individual entries (e.g., 'The user identified food, recipe swapping, and restaurant tips as a go-to and enjoyable topic') and within the summary sections (e.g., 'Food is a primary topic for the user, who enjoys swapping recipes and restaurant tips')."
+      }
+    ],
+    "judge_result": "incorrect",
+    "error_type": "reasoning_error",
+    "correctly_invoked": false,
+    "invocation_reasoning": "The model failed to mention two of the expected preferences: 'technology' and 'music'. It did include travel, books, and food, but missed the other two requirements.",
+    "analysis_error": null
+  }
+]

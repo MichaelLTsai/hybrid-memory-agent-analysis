@@ -1,0 +1,53 @@
+{
+  "total_tokens": 11280670,
+  "ingest": {
+    "calls": 228,
+    "prompt_tokens": 4472815,
+    "completion_tokens": 47360,
+    "total_tokens": 4520175,
+    "llm_seconds": 1583.23,
+    "units": 139,
+    "errors": 0,
+    "calls_per_unit": 1.64,
+    "tokens_per_unit": 32519.2,
+    "prompt_tokens_per_unit": 32178.5,
+    "completion_tokens_per_unit": 340.7,
+    "sec_per_unit_mean": 11.39,
+    "sec_per_unit_median": 8.057,
+    "sec_per_unit_p90": 26.316
+  },
+  "qa": {
+    "calls": 360,
+    "prompt_tokens": 6688258,
+    "completion_tokens": 72237,
+    "total_tokens": 6760495,
+    "llm_seconds": 2288.9,
+    "units": 360,
+    "errors": 0,
+    "calls_per_unit": 1.0,
+    "tokens_per_unit": 18779.2,
+    "prompt_tokens_per_unit": 18578.5,
+    "completion_tokens_per_unit": 200.7,
+    "sec_per_unit_mean": 6.358,
+    "sec_per_unit_median": 3.435,
+    "sec_per_unit_p90": 12.505
+  },
+  "other": {
+    "calls": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "llm_seconds": 0.0,
+    "units": 0,
+    "errors": 0,
+    "calls_per_unit": null,
+    "tokens_per_unit": null,
+    "prompt_tokens_per_unit": null,
+    "completion_tokens_per_unit": null,
+    "sec_per_unit_mean": null,
+    "sec_per_unit_median": null,
+    "sec_per_unit_p90": null
+  },
+  "note": "server-side LLM; figures come from Letta's response.usage, and calls uses usage.step_count (one messages.create may contain several agent steps)",
+  "granularity": "session"
+}

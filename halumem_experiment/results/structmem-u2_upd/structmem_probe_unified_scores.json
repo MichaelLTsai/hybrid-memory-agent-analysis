@@ -1,0 +1,20 @@
+{
+  "run": "structmem-u2_upd",
+  "n": 147,
+  "P1_fail": 0.9184,
+  "P4_fail": 0.0,
+  "P5_fail": 0.0544,
+  "not_counted": 1,
+  "abstain_n": 41,
+  "unadjudicated": 0,
+  "verdicts": {
+    "SUMMARY": 135,
+    "REASONING": 8,
+    "P5b_OK": 40,
+    "OK": 3,
+    "NOT_COUNTED": 1,
+    "P5b_FAIL": 1
+  },
+  "judge_failures": {},
+  "attributable_error_rate": 0.9728
+}

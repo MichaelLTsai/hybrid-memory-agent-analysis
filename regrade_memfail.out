@@ -1,0 +1,51 @@
+=== regrading results_ablate_e0_baseline/coexisting_facts ===
+    exit=0
+=== regrading results_ablate_e0_baseline/conditional_easy ===
+    exit=0
+=== regrading results_ablate_e0_baseline/conditional_hard ===
+    exit=0
+=== regrading results_ablate_e0_baseline/long_hop ===
+    exit=0
+=== regrading results_ablate_e0_baseline/persona ===
+    exit=0
+=== regrading results_ablate_e1_m1/coexisting_facts ===
+    exit=0
+=== regrading results_ablate_e1_m1/conditional_easy ===
+    exit=0
+=== regrading results_ablate_e1_m1/conditional_hard ===
+    exit=0
+=== regrading results_ablate_e1_m1/long_hop ===
+    exit=0
+=== regrading results_ablate_e1_m1/persona ===
+    exit=0
+=== regrading results_ablate_e2_m1_m3/coexisting_facts ===
+    exit=0
+=== regrading results_ablate_e2_m1_m3/conditional_easy ===
+    exit=0
+=== regrading results_ablate_e2_m1_m3/conditional_hard ===
+    exit=0
+=== regrading results_ablate_e2_m1_m3/long_hop ===
+    exit=0
+=== regrading results_ablate_e2_m1_m3/persona ===
+    exit=0
+=== regrading results_ablate_e3_m1_m4/coexisting_facts ===
+    exit=0
+=== regrading results_ablate_e3_m1_m4/conditional_easy ===
+    exit=0
+=== regrading results_ablate_e3_m1_m4/conditional_hard ===
+    exit=0
+=== regrading results_ablate_e3_m1_m4/long_hop ===
+    exit=0
+=== regrading results_ablate_e3_m1_m4/persona ===
+    exit=0
+=== regrading results_ablate_e4_full/coexisting_facts ===
+    exit=0
+=== regrading results_ablate_e4_full/conditional_easy ===
+    exit=0
+=== regrading results_ablate_e4_full/conditional_hard ===
+    exit=0
+=== regrading results_ablate_e4_full/long_hop ===
+    exit=0
+=== regrading results_ablate_e4_full/persona ===
+    exit=0
+=== REGRADE FINISHED ===

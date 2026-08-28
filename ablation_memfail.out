@@ -1,0 +1,87 @@
+=== E0_baseline / coexisting_facts ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e0_baseline/coexisting_facts/analysis
+=== E0_baseline / conditional_easy ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e0_baseline/conditional_easy/analysis
+=== E0_baseline / conditional_hard ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e0_baseline/conditional_hard/analysis
+=== E0_baseline / long_hop ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e0_baseline/long_hop/analysis
+=== E0_baseline / persona ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e0_baseline/persona/analysis
+=== E0_baseline DONE ===
+=== E1_m1 / coexisting_facts ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e1_m1/coexisting_facts/analysis
+=== E1_m1 / conditional_easy ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e1_m1/conditional_easy/analysis
+=== E1_m1 / conditional_hard ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e1_m1/conditional_hard/analysis
+=== E1_m1 / long_hop ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e1_m1/long_hop/analysis
+=== E1_m1 / persona ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e1_m1/persona/analysis
+=== E1_m1 DONE ===
+=== E2_m1_m3 / coexisting_facts ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e2_m1_m3/coexisting_facts/analysis
+=== E2_m1_m3 / conditional_easy ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e2_m1_m3/conditional_easy/analysis
+=== E2_m1_m3 / conditional_hard ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e2_m1_m3/conditional_hard/analysis
+=== E2_m1_m3 / long_hop ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e2_m1_m3/long_hop/analysis
+=== E2_m1_m3 / persona ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e2_m1_m3/persona/analysis
+=== E2_m1_m3 DONE ===
+=== E3_m1_m4 / coexisting_facts ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e3_m1_m4/coexisting_facts/analysis
+=== E3_m1_m4 / conditional_easy ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e3_m1_m4/conditional_easy/analysis
+=== E3_m1_m4 / conditional_hard ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e3_m1_m4/conditional_hard/analysis
+=== E3_m1_m4 / long_hop ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e3_m1_m4/long_hop/analysis
+=== E3_m1_m4 / persona ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e3_m1_m4/persona/analysis
+=== E3_m1_m4 DONE ===
+=== E4_full / coexisting_facts ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e4_full/coexisting_facts/analysis
+=== E4_full / conditional_easy ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e4_full/conditional_easy/analysis
+=== E4_full / conditional_hard ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e4_full/conditional_hard/analysis
+=== E4_full / long_hop ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e4_full/long_hop/analysis
+=== E4_full / persona ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e4_full/persona/analysis
+=== E4_full DONE ===
+./run_ablation_memfail.sh: line 112: -counts: command not found
+=== E4_full / persona ===
+    evaluate exit=0
+    analyze  exit=0  -> results_ablate_e4_full/persona/analysis
+=== E4_full DONE ===
+./run_ablation_memfail.sh: line 116: syntax error near unexpected token `done'
+./run_ablation_memfail.sh: line 116: `done'

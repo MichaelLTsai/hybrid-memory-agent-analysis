@@ -1,0 +1,35 @@
+Probing conv-26: 199 questions ...
+✅ wrote the "probe" block of /Users/stud113/Documents/lintsai/Memory_Experience/locomo_experiment/results/structmem-ablate_e0_baseline/structmem_locomo_scores.json; per-question -> /Users/stud113/Documents/lintsai/Memory_Experience/locomo_experiment/results/structmem-ablate_e0_baseline/structmem_locomo_probe_detail.jsonl
+
+=== LoCoMo probe ===
+{
+  "n_total": 199,
+  "n_answerable": 152,
+  "n_adversarial": 47,
+  "P4_sufficient": 0.8618421052631579,
+  "P4_n": 152,
+  "P1_scoped_sufficient": 0.5,
+  "P1_scoped_n": 20,
+  "P5_fail_given_P4": 0.3282442748091603,
+  "P5_n": 131,
+  "P5b_avoid_rate": 0.851063829787234,
+  "P5b_n": 47,
+  "verdicts": {
+    "REASONING": 43,
+    "OK": 128,
+    "SUMMARY": 10,
+    "RETRIEVAL": 10,
+    "NO_WRITE": 1,
+    "P5b_FAIL": 7
+  },
+  "attribution": {
+    "OK": 0.6432160804020101,
+    "SUMMARY": 0.05025125628140704,
+    "RETRIEVAL": 0.05025125628140704,
+    "REASONING": 0.21608040201005024,
+    "NO_WRITE": 0.005025125628140704,
+    "P5b_FAIL": 0.035175879396984924
+  },
+  "unknown_ratio": 0.0,
+  "judge_failures": {}
+}

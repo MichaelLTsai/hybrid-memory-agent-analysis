@@ -48,24 +48,38 @@ BACKENDS = [
     # other buckets), which is why only this batch has Cost columns. It sits
     # alongside batch 1 rather than replacing it: the score gap between the two is
     # the run-to-run variance under identical parameters, which is itself a result.
-    ("Mem0 v1 · 0819",   "mem0_oss-v1_cost_u2",   "mem0-v1_cost",      "mem0-v1_cost",      "results_cost_mem0v1",    "gemma-4-31B-it"),
-    ("Mem0 v2 · 0819",   "mem0_oss-v2_cost_u2",   "mem0-v2_cost",      "mem0-v2_cost",      "results_cost_mem0v2",    "gemma-4-31B-it"),
-    ("StructMem · 0819", "structmem-sm_cost_u2",  "structmem-sm_cost", "structmem-sm_cost", "results_cost_structmem", "gemma-4-31B-it"),
-    ("A-MEM · 0819",     "amem-amem_cost_u2",     "amem-amem_cost",    "amem-amem_cost",    "results_cost_amem",      "gemma-4-31B-it"),
-    ("Letta · 0819",     "letta-letta_cost_u2",   "letta-letta_cost",  "letta-letta_cost",  "results_cost_letta",     "openai-proxy/gemma-4-31B-it"),
+    # HaluMem differs in one respect: these rows carry the users #3 and #4 sample,
+    # which has 37 Dynamic Update questions against user #1's 4, so the
+    # end-to-end evidence for post-update answering is far stronger here.
+    ("Mem0 v1 · 0819",   "mem0_oss-v1_cost_u34",   "mem0-v1_cost",      "mem0-v1_cost",      "results_cost_mem0v1",    "gemma-4-31B-it"),
+    ("Mem0 v2 · 0819",   "mem0_oss-v2_cost_u34",   "mem0-v2_cost",      "mem0-v2_cost",      "results_cost_mem0v2",    "gemma-4-31B-it"),
+    # The 0819 StructMem run had an ingestion fault; per user decision it is
+    # replaced by the ablation control E0. Scope caveats: E4B extraction model,
+    # HaluMem user #1, LongMemEval limited to the 5 knowledge-update questions.
+    ("StructMem · 0819", "structmem-ablate_e0_baseline", "structmem-ablate_e0_baseline", "structmem-ablate_e0_baseline", "results_ablate_e0_baseline", "gemma-4-E4B-it"),
+    ("A-MEM · 0819",     "amem-amem_cost_u34",     "amem-amem_cost",    "amem-amem_cost",    "results_cost_amem",      "gemma-4-31B-it"),
+    ("Letta · 0819",     "letta-letta_cost_u34",   "letta-letta_cost",  "letta-letta_cost",  "results_cost_letta",     "openai-proxy/gemma-4-31B-it"),
 
-    # ── Batch 3 (2026-08-19): additional HaluMem samples ────────────────────
-    # HaluMem users #3 and #4 only. Motivation: the Dynamic Update question type
-    # is very unevenly distributed across users. User #1, used by the first two
-    # batches, has only 4 such questions, while #3 has 22 and #4 has 11. This
-    # raises the end-to-end evidence for "can it answer correctly after an update"
-    # from 4 questions to 37. The memory-point-level memory_update metric already
-    # had 123 to 168 samples per user and was never short.
-    ("Mem0 v1 · u34",   "mem0_oss-v1_cost_u34",  "", "", "", "gemma-4-31B-it"),
-    ("Mem0 v2 · u34",   "mem0_oss-v2_cost_u34",  "", "", "", "gemma-4-31B-it"),
-    ("StructMem · u34", "structmem-sm_cost_u34", "", "", "", "gemma-4-31B-it"),
-    ("A-MEM · u34",     "amem-amem_cost_u34",    "", "", "", "gemma-4-31B-it"),
-    ("Letta · u34",     "letta-letta_cost_u34",  "", "", "", "openai-proxy/gemma-4-31B-it"),
+    # ── Batch 4 (2026-08-24): StructMem state ablation, M1 / M3 / M4 ────────
+    # Five arms over a reduced but identical slice: LongMemEval knowledge-update
+    # x5 and HaluMem user #1. Only the state-handling modules differ between
+    # arms; embedding, candidate retrieval, update_queue, top-k, thresholds and
+    # sampling are held fixed, so a gap between rows is attributable to the
+    # module that was switched on.
+    #   E0 original update/delete/ignore   E1 +non-destructive state bank
+    #   E2 +summary sync                   E3 +state-aware retrieval/QA
+    #   E4 all three
+    # LoCoMo and MemFail are intentionally empty: this ablation was scoped to
+    # the two benchmarks that actually exercise knowledge update.
+    # All four benchmarks now, and note the LLM: the arms run gemma-4-E4B-it on
+    # HaluMem user #1 (Martin_Mark), whereas the older StructMem rows above ran
+    # gemma-4-31B-it on a different user. The batch-4 rows are therefore only
+    # comparable to each other and to E0, never to the older rows.
+    ("StructMem E0 baseline", "structmem-ablate_e0_baseline", "structmem-ablate_e0_baseline", "structmem-ablate_e0_baseline", "results_ablate_e0_baseline", "gemma-4-E4B-it"),
+    ("StructMem E1 M1",       "structmem-ablate_e1_m1",       "structmem-ablate_e1_m1",       "structmem-ablate_e1_m1",       "results_ablate_e1_m1",       "gemma-4-E4B-it"),
+    ("StructMem E2 M1+M3",    "structmem-ablate_e2_m1_m3",    "structmem-ablate_e2_m1_m3",    "structmem-ablate_e2_m1_m3",    "results_ablate_e2_m1_m3",    "gemma-4-E4B-it"),
+    ("StructMem E3 M1+M4",    "structmem-ablate_e3_m1_m4",    "structmem-ablate_e3_m1_m4",    "structmem-ablate_e3_m1_m4",    "results_ablate_e3_m1_m4",    "gemma-4-E4B-it"),
+    ("StructMem E4 full",     "structmem-ablate_e4_full",     "structmem-ablate_e4_full",     "structmem-ablate_e4_full",     "results_ablate_e4_full",     "gemma-4-E4B-it"),
 ]
 
 # Which batch each row belongs to. Batch 2 uses exactly the same sampling as
@@ -76,9 +90,9 @@ BATCH = {"Mem0 v1": "① 08-14", "Mem0 v2": "① 08-14", "StructMem": "① 08-14
          "Mem0 v1 · 0819": "② 08-19", "Mem0 v2 · 0819": "② 08-19",
          "StructMem · 0819": "② 08-19", "A-MEM · 0819": "② 08-19",
          "Letta · 0819": "② 08-19",
-         "Mem0 v1 · u34": "③ u3+u4", "Mem0 v2 · u34": "③ u3+u4",
-         "StructMem · u34": "③ u3+u4", "A-MEM · u34": "③ u3+u4",
-         "Letta · u34": "③ u3+u4"}
+         "StructMem E0 baseline": "④ ablation", "StructMem E1 M1": "④ ablation",
+         "StructMem E2 M1+M3": "④ ablation", "StructMem E3 M1+M4": "④ ablation",
+         "StructMem E4 full": "④ ablation"}
 
 FRAME = {"mem0_oss": "mem0_oss", "mem0": "mem0", "structmem": "structmem",
          "amem": "amem", "letta": "letta"}
@@ -107,6 +121,12 @@ GRANULARITY = {
     "StructMem · u34": ("session", "session",   "session", "turn"),
     "A-MEM · u34":     ("turn",    "turn",      "turn",    "turn"),
     "Letta · u34":     ("session", "session",   "session", "turn"),
+    # Batch 4 is StructMem throughout, so granularity is unchanged across arms.
+    "StructMem E0 baseline": ("session", "session", "session", "turn"),
+    "StructMem E1 M1":       ("session", "session", "session", "turn"),
+    "StructMem E2 M1+M3":    ("session", "session", "session", "turn"),
+    "StructMem E3 M1+M4":    ("session", "session", "session", "turn"),
+    "StructMem E4 full":     ("session", "session", "session", "turn"),
 }
 
 
@@ -124,7 +144,17 @@ TURNS = {
 # Batch 3 runs HaluMem users #3 and #4, totalling 3,210 + 2,960 = 6,170 messages,
 # unlike user #1's 3,242. Reusing the old denominator would inflate entries-per-turn
 # by a factor of 1.9.
-TURNS_BY_BATCH = {"③ u3+u4": {"halumem": 6170}}
+TURNS_BY_BATCH = {
+    # Batch 2 now carries the HaluMem users #3 and #4 sample, so its HaluMem
+    # denominators are those of that sample, not user #1.
+    "② 08-19": {"halumem": 6170},
+    # Batch 4 runs HaluMem user #1 = Martin_Mark (2,806 messages over 65 content
+    # sessions), not the Johnson_Joseph user the earlier batches used, and its
+    # LongMemEval slice is the 5 knowledge-update questions (median haystack 468
+    # turns) rather than the 18-question stratified sample. Reusing the old
+    # denominators would misstate entries-per-turn for both.
+    "④ ablation": {"halumem": 2806, "longmem": 468},
+}
 
 
 def turns_for(batch: str, dataset: str) -> int:
@@ -330,18 +360,47 @@ def cost(dataset: str, run: str, prefix: str):
         return {}
     try:
         if dataset == "memfail":
-            # MemFail writes output_dir under playground as results/<memory>/
+            # MemFail 的 run 名就是 memfail_experiment/ 底下的目錄名,五個子集各有
+            # 一份 token_usage。必須用 run 限定路徑:先前用 glob 抓「最新的一份」,
+            # 導致三個批次全讀到同一個檔,第一批(舊格式、根本沒量成本)也被填上值。
             import glob
-            hits = glob.glob(os.path.join(BASE, "memfail_experiment", "**",
+            hits = glob.glob(os.path.join(BASE, "memfail_experiment", run, "**",
                                           "memfail_token_usage.json"), recursive=True)
             if not hits:
                 return {}
-            path = max(hits, key=os.path.getmtime)
-        else:
-            sub, pat = _COST_FILE[dataset]
-            frame = ("mem0_oss" if run.startswith("mem0_oss") else run.split("-")[0])
-            path = os.path.join(BASE, sub, "results", run,
-                                pat.format(frame=frame) + "_token_usage.json")
+            # 五個子集加總後再算每單位,單看一個子集不能代表整個 MemFail
+            tot = {"ingest": {"calls": 0, "total_tokens": 0, "units": 0, "secs": []},
+                   "qa":     {"calls": 0, "total_tokens": 0, "units": 0, "secs": []}}
+            for h in hits:
+                dd = _load(h) or {}
+                for ph in ("ingest", "qa"):
+                    b = dd.get(ph) or {}
+                    if not isinstance(b, dict):
+                        continue
+                    tot[ph]["calls"] += b.get("calls") or 0
+                    tot[ph]["total_tokens"] += b.get("total_tokens") or 0
+                    tot[ph]["units"] += b.get("units") or 0
+                    if b.get("sec_per_unit_median") is not None:
+                        tot[ph]["secs"].append(b["sec_per_unit_median"])
+            def _per(ph, key):
+                n = tot[ph]["units"]
+                return round(tot[ph][key] / n, 3) if n else None
+            def _sec(ph):
+                ss = tot[ph]["secs"]
+                return round(sum(ss) / len(ss), 3) if ss else None
+            return {
+                f"{prefix}_in_calls": _per("ingest", "calls"),
+                f"{prefix}_in_tok":   _per("ingest", "total_tokens"),
+                f"{prefix}_in_sec":   _sec("ingest"),
+                f"{prefix}_qa_calls": _per("qa", "calls"),
+                f"{prefix}_qa_tok":   _per("qa", "total_tokens"),
+                f"{prefix}_qa_sec":   _sec("qa"),
+            }
+        # 其餘三個資料集:每個 run 一份 token_usage
+        sub, pat = _COST_FILE[dataset]
+        frame = ("mem0_oss" if run.startswith("mem0_oss") else run.split("-")[0])
+        path = os.path.join(BASE, sub, "results", run,
+                            pat.format(frame=frame) + "_token_usage.json")
         d = _load(path)
         if not d:
             return {}
@@ -385,6 +444,81 @@ def memfail(run):
     return {}
 
 
+# ── Stage failure rates (definition adopted 2026-08-25) ─────────────────────
+# Denominator: all adjudicated questions. Numerator: questions attributed to
+# that stage AND answered wrong. A stage failure that still produced the right
+# answer is not counted as a failure; it is reported separately as "lucky".
+# NO_WRITE is folded into SUMMARY. The three rates sum to the error rate, which
+# is 1 minus accuracy, and share their definition with MemFail's official
+# summary_error / retr_error / reason_error.
+_SF_STAGE = {"SUMMARY": "p1", "NO_WRITE": "p1", "RETRIEVAL": "p4", "REASONING": "p5"}
+_SF_NEUTRAL = {"OK"}
+_SF_ABSTAIN = {"P5b_FAIL", "P5b_OK"}
+_SF_EXCLUDE = {"UNKNOWN", "NO_DUMP", "UNADJUDICATED", None}
+
+
+def _sf_from_detail(path, prefix):
+    """Compute the stage failure rates from a per-question probe detail file."""
+    if not os.path.exists(path):
+        return {}
+    fail = {"p1": 0, "p4": 0, "p5": 0}
+    lucky = n = 0
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            r = json.loads(line)
+            v = r.get("verdict")
+            if v in _SF_EXCLUDE or v in _SF_ABSTAIN:
+                continue
+            n += 1
+            st = _SF_STAGE.get(v)
+            if st is None:
+                continue
+            if r.get("is_correct") is True:
+                lucky += 1
+            else:
+                fail[st] += 1
+    if not n:
+        return {}
+    out = {f"{prefix}_sf_{k}": round(v / n, 4) for k, v in fail.items()}
+    out[f"{prefix}_sf_err"] = round(sum(fail.values()) / n, 4)
+    out[f"{prefix}_sf_lucky"] = lucky
+    out[f"{prefix}_sf_n"] = n
+    return out
+
+
+def stage_rates(dataset, run, prefix):
+    if not run:
+        return {}
+    frame = run.split("-")[0]
+    if dataset == "longmem":
+        return _sf_from_detail(os.path.join(
+            BASE, "longmemeval_experiment", "results", run,
+            f"{frame}_lme_probe_detail.jsonl"), prefix)
+    if dataset == "locomo":
+        return _sf_from_detail(os.path.join(
+            BASE, "locomo_experiment", "results", run,
+            f"{frame}_locomo_probe_detail.jsonl"), prefix)
+    if dataset == "halumem":
+        # HaluMem uses the unified probe: P1 and P4 both judged with the same
+        # sufficiency prompt as the other two benchmarks.
+        d = _load(os.path.join(BASE, "halumem_experiment", "results", run,
+                               f"{frame}_probe_unified_scores.json"))
+        if not d:
+            return {}
+        return {
+            f"{prefix}_sf_p1":    d.get("P1_fail"),
+            f"{prefix}_sf_p4":    d.get("P4_fail"),
+            f"{prefix}_sf_p5":    d.get("P5_fail"),
+            f"{prefix}_sf_err":   d.get("attributable_error_rate"),
+            f"{prefix}_sf_lucky": d.get("not_counted"),
+            f"{prefix}_sf_n":     d.get("n"),
+        }
+    return {}
+
+
 # ── Column definitions: (group, header, key, source description) ────────────
 COLUMNS = [
     ("",          "Run name",   "run_name", "Row label in this table"),
@@ -395,27 +529,29 @@ COLUMNS = [
     # Within every group the dataset order is fixed: LongMemEval, LoCoMo,
     # HaluMem, MemFail. Header markers: ↑ higher is better, ↓ lower is better.
     # Differences in denominators are documented in the Definitions sheet.
-    ("Summary",   "LongMemEval P1 ↑",      "lme_p1",  "probe_longmem.py; judged only on questions where P4 failed, so the denominator is small"),
+    ("Summary",   "LongMemEval P1 fail (all) ↓", "lme_sf_p1", "Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics. SUMMARY includes NO_WRITE."),
     ("Summary",   "LoCoMo P1 recall ↑",    "loc_p1",  "extraction_locomo.py; observations treated as golden memories, strict=2"),
     ("Summary",   "LoCoMo precision ↑",    "loc_acc", "Precision counterpart of the above (whether what was recorded is correct)"),
     ("Summary",   "LoCoMo F1 ↑",           "loc_f1",  "Harmonic mean of the two above"),
+    ("Summary",   "LoCoMo P1 fail (all) ↓", "loc_sf_p1", "Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics."),
     ("Summary",   "HaluMem recall ↑",      "hal_integrity", "Official memory_integrity recall (all)"),
     ("Summary",   "HaluMem precision ↑",   "hal_target",    "Official target_accuracy (all); this is the precision used by f1"),
     ("Summary",   "HaluMem F1 ↑",          "hal_f1",  "Official memory_extraction_f1"),
     ("Summary",   "HaluMem interference ↑","hal_interf","Official interference_accuracy (all); correct-rejection rate on distractors, not part of f1"),
+    ("Summary",   "HaluMem P1 fail (all) ↓", "hal_sf_p1", "probe_halumem_unified.py; scope taken from the evidence's source session. Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics."),
     ("Summary",   "MemFail summary_error ↓","mf_summary","Official analyze_errors summary_error as a share of all questions"),
 
     ("Storage",   "LongMemEval KU acc ↑",  "lme_ku",     "QA accuracy on the knowledge-update subset (end-to-end, not a storage-specific metric)"),
     ("Storage",   "HaluMem update ↑",      "hal_update", "Official correct_update_memory_ratio (all); omission and hallucination are its subcategories and are not listed separately"),
     ("Storage",   "MemFail storage_error ↓","mf_storage","Official analyze_errors not_stored as a share of all questions"),
 
-    ("Retrieval", "LongMemEval P4 ↑",      "lme_p4",    "probe_longmem.py; whether the retrieved context suffices to answer (value level)"),
+    ("Retrieval", "LongMemEval P4 fail (all) ↓", "lme_sf_p4", "Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics."),
     ("Retrieval", "LongMemEval Recall@5 ↑","lme_recall","Official retrieval metric (session level)"),
     ("Retrieval", "LongMemEval NDCG@5 ↑",  "lme_ndcg",  "Official retrieval metric (session level)"),
-    ("Retrieval", "LoCoMo P4 ↑",           "loc_p4",    "probe_locomo.py; same definition"),
+    ("Retrieval", "LoCoMo P4 fail (all) ↓", "loc_sf_p4", "Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics."),
     ("Retrieval", "LoCoMo Recall@5 ↑",     "loc_recall","Official retrieval metric (turn level, exact dia_id match)"),
     ("Retrieval", "LoCoMo NDCG@5 ↑",       "loc_ndcg",  "Official retrieval metric (turn level)"),
-    ("Retrieval", "HaluMem P4 ↑",          "hal_p4_suff","probe_halumem.py; same definition, run over all 188 questions"),
+    ("Retrieval", "HaluMem P4 fail (all) ↓", "hal_sf_p4", "probe_halumem_unified.py; re-judged with the shared sufficiency prompt. Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics."),
     ("Retrieval", "MemFail retr_error ↓",  "mf_retr",   "Official analyze_errors not_retrieved as a share of all questions"),
 
     # P5 = share of questions that passed P4 (the answer really was in the
@@ -424,10 +560,20 @@ COLUMNS = [
     # Denominator sizes vary a lot (LongMemEval has only 2 to 14), so read these
     # against the question counts in the Scale group. Per-metric denominators are
     # documented in the Definitions sheet.
-    ("Reasoning", "LongMemEval P5 fail ↓", "lme_p5",     "probe_longmem.py; share of P4-passing questions still answered wrong"),
-    ("Reasoning", "LoCoMo P5 fail ↓",      "loc_p5",     "probe_locomo.py; same definition"),
-    ("Reasoning", "HaluMem P5 fail ↓",     "hal_p5_fail","probe_halumem.py; same definition"),
+    ("Reasoning", "LongMemEval P5 fail (all) ↓", "lme_sf_p5", "Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics."),
+    ("Reasoning", "LoCoMo P5 fail (all) ↓", "loc_sf_p5", "Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics."),
+    ("Reasoning", "HaluMem P5 fail (all) ↓", "hal_sf_p5", "Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics."),
     ("Reasoning", "MemFail reason_error ↓","mf_reason",  "Official analyze_errors reasoning_error as a share of all questions"),
+
+    # Totals that are not stage-specific: the three stage rates sum to the error
+    # rate, and "lucky" counts the questions where a stage failed yet the answer
+    # came out right (not counted as failures).
+    ("Attribution summary", "LongMemEval error ↓", "lme_sf_err",   "P1 + P4 + P5; equals 1 minus accuracy"),
+    ("Attribution summary", "LongMemEval lucky n", "lme_sf_lucky", "Stage failed but answered correctly; excluded from the numerators"),
+    ("Attribution summary", "LoCoMo error ↓",      "loc_sf_err",   "Same definition"),
+    ("Attribution summary", "LoCoMo lucky n",      "loc_sf_lucky", "Same definition"),
+    ("Attribution summary", "HaluMem error ↓",     "hal_sf_err",   "Same definition"),
+    ("Attribution summary", "HaluMem lucky n",     "hal_sf_lucky", "Same definition; highest for Letta, which answers from conversation history"),
 
     ("Memory Performance", "LongMemEval QA ↑", "lme_qa", "Official LLM-judge accuracy"),
     ("Memory Performance", "LoCoMo QA ↑",      "loc_qa", "Official LLM-judge accuracy"),
@@ -580,6 +726,7 @@ GROUP_FILL = {
     "Storage":             "E8EEF9",
     "Retrieval":           "F8F0DE",
     "Reasoning":           "F5E8F0",
+    "Attribution summary": "EFEFEF",
     "Memory Performance":  "E6E6E6",
     "Memory volume":               "E8F0FA",
     "Cost":                 "FDF2E9",
@@ -626,7 +773,11 @@ KEY_DATASET = {"hal_": "halumem", "loc_": "locomo", "lme_": "longmem", "mf_": "m
 def collect():
     rows = []
     for name, hal, loc, lme, mf, llm in BACKENDS:
-        r = {"run_name": f"{name} · gemma4-31B", "backend": name, "llm": llm,
+        # The label was hard-coded to gemma4-31B, which silently mislabelled the
+        # batch-4 ablation rows: those run gemma-4-E4B-it. Derive it from the
+        # row's own LLM instead.
+        short_llm = llm.replace("openai-proxy/", "").replace("gemma-4-", "gemma4-").replace("-it", "")
+        r = {"run_name": f"{name} · {short_llm}", "backend": name, "llm": llm,
              "batch": BATCH.get(name, "")}
         r.update(halumem(hal)); r.update(locomo(loc))
         r.update(longmem(lme)); r.update(memfail(mf))
@@ -650,13 +801,18 @@ def collect():
         # definitions in SUBSET_COLS)
         r.update(subset_scores(name, hal, loc, lme, mf))
         # Cost and latency: only runs executed after 2026-08-18 carry staged data
+        r.update(stage_rates("longmem", lme, "lme"))
+        r.update(stage_rates("locomo", loc, "loc"))
+        r.update(stage_rates("halumem", hal, "hal"))
         r.update(cost("longmem", lme, "lme")); r.update(cost("locomo", loc, "loc"))
         r.update(cost("halumem", hal, "hal")); r.update(cost("memfail", mf, "mf"))
         g = GRANULARITY.get(name, ("?",) * 4)
         r["loc_gran"], r["lme_gran"], r["hal_gran"], r["mf_gran"] = g
         # Scale: question counts alone do not convey workload, so user / session /
         # turn counts are added
-        r["hal_scale"] = "1 user / 77 sessions / 3,242 turns"
+        r["hal_scale"] = ("2 users (#3, #4) / 6,170 turns"
+                          if r["batch"] == "② 08-19"
+                          else "1 user / 77 sessions / 3,242 turns")
         r["loc_scale"] = "1 conv (conv-26) / 19 sessions / 419 turns"
         r["lme_scale"] = "about 50 sessions, 491 turns per question"
         rows.append(r)

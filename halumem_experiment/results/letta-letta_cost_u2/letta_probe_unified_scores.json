@@ -1,0 +1,21 @@
+{
+  "run": "letta-letta_cost_u2",
+  "n": 147,
+  "P1_fail": 0.1293,
+  "P4_fail": 0.0748,
+  "P5_fail": 0.3333,
+  "not_counted": 23,
+  "abstain_n": 41,
+  "unadjudicated": 0,
+  "verdicts": {
+    "OK": 45,
+    "P5b_OK": 38,
+    "REASONING": 49,
+    "NOT_COUNTED": 23,
+    "SUMMARY": 19,
+    "P5b_FAIL": 3,
+    "RETRIEVAL": 11
+  },
+  "judge_failures": {},
+  "attributable_error_rate": 0.5374
+}

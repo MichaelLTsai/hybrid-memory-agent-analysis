@@ -1,0 +1,6 @@
+{
+  "extraction_llm": "gemma-4-E4B-it",
+  "judge_llm": "gemma-4-E4B-it",
+  "embed_model": "all-MiniLM-L6-v2",
+  "granularity": "session"
+}

@@ -3,12 +3,12 @@
   "token_f1_all": 0.06666666666666667,
   "qa_num": 18,
   "retrieval": {
-    "recall@3": null,
-    "recall@5": null,
-    "recall@10": null,
-    "ndcg@3": null,
-    "ndcg@5": null,
-    "ndcg@10": null
+    "recall@3": 0.1111111111111111,
+    "recall@5": 0.1111111111111111,
+    "recall@10": 0.1111111111111111,
+    "ndcg@3": 0.1111111111111111,
+    "ndcg@5": 0.1111111111111111,
+    "ndcg@10": 0.1111111111111111
   },
   "per_type": {
     "knowledge-update": {
@@ -90,5 +90,6 @@
         "NO_WRITE": 3
       }
     }
-  }
+  },
+  "retrieval_note": "session ids recovered by matching retrieved text against all_memories; 360/360 atomic rows resolved (100.0%), 0 cross-event summary rows excluded (no single source session)"
 }

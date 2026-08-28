@@ -1,0 +1,312 @@
+[
+  {
+    "example_id": "longhop-1hop-003",
+    "hop_count": 1,
+    "facts": [
+      "Morning meditation gives me a clear head.",
+      "A clear head helps me tackle email."
+    ],
+    "answer_chain": [
+      "morning meditation",
+      "clear head",
+      "tackle email"
+    ],
+    "ground_truth_answer": "tackle email",
+    "support_set_size": 2,
+    "question_stem": "When I do morning meditation, what do I end up doing?\n\nOptions:\nA. bake cookies\nB. water plants\nC. fold laundry\nD. tackle email\nE. shoot hoops",
+    "question": "When I do morning meditation, what do I end up doing?\n\nOptions:\nA. bake cookies\nB. water plants\nC. fold laundry\nD. tackle email\nE. shoot hoops\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "bake cookies",
+      "B": "water plants",
+      "C": "fold laundry",
+      "D": "tackle email",
+      "E": "shoot hoops"
+    },
+    "correct_choice": "D",
+    "retrieved_memories": "- 2026-08-26T16:13:00.000 Wed The assistant noted that morning meditation is a positive and effective routine for the user.\n- 2026-08-26T16:13:00.000 Wed Morning meditation gives the user a clear head.\n- 2026-08-26T16:13:00.000 Wed The assistant acknowledged the user's positive experience with morning meditation and validated it as a positive and effective routine.\n- 2026-08-26T16:13:00.000 Wed The user believes that a calm mind leads them to finish journaling.\n- 2026-08-26T16:13:00.000 Wed The assistant noted that a calm mind is what helps the user to finish journaling.\n- 2026-08-26T16:13:00.000 [SUMMARY] During the conversation on 2026-08-26, the discussion centered on the user's routines, emotional states, and preferences, with the assistant providing consistent validation and support. The user shared that early yoga is very calming, which contributes to a calm mind, aiding in finishing journaling. Similarly, morning meditation is noted as a positive and effective routine that provides a clear head, which the user believes helps them tackle email.\n\nRegarding physical activities, Jonas enjoys morning biking, which results in him eating a big breakfast.\n\nThe user also detailed several sensitivities and challenges. They avoid noisy cafes because they trigger headaches, a preference the assistant noted and validated. Furthermore, the user experiences jitters from black coffee, which caused them to cancel meetings on 2026-08-26. The assistant acknowledged this vulnerability, offering supportive resources and encouragement for managing these jitters. Additionally, the user experienced headaches on 2026-08-26, prompting them to take a nap.\n\nThroughout the exchange, the assistant consistently validated the user's insights—such as the link between a clear head and productivity—and praised positive habits like journaling. The assistant concluded by offering supportive availability for future discussions on productivity or organization.",
+    "llm_response": "{\"selected_choice\": \"D\"}",
+    "conversation_id": "b6c3effc-f35b-4f9a-9e3b-78c76003069e",
+    "eval_input_tokens": 766,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Morning meditation gives me a clear head.",
+        "fact_index": 0,
+        "category": null,
+        "fact_in_store": null,
+        "storage_reasoning": null,
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "target_message": "A clear head helps me tackle email.",
+        "fact_index": 1,
+        "category": null,
+        "fact_in_store": null,
+        "storage_reasoning": null,
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      }
+    ],
+    "judge_result": null,
+    "error_type": null,
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "selected_choice": null,
+    "final_answer_correct": null,
+    "analysis_error": "Judge call failed after 3 attempts: Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+    "example_id": "longhop-1hop-001",
+    "hop_count": 1,
+    "facts": [
+      "Early yoga gives me a calm mind.",
+      "A calm mind leads me to finish journaling."
+    ],
+    "answer_chain": [
+      "early yoga",
+      "calm mind",
+      "finish journaling"
+    ],
+    "ground_truth_answer": "finish journaling",
+    "support_set_size": 2,
+    "question_stem": "When I do early yoga, what do I end up doing?\n\nOptions:\nA. check email\nB. fold laundry\nC. finish journaling\nD. water the plants\nE. take out the trash",
+    "question": "When I do early yoga, what do I end up doing?\n\nOptions:\nA. check email\nB. fold laundry\nC. finish journaling\nD. water the plants\nE. take out the trash\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "check email",
+      "B": "fold laundry",
+      "C": "finish journaling",
+      "D": "water the plants",
+      "E": "take out the trash"
+    },
+    "correct_choice": "C",
+    "retrieved_memories": "- 2026-08-26T16:13:00.000 Wed The assistant acknowledged and validated the user's positive feeling about early yoga, expressing agreement that it sounds like a great routine for achieving a calm mind.\n- 2026-08-26T16:13:00.000 Wed The user finds that early yoga gives them a calm mind.\n- 2026-08-26T16:13:00.000 Wed The assistant noted that the user finds early yoga to be very calming.\n- 2026-08-26T16:13:00.000 Wed The assistant noted that a calm mind is what helps the user to finish journaling.\n- 2026-08-26T16:13:00.000 Wed The assistant noted that morning meditation is a positive and effective routine for the user.\n- 2026-08-26T16:13:00.000 [SUMMARY] During the conversation on 2026-08-26, the discussion centered on the user's routines, emotional states, and preferences, with the assistant providing consistent validation and support. The user shared that early yoga is very calming, which contributes to a calm mind, aiding in finishing journaling. Similarly, morning meditation is noted as a positive and effective routine that provides a clear head, which the user believes helps them tackle email.\n\nRegarding physical activities, Jonas enjoys morning biking, which results in him eating a big breakfast.\n\nThe user also detailed several sensitivities and challenges. They avoid noisy cafes because they trigger headaches, a preference the assistant noted and validated. Furthermore, the user experiences jitters from black coffee, which caused them to cancel meetings on 2026-08-26. The assistant acknowledged this vulnerability, offering supportive resources and encouragement for managing these jitters. Additionally, the user experienced headaches on 2026-08-26, prompting them to take a nap.\n\nThroughout the exchange, the assistant consistently validated the user's insights—such as the link between a clear head and productivity—and praised positive habits like journaling. The assistant concluded by offering supportive availability for future discussions on productivity or organization.",
+    "llm_response": "{\"selected_choice\": \"C\"}",
+    "conversation_id": "87e49733-e168-4a9c-9c31-5fcd2626b6d3",
+    "eval_input_tokens": 781,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Early yoga gives me a calm mind.",
+        "fact_index": 0,
+        "category": null,
+        "fact_in_store": null,
+        "storage_reasoning": null,
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "target_message": "A calm mind leads me to finish journaling.",
+        "fact_index": 1,
+        "category": null,
+        "fact_in_store": null,
+        "storage_reasoning": null,
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      }
+    ],
+    "judge_result": null,
+    "error_type": null,
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "selected_choice": null,
+    "final_answer_correct": null,
+    "analysis_error": "Judge call failed after 3 attempts: Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+    "example_id": "longhop-1hop-002",
+    "hop_count": 1,
+    "facts": [
+      "Black coffee gives me jitters.",
+      "Jitters make me cancel meetings."
+    ],
+    "answer_chain": [
+      "black coffee",
+      "jitters",
+      "cancel meetings"
+    ],
+    "ground_truth_answer": "cancel meetings",
+    "support_set_size": 2,
+    "question_stem": "After I drink black coffee, what do I end up doing?\n\nOptions:\nA. buy groceries\nB. cook dinner\nC. water plants\nD. fold laundry\nE. cancel meetings",
+    "question": "After I drink black coffee, what do I end up doing?\n\nOptions:\nA. buy groceries\nB. cook dinner\nC. water plants\nD. fold laundry\nE. cancel meetings\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "buy groceries",
+      "B": "cook dinner",
+      "C": "water plants",
+      "D": "fold laundry",
+      "E": "cancel meetings"
+    },
+    "correct_choice": "E",
+    "retrieved_memories": "- 2026-08-26T16:13:00.000 Wed The user experiences jitters from black coffee.\n- 2026-08-26T16:13:00.000 Wed The assistant acknowledged and validated the user's preference regarding noisy cafes, showing attentiveness to the user's needs.\n- 2026-08-26T16:13:00.000 Wed The assistant has noted that the user avoids noisy cafes because they trigger headaches and will keep this in mind.\n- 2026-08-26T16:13:00.000 Wed Morning biking causes Jonas to eat a big breakfast.\n- 2026-08-26T16:13:00.000 Wed The user avoids noisy cafes because they trigger headaches.\n- 2026-08-26T16:13:00.000 [SUMMARY] During the conversation on 2026-08-26, the discussion centered on the user's routines, emotional states, and preferences, with the assistant providing consistent validation and support. The user shared that early yoga is very calming, which contributes to a calm mind, aiding in finishing journaling. Similarly, morning meditation is noted as a positive and effective routine that provides a clear head, which the user believes helps them tackle email.\n\nRegarding physical activities, Jonas enjoys morning biking, which results in him eating a big breakfast.\n\nThe user also detailed several sensitivities and challenges. They avoid noisy cafes because they trigger headaches, a preference the assistant noted and validated. Furthermore, the user experiences jitters from black coffee, which caused them to cancel meetings on 2026-08-26. The assistant acknowledged this vulnerability, offering supportive resources and encouragement for managing these jitters. Additionally, the user experienced headaches on 2026-08-26, prompting them to take a nap.\n\nThroughout the exchange, the assistant consistently validated the user's insights—such as the link between a clear head and productivity—and praised positive habits like journaling. The assistant concluded by offering supportive availability for future discussions on productivity or organization.",
+    "llm_response": "{\"selected_choice\": \"E\"}",
+    "conversation_id": "8fd34d73-f358-45e7-91a4-1d34c59939d6",
+    "eval_input_tokens": 764,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Black coffee gives me jitters.",
+        "fact_index": 0,
+        "category": null,
+        "fact_in_store": null,
+        "storage_reasoning": null,
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "target_message": "Jitters make me cancel meetings.",
+        "fact_index": 1,
+        "category": null,
+        "fact_in_store": null,
+        "storage_reasoning": null,
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      }
+    ],
+    "judge_result": null,
+    "error_type": null,
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "selected_choice": null,
+    "final_answer_correct": null,
+    "analysis_error": "Judge call failed after 3 attempts: Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+    "example_id": "longhop-1hop-004",
+    "hop_count": 1,
+    "facts": [
+      "I avoid noisy cafes because they trigger headaches.",
+      "Headaches push me to take a nap."
+    ],
+    "answer_chain": [
+      "noisy cafes",
+      "headaches",
+      "take a nap"
+    ],
+    "ground_truth_answer": "take a nap",
+    "support_set_size": 2,
+    "question_stem": "If I'm around noisy cafes, what do I end up doing?\n\nOptions:\nA. do the laundry\nB. cook dinner\nC. call a friend\nD. organize my desk\nE. take a nap",
+    "question": "If I'm around noisy cafes, what do I end up doing?\n\nOptions:\nA. do the laundry\nB. cook dinner\nC. call a friend\nD. organize my desk\nE. take a nap\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "do the laundry",
+      "B": "cook dinner",
+      "C": "call a friend",
+      "D": "organize my desk",
+      "E": "take a nap"
+    },
+    "correct_choice": "E",
+    "retrieved_memories": "- 2026-08-26T16:13:00.000 Wed The assistant acknowledged and validated the user's preference regarding noisy cafes, showing attentiveness to the user's needs.\n- 2026-08-26T16:13:00.000 Wed The assistant has noted that the user avoids noisy cafes because they trigger headaches and will keep this in mind.\n- 2026-08-26T16:13:00.000 Wed The user avoids noisy cafes because they trigger headaches.\n- 2026-08-26T16:13:00.000 Wed The user experiences jitters from black coffee.\n- 2026-08-26T16:13:00.000 Wed The assistant acknowledged the user's insight and offered supportive availability for future conversations regarding productivity or organization.\n- 2026-08-26T16:13:00.000 [SUMMARY] During the conversation on 2026-08-26, the discussion centered on the user's routines, emotional states, and preferences, with the assistant providing consistent validation and support. The user shared that early yoga is very calming, which contributes to a calm mind, aiding in finishing journaling. Similarly, morning meditation is noted as a positive and effective routine that provides a clear head, which the user believes helps them tackle email.\n\nRegarding physical activities, Jonas enjoys morning biking, which results in him eating a big breakfast.\n\nThe user also detailed several sensitivities and challenges. They avoid noisy cafes because they trigger headaches, a preference the assistant noted and validated. Furthermore, the user experiences jitters from black coffee, which caused them to cancel meetings on 2026-08-26. The assistant acknowledged this vulnerability, offering supportive resources and encouragement for managing these jitters. Additionally, the user experienced headaches on 2026-08-26, prompting them to take a nap.\n\nThroughout the exchange, the assistant consistently validated the user's insights—such as the link between a clear head and productivity—and praised positive habits like journaling. The assistant concluded by offering supportive availability for future discussions on productivity or organization.",
+    "llm_response": "{\"selected_choice\": \"E\"}",
+    "conversation_id": "f0878f40-829b-4f93-9a13-879679af5a4f",
+    "eval_input_tokens": 780,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "I avoid noisy cafes because they trigger headaches.",
+        "fact_index": 0,
+        "category": null,
+        "fact_in_store": null,
+        "storage_reasoning": null,
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "target_message": "Headaches push me to take a nap.",
+        "fact_index": 1,
+        "category": null,
+        "fact_in_store": null,
+        "storage_reasoning": null,
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      }
+    ],
+    "judge_result": null,
+    "error_type": null,
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "selected_choice": null,
+    "final_answer_correct": null,
+    "analysis_error": "Judge call failed after 3 attempts: Expecting value: line 1 column 1 (char 0)"
+  },
+  {
+    "example_id": "longhop-1hop-005",
+    "hop_count": 1,
+    "facts": [
+      "Jonas loves morning biking.",
+      "Morning biking makes Jonas eat a big breakfast."
+    ],
+    "answer_chain": [
+      "Jonas",
+      "morning biking",
+      "eat a big breakfast"
+    ],
+    "ground_truth_answer": "eat a big breakfast",
+    "support_set_size": 2,
+    "question_stem": "After Jonas does his favorite routine, what does he do?\n\nOptions:\nA. call a close friend\nB. eat a big breakfast\nC. pay some bills\nD. organize his bookshelf\nE. water the houseplants",
+    "question": "After Jonas does his favorite routine, what does he do?\n\nOptions:\nA. call a close friend\nB. eat a big breakfast\nC. pay some bills\nD. organize his bookshelf\nE. water the houseplants\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "call a close friend",
+      "B": "eat a big breakfast",
+      "C": "pay some bills",
+      "D": "organize his bookshelf",
+      "E": "water the houseplants"
+    },
+    "correct_choice": "B",
+    "retrieved_memories": "- 2026-08-26T16:13:00.000 Wed Jonas loves morning biking.\n- 2026-08-26T16:13:00.000 Wed Morning biking causes Jonas to eat a big breakfast.\n- 2026-08-26T16:13:00.000 Wed The assistant acknowledged and praised the user's habit of journaling, validating the connection between a calm mind and the ability to complete it.\n- 2026-08-26T16:13:00.000 Wed The user believes that a calm mind leads them to finish journaling.\n- 2026-08-26T16:13:00.000 Wed The assistant acknowledged the user's insight that a clear head helps tackle email.\n- 2026-08-26T16:13:00.000 [SUMMARY] During the conversation on 2026-08-26, the discussion centered on the user's routines, emotional states, and preferences, with the assistant providing consistent validation and support. The user shared that early yoga is very calming, which contributes to a calm mind, aiding in finishing journaling. Similarly, morning meditation is noted as a positive and effective routine that provides a clear head, which the user believes helps them tackle email.\n\nRegarding physical activities, Jonas enjoys morning biking, which results in him eating a big breakfast.\n\nThe user also detailed several sensitivities and challenges. They avoid noisy cafes because they trigger headaches, a preference the assistant noted and validated. Furthermore, the user experiences jitters from black coffee, which caused them to cancel meetings on 2026-08-26. The assistant acknowledged this vulnerability, offering supportive resources and encouragement for managing these jitters. Additionally, the user experienced headaches on 2026-08-26, prompting them to take a nap.\n\nThroughout the exchange, the assistant consistently validated the user's insights—such as the link between a clear head and productivity—and praised positive habits like journaling. The assistant concluded by offering supportive availability for future discussions on productivity or organization.",
+    "llm_response": "{\"selected_choice\": \"B\"}",
+    "conversation_id": "d3a58c65-32f4-4b78-a142-5bd7b238ce9d",
+    "eval_input_tokens": 767,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Jonas loves morning biking.",
+        "fact_index": 0,
+        "category": null,
+        "fact_in_store": null,
+        "storage_reasoning": null,
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      },
+      {
+        "target_message": "Morning biking makes Jonas eat a big breakfast.",
+        "fact_index": 1,
+        "category": null,
+        "fact_in_store": null,
+        "storage_reasoning": null,
+        "summary_passed": null,
+        "summary_reasoning": null,
+        "fact_in_retrieved": null,
+        "retrieval_reasoning": null
+      }
+    ],
+    "judge_result": null,
+    "error_type": null,
+    "correctly_invoked": null,
+    "invocation_reasoning": null,
+    "selected_choice": null,
+    "final_answer_correct": null,
+    "analysis_error": "Judge call failed after 3 attempts: Expecting value: line 1 column 1 (char 0)"
+  }
+]

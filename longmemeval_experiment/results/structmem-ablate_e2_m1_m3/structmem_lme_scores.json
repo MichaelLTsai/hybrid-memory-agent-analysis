@@ -1,0 +1,56 @@
+{
+  "qa_accuracy_all": 0.6,
+  "token_f1_all": 0.08988380041011619,
+  "qa_num": 5,
+  "retrieval": {
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "recall@10": 1.0,
+    "ndcg@3": 1.0,
+    "ndcg@5": 1.0,
+    "ndcg@10": 1.0
+  },
+  "per_type": {
+    "knowledge-update": {
+      "accuracy": 0.6,
+      "num": 5
+    }
+  },
+  "probe": {
+    "n_total": 5,
+    "n_answerable": 5,
+    "n_abstention": 0,
+    "P4_sufficient": 1.0,
+    "P4_n": 5,
+    "P1_sufficient": null,
+    "P1_n": 0,
+    "P5_fail_given_P4": 0.4,
+    "P5_n": 5,
+    "P5b_abstain_rate": null,
+    "P5b_n": 0,
+    "verdicts": {
+      "REASONING": 2,
+      "OK": 3
+    },
+    "attribution": {
+      "OK": 0.6,
+      "SUMMARY": 0.0,
+      "RETRIEVAL": 0.0,
+      "REASONING": 0.4,
+      "NO_WRITE": 0.0,
+      "P5b_FAIL": 0.0
+    },
+    "unknown_ratio": 0.0,
+    "judge_failures": {},
+    "scope": [
+      "session"
+    ],
+    "by_question_type": {
+      "knowledge-update": {
+        "REASONING": 2,
+        "OK": 3
+      }
+    }
+  },
+  "retrieval_note": "session ids recovered by matching retrieved text against all_memories; 100/100 atomic rows resolved (100.0%), 15 cross-event summary rows excluded (no single source session)"
+}

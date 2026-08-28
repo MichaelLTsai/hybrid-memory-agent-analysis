@@ -26,6 +26,12 @@ RUNS = [
     ("results_5q_mem0v2", "Mem0 v2"),
     ("results_5q_amem", "A-MEM"),
     ("results_5q_structmem", "StructMem"),
+    # 第二批(2026-08-19 起)：同樣的資料與參數，adapter 已接上分階段成本量測。
+    ("results_cost_mem0v1", "Mem0 v1 cost"),
+    ("results_cost_mem0v2", "Mem0 v2 cost"),
+    ("results_cost_structmem", "StructMem cost"),
+    ("results_cost_amem", "A-MEM cost"),
+    ("results_cost_letta", "Letta cost"),
 ]
 
 DATASETS = [

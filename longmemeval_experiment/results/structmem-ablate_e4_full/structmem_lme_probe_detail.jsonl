@@ -1,0 +1,5 @@
+{"question_id": "830ce83f", "question_type": "knowledge-update", "is_correct": false, "is_abstention": false, "n_retrieved": 20, "scope": "session", "n_scoped": 107, "P4": true, "P1": null, "verdict": "REASONING"}
+{"question_id": "6aeb4375", "question_type": "knowledge-update", "is_correct": true, "is_abstention": false, "n_retrieved": 25, "scope": "session", "n_scoped": 112, "P4": true, "P1": null, "verdict": "OK"}
+{"question_id": "852ce960", "question_type": "knowledge-update", "is_correct": true, "is_abstention": false, "n_retrieved": 25, "scope": "session", "n_scoped": 123, "P4": true, "P1": null, "verdict": "OK"}
+{"question_id": "6a1eabeb", "question_type": "knowledge-update", "is_correct": false, "is_abstention": false, "n_retrieved": 20, "scope": "session", "n_scoped": 132, "P4": false, "P1": true, "verdict": "RETRIEVAL"}
+{"question_id": "945e3d21", "question_type": "knowledge-update", "is_correct": false, "is_abstention": false, "n_retrieved": 20, "scope": "session", "n_scoped": 95, "P4": true, "P1": null, "verdict": "REASONING"}

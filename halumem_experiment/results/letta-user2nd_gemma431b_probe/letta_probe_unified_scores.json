@@ -1,0 +1,21 @@
+{
+  "run": "letta-user2nd_gemma431b_probe",
+  "n": 147,
+  "P1_fail": 0.1701,
+  "P4_fail": 0.0272,
+  "P5_fail": 0.3197,
+  "not_counted": 33,
+  "abstain_n": 41,
+  "unadjudicated": 0,
+  "verdicts": {
+    "OK": 38,
+    "P5b_OK": 38,
+    "REASONING": 47,
+    "NOT_COUNTED": 33,
+    "SUMMARY": 25,
+    "P5b_FAIL": 3,
+    "RETRIEVAL": 4
+  },
+  "judge_failures": {},
+  "attributable_error_rate": 0.517
+}

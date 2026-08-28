@@ -1,0 +1,21 @@
+{
+  "run": "structmem-ablate_e3_m1_m4",
+  "n": 125,
+  "P1_fail": 0.04,
+  "P4_fail": 0.152,
+  "P5_fail": 0.448,
+  "not_counted": 2,
+  "abstain_n": 39,
+  "unadjudicated": 0,
+  "verdicts": {
+    "P5b_OK": 36,
+    "OK": 43,
+    "REASONING": 56,
+    "P5b_FAIL": 3,
+    "RETRIEVAL": 19,
+    "SUMMARY": 5,
+    "NOT_COUNTED": 2
+  },
+  "judge_failures": {},
+  "attributable_error_rate": 0.64
+}

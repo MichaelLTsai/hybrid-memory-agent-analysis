@@ -1,0 +1,41 @@
+example_id,hop_count,support_set_size,conversation_id,judge_result,error_type,correctly_invoked,selected_choice,correct_choice,final_answer_correct,ground_truth_answer,question_stem,n_facts,n_not_stored,n_summary_error,n_not_retrieved,n_correct,frac_not_stored,frac_summary_error,frac_not_retrieved,frac_correct,invocation_reasoning,eval_input_tokens,eval_output_tokens,eval_cost
+longhop-1hop-003,1,2,5f6e6fab-545c-4cad-965b-67835f87be03,,,,,D,,tackle email,"When I do morning meditation, what do I end up doing?
+
+Options:
+A. bake cookies
+B. water plants
+C. fold laundry
+D. tackle email
+E. shoot hoops",2,0,0,0,0,0.000,0.000,0.000,0.000,,791,9,0.0
+longhop-1hop-001,1,2,1f7d77ae-2d16-4742-8778-0a227583d10a,,,,,C,,finish journaling,"When I do early yoga, what do I end up doing?
+
+Options:
+A. check email
+B. fold laundry
+C. finish journaling
+D. water the plants
+E. take out the trash",2,0,0,0,0,0.000,0.000,0.000,0.000,,783,9,0.0
+longhop-1hop-002,1,2,4ee1c4d6-cf57-445c-888a-186e04dc30ab,,,,,E,,cancel meetings,"After I drink black coffee, what do I end up doing?
+
+Options:
+A. buy groceries
+B. cook dinner
+C. water plants
+D. fold laundry
+E. cancel meetings",2,0,0,0,0,0.000,0.000,0.000,0.000,,802,9,0.0
+longhop-1hop-004,1,2,c282bcdc-0301-48a8-87bf-2bb7da4d3933,,,,,E,,take a nap,"If I'm around noisy cafes, what do I end up doing?
+
+Options:
+A. do the laundry
+B. cook dinner
+C. call a friend
+D. organize my desk
+E. take a nap",2,0,0,0,0,0.000,0.000,0.000,0.000,,809,9,0.0
+longhop-1hop-005,1,2,b4ba280f-a7b6-4ecd-9304-3947f6db6487,,,,,B,,eat a big breakfast,"After Jonas does his favorite routine, what does he do?
+
+Options:
+A. call a close friend
+B. eat a big breakfast
+C. pay some bills
+D. organize his bookshelf
+E. water the houseplants",2,0,0,0,0,0.000,0.000,0.000,0.000,,785,156,0.0

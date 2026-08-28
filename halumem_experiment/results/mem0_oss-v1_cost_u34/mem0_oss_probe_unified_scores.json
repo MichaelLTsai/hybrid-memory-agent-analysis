@@ -1,0 +1,21 @@
+{
+  "run": "mem0_oss-v1_cost_u34",
+  "n": 290,
+  "P1_fail": 0.2483,
+  "P4_fail": 0.2207,
+  "P5_fail": 0.3897,
+  "not_counted": 8,
+  "abstain_n": 70,
+  "unadjudicated": 0,
+  "verdicts": {
+    "OK": 33,
+    "P5b_OK": 66,
+    "REASONING": 113,
+    "SUMMARY": 72,
+    "RETRIEVAL": 64,
+    "NOT_COUNTED": 8,
+    "P5b_FAIL": 4
+  },
+  "judge_failures": {},
+  "attributable_error_rate": 0.8587
+}

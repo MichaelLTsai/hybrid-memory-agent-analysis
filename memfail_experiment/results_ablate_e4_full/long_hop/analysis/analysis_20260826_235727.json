@@ -1,0 +1,312 @@
+[
+  {
+    "example_id": "longhop-1hop-003",
+    "hop_count": 1,
+    "facts": [
+      "Morning meditation gives me a clear head.",
+      "A clear head helps me tackle email."
+    ],
+    "answer_chain": [
+      "morning meditation",
+      "clear head",
+      "tackle email"
+    ],
+    "ground_truth_answer": "tackle email",
+    "support_set_size": 2,
+    "question_stem": "When I do morning meditation, what do I end up doing?\n\nOptions:\nA. bake cookies\nB. water plants\nC. fold laundry\nD. tackle email\nE. shoot hoops",
+    "question": "When I do morning meditation, what do I end up doing?\n\nOptions:\nA. bake cookies\nB. water plants\nC. fold laundry\nD. tackle email\nE. shoot hoops\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "bake cookies",
+      "B": "water plants",
+      "C": "fold laundry",
+      "D": "tackle email",
+      "E": "shoot hoops"
+    },
+    "correct_choice": "D",
+    "retrieved_memories": "- [HISTORICAL MEMORY | 2026-08-26T17:26:00.000] The user finds that morning meditation gives them a clear head.\n- [HISTORICAL MEMORY | 2026-08-26T17:26:00.000] The assistant noted that morning meditation gives the user a clear head.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The assistant acknowledged the user's positive experience with morning meditation with enthusiasm and encouragement.\n- [HISTORICAL MEMORY | 2026-08-26T17:26:00.000] The assistant has noted that morning biking makes Jonas eat a big breakfast and will remember this for future conversations.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The assistant noted that the user benefits from yoga in the morning.\n- [CURRENT SUMMARY | 2026-08-26T17:26:00.000] Throughout the recorded interactions on 2026-08-26, the user shared several routines and sensitivities related to their well-being. The user finds that morning meditation provides a clear head, which they believe helps them tackle email. Furthermore, early yoga helps the user achieve a calm mind, which in turn assists them in finishing journaling.\n\nRegarding physical responses, the user experiences headaches, which prompts them to take a nap, and they avoid noisy cafes because these trigger headaches. Additionally, the user experiences jitters when consuming black coffee, a symptom that has caused them to cancel meetings.\n\nIn terms of habits, morning biking is noted to cause Jonas to eat a big breakfast. The assistant consistently demonstrated supportive engagement throughout these disclosures. For instance, when the user shared their anxiety regarding canceling meetings due to jitters, the assistant acknowledged this vulnerability and committed to keeping it in mind. Similarly, the assistant validated the benefits of morning meditation and yoga, confirming they would remember the user's preferences regarding avoiding noisy cafes and the positive effects of their morning routines for future interactions.",
+    "llm_response": "{\"selected_choice\": \"D\"}",
+    "conversation_id": "ad9c4228-eebe-4ffb-b5a0-bff405e520a5",
+    "eval_input_tokens": 757,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Morning meditation gives me a clear head.",
+        "fact_index": 0,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Morning meditation gives me a clear head' is explicitly stored in multiple memories: 'The user finds that morning meditation gives them a clear head' and 'The assistant noted that morning meditation gives the user a clear head.'",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Morning meditation gives me a clear head' is faithfully preserved in multiple memory entries. Specifically, 'The user finds that morning meditation gives them a clear head' and 'The assistant noted that morning meditation gives the user a clear head' explicitly maintain the entities (morning meditation and clear head) and the causal relationship between them without any corruption or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Morning meditation gives me a clear head' is explicitly present in multiple memories: as a historical memory ('The user finds that morning meditation gives them a clear head') and within the current summary ('The user finds that morning meditation provides a clear head')."
+      },
+      {
+        "target_message": "A clear head helps me tackle email.",
+        "fact_index": 1,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The memory store includes statements such as \"The user believes that having a clear head helps them tackle email\" and \"The assistant has noted the user's belief that a clear head helps tackle email,\" which preserve the specific entities (clear head, email) and the relation (helps/helps them tackle). This unambiguously recovers the target fact.",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'A clear head helps me tackle email' is explicitly and faithfully preserved in multiple memory entries: 'The user believes that having a clear head helps them tackle email' and 'The assistant has noted the user's belief that a clear head helps tackle email and will keep this in mind.' The entities (clear head, tackle email) and the causal relationship between them are clearly maintained.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'A clear head helps me tackle email' is explicitly contained within the CURRENT SUMMARY memory: 'The user finds that morning meditation provides a clear head, which they believe helps them tackle email.'"
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "model selected D; correct choice is D",
+    "selected_choice": "D",
+    "final_answer_correct": true,
+    "analysis_error": null
+  },
+  {
+    "example_id": "longhop-1hop-001",
+    "hop_count": 1,
+    "facts": [
+      "Early yoga gives me a calm mind.",
+      "A calm mind leads me to finish journaling."
+    ],
+    "answer_chain": [
+      "early yoga",
+      "calm mind",
+      "finish journaling"
+    ],
+    "ground_truth_answer": "finish journaling",
+    "support_set_size": 2,
+    "question_stem": "When I do early yoga, what do I end up doing?\n\nOptions:\nA. check email\nB. fold laundry\nC. finish journaling\nD. water the plants\nE. take out the trash",
+    "question": "When I do early yoga, what do I end up doing?\n\nOptions:\nA. check email\nB. fold laundry\nC. finish journaling\nD. water the plants\nE. take out the trash\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "check email",
+      "B": "fold laundry",
+      "C": "finish journaling",
+      "D": "water the plants",
+      "E": "take out the trash"
+    },
+    "correct_choice": "C",
+    "retrieved_memories": "- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The assistant noted that the user benefits from yoga in the morning.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The user finds that early yoga provides them with a calm mind.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The assistant acknowledged the user's statement positively and validated the benefit of early yoga for finding calmness.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The user believes that a calm mind helps them finish journaling.\n- [HISTORICAL MEMORY | 2026-08-26T17:26:00.000] The user finds that morning meditation gives them a clear head.\n- [CURRENT SUMMARY | 2026-08-26T17:26:00.000] Throughout the recorded interactions on 2026-08-26, the user shared several routines and sensitivities related to their well-being. The user finds that morning meditation provides a clear head, which they believe helps them tackle email. Furthermore, early yoga helps the user achieve a calm mind, which in turn assists them in finishing journaling.\n\nRegarding physical responses, the user experiences headaches, which prompts them to take a nap, and they avoid noisy cafes because these trigger headaches. Additionally, the user experiences jitters when consuming black coffee, a symptom that has caused them to cancel meetings.\n\nIn terms of habits, morning biking is noted to cause Jonas to eat a big breakfast. The assistant consistently demonstrated supportive engagement throughout these disclosures. For instance, when the user shared their anxiety regarding canceling meetings due to jitters, the assistant acknowledged this vulnerability and committed to keeping it in mind. Similarly, the assistant validated the benefits of morning meditation and yoga, confirming they would remember the user's preferences regarding avoiding noisy cafes and the positive effects of their morning routines for future interactions.",
+    "llm_response": "{\"selected_choice\": \"C\"}",
+    "conversation_id": "66c0f0d1-84a1-4b5e-a29e-538564b7909b",
+    "eval_input_tokens": 752,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Early yoga gives me a calm mind.",
+        "fact_index": 0,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Early yoga gives me a calm mind' is explicitly stored in the memory: 'The user finds that early yoga provides them with a calm mind.'",
+        "summary_passed": true,
+        "summary_reasoning": "The memory entry 'The user finds that early yoga provides them with a calm mind' explicitly and faithfully preserves both the entities (early yoga, calm mind) and the specific relation (provides/gives) between them.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Early yoga gives me a calm mind' is explicitly present in multiple memories: 'The user finds that early yoga provides them with a calm mind' and 'early yoga helps the user achieve a calm mind'."
+      },
+      {
+        "target_message": "A calm mind leads me to finish journaling.",
+        "fact_index": 1,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'A calm mind leads me to finish journaling' is explicitly stated in the memory: 'The user believes that a calm mind helps them finish journaling.' It is also reinforced in other entries, such as 'The assistant acknowledged that having a calm mind is helpful for the user when journaling.'",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'A calm mind leads me to finish journaling' is explicitly and faithfully preserved in the memory entry: 'The user believes that a calm mind helps them finish journaling.' The entities (calm mind, finish journaling) and the causal relation between them are maintained without corruption or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The retrieved memories contain the statement that a calm mind helps the user finish journaling, and the summary merges the links: early yoga leads to a calm mind, which in turn assists in finishing journaling. This unambiguously includes the target fact's relationship."
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "model selected C; correct choice is C",
+    "selected_choice": "C",
+    "final_answer_correct": true,
+    "analysis_error": null
+  },
+  {
+    "example_id": "longhop-1hop-002",
+    "hop_count": 1,
+    "facts": [
+      "Black coffee gives me jitters.",
+      "Jitters make me cancel meetings."
+    ],
+    "answer_chain": [
+      "black coffee",
+      "jitters",
+      "cancel meetings"
+    ],
+    "ground_truth_answer": "cancel meetings",
+    "support_set_size": 2,
+    "question_stem": "After I drink black coffee, what do I end up doing?\n\nOptions:\nA. buy groceries\nB. cook dinner\nC. water plants\nD. fold laundry\nE. cancel meetings",
+    "question": "After I drink black coffee, what do I end up doing?\n\nOptions:\nA. buy groceries\nB. cook dinner\nC. water plants\nD. fold laundry\nE. cancel meetings\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "buy groceries",
+      "B": "cook dinner",
+      "C": "water plants",
+      "D": "fold laundry",
+      "E": "cancel meetings"
+    },
+    "correct_choice": "E",
+    "retrieved_memories": "- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The user experiences jitters when consuming black coffee.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The assistant acknowledged and validated the user's preference regarding noisy cafes, indicating attentiveness to the user's needs for future interactions.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The assistant has noted that the user avoids noisy cafes because they trigger headaches and will remember this for future conversations.\n- [HISTORICAL MEMORY | 2026-08-26T17:26:00.000] The assistant has noted that morning biking makes Jonas eat a big breakfast and will remember this for future conversations.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The assistant acknowledged that jitters can cause the user to cancel meetings and will keep this in mind for future conversations.\n- [CURRENT SUMMARY | 2026-08-26T17:26:00.000] Throughout the recorded interactions on 2026-08-26, the user shared several routines and sensitivities related to their well-being. The user finds that morning meditation provides a clear head, which they believe helps them tackle email. Furthermore, early yoga helps the user achieve a calm mind, which in turn assists them in finishing journaling.\n\nRegarding physical responses, the user experiences headaches, which prompts them to take a nap, and they avoid noisy cafes because these trigger headaches. Additionally, the user experiences jitters when consuming black coffee, a symptom that has caused them to cancel meetings.\n\nIn terms of habits, morning biking is noted to cause Jonas to eat a big breakfast. The assistant consistently demonstrated supportive engagement throughout these disclosures. For instance, when the user shared their anxiety regarding canceling meetings due to jitters, the assistant acknowledged this vulnerability and committed to keeping it in mind. Similarly, the assistant validated the benefits of morning meditation and yoga, confirming they would remember the user's preferences regarding avoiding noisy cafes and the positive effects of their morning routines for future interactions.",
+    "llm_response": "{\"selected_choice\": \"E\"}",
+    "conversation_id": "000f1b5a-3453-44b6-83f5-5f202ae52d95",
+    "eval_input_tokens": 782,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Black coffee gives me jitters.",
+        "fact_index": 0,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Black coffee gives me jitters' is explicitly stored in the memory: 'The user experiences jitters when consuming black coffee.' This preserves the link between 'black coffee' and 'jitters'.",
+        "summary_passed": true,
+        "summary_reasoning": "The memory entry 'The user experiences jitters when consuming black coffee' faithfully preserves both entities (black coffee, jitters) and the specific causal relation between them.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The memory explicitly states 'The user experiences jitters when consuming black coffee.', which directly captures the link that black coffee gives the user jitters."
+      },
+      {
+        "target_message": "Jitters make me cancel meetings.",
+        "fact_index": 1,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Jitters make me cancel meetings' is explicitly present in multiple memory entries, including 'The user experiences jitters which cause them to cancel meetings' and 'The user shared a vulnerability regarding their anxiety (jitters) causing them to cancel meetings.'",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Jitters make me cancel meetings' is explicitly and faithfully preserved in multiple memory entries, most notably: 'The user experiences jitters which cause them to cancel meetings.' The entities (jitters, canceling meetings) and the causal relation between them are clearly maintained without corruption or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Jitters make me cancel meetings' is explicitly mentioned in multiple retrieved memories: one current memory stating 'jitters can cause the user to cancel meetings' and the current summary stating 'the user experiences jitters when consuming black coffee, a symptom that has caused them to cancel meetings.'"
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "model selected E; correct choice is E",
+    "selected_choice": "E",
+    "final_answer_correct": true,
+    "analysis_error": null
+  },
+  {
+    "example_id": "longhop-1hop-004",
+    "hop_count": 1,
+    "facts": [
+      "I avoid noisy cafes because they trigger headaches.",
+      "Headaches push me to take a nap."
+    ],
+    "answer_chain": [
+      "noisy cafes",
+      "headaches",
+      "take a nap"
+    ],
+    "ground_truth_answer": "take a nap",
+    "support_set_size": 2,
+    "question_stem": "If I'm around noisy cafes, what do I end up doing?\n\nOptions:\nA. do the laundry\nB. cook dinner\nC. call a friend\nD. organize my desk\nE. take a nap",
+    "question": "If I'm around noisy cafes, what do I end up doing?\n\nOptions:\nA. do the laundry\nB. cook dinner\nC. call a friend\nD. organize my desk\nE. take a nap\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "do the laundry",
+      "B": "cook dinner",
+      "C": "call a friend",
+      "D": "organize my desk",
+      "E": "take a nap"
+    },
+    "correct_choice": "E",
+    "retrieved_memories": "- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The assistant acknowledged and validated the user's preference regarding noisy cafes, indicating attentiveness to the user's needs for future interactions.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The assistant has noted that the user avoids noisy cafes because they trigger headaches and will remember this for future conversations.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The user avoids noisy cafes because they trigger headaches.\n- [HISTORICAL MEMORY | 2026-08-26T17:26:00.000] The assistant has noted that morning biking makes Jonas eat a big breakfast and will remember this for future conversations.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The user experiences jitters when consuming black coffee.\n- [CURRENT SUMMARY | 2026-08-26T17:26:00.000] Throughout the recorded interactions on 2026-08-26, the user shared several routines and sensitivities related to their well-being. The user finds that morning meditation provides a clear head, which they believe helps them tackle email. Furthermore, early yoga helps the user achieve a calm mind, which in turn assists them in finishing journaling.\n\nRegarding physical responses, the user experiences headaches, which prompts them to take a nap, and they avoid noisy cafes because these trigger headaches. Additionally, the user experiences jitters when consuming black coffee, a symptom that has caused them to cancel meetings.\n\nIn terms of habits, morning biking is noted to cause Jonas to eat a big breakfast. The assistant consistently demonstrated supportive engagement throughout these disclosures. For instance, when the user shared their anxiety regarding canceling meetings due to jitters, the assistant acknowledged this vulnerability and committed to keeping it in mind. Similarly, the assistant validated the benefits of morning meditation and yoga, confirming they would remember the user's preferences regarding avoiding noisy cafes and the positive effects of their morning routines for future interactions.",
+    "llm_response": "{\"selected_choice\": \"E\"}",
+    "conversation_id": "ce33637c-b41a-4404-a0d8-5ddc0ae3e8b0",
+    "eval_input_tokens": 775,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "I avoid noisy cafes because they trigger headaches.",
+        "fact_index": 0,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'I avoid noisy cafes because they trigger headaches' is stored verbatim in the memory store: 'The user avoids noisy cafes because they trigger headaches.' It is also preserved in a merged assistant note: 'The assistant has noted that the user avoids noisy cafes because they trigger headaches and will remember this for future conversations.'",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'I avoid noisy cafes because they trigger headaches' is explicitly and faithfully preserved in multiple memory entries. Specifically, the entry 'The user avoids noisy cafes because they trigger headaches' and the entry 'The assistant has noted that the user avoids noisy cafes because they trigger headaches and will remember this for future conversations' both maintain the entities (user/noisy cafes/headaches) and the causal relation (avoidance due to triggering headaches) without any corruption or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The retrieved memories contain the exact statement that the user avoids noisy cafes because they trigger headaches (both verbatim and paraphrased), satisfying the requirement that the specific link is present."
+      },
+      {
+        "target_message": "Headaches push me to take a nap.",
+        "fact_index": 1,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Headaches push me to take a nap' is present in the memory store in two paraphrased versions: 'The user experiences headaches which prompt them to take a nap' and 'The assistant noted that headaches tend to make the user feel like taking a nap.' Both entries unambiguously preserve the link between the entities (headaches) and the resulting action (taking a nap).",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Headaches push me to take a nap' is faithfully preserved in two memory entries: 'The user experiences headaches which prompt them to take a nap' and 'The assistant noted that headaches tend to make the user feel like taking a nap.' Both entries maintain the correct entities (headaches, taking a nap) and the causal relationship (headaches $\rightarrow$ nap) without any corruption, swapping, or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Headaches push me to take a nap' is explicitly present in the [CURRENT SUMMARY] memory: 'the user experiences headaches, which prompts them to take a nap'."
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "model selected E; correct choice is E",
+    "selected_choice": "E",
+    "final_answer_correct": true,
+    "analysis_error": null
+  },
+  {
+    "example_id": "longhop-1hop-005",
+    "hop_count": 1,
+    "facts": [
+      "Jonas loves morning biking.",
+      "Morning biking makes Jonas eat a big breakfast."
+    ],
+    "answer_chain": [
+      "Jonas",
+      "morning biking",
+      "eat a big breakfast"
+    ],
+    "ground_truth_answer": "eat a big breakfast",
+    "support_set_size": 2,
+    "question_stem": "After Jonas does his favorite routine, what does he do?\n\nOptions:\nA. call a close friend\nB. eat a big breakfast\nC. pay some bills\nD. organize his bookshelf\nE. water the houseplants",
+    "question": "After Jonas does his favorite routine, what does he do?\n\nOptions:\nA. call a close friend\nB. eat a big breakfast\nC. pay some bills\nD. organize his bookshelf\nE. water the houseplants\n\nChoose exactly one option above. The correct answer is uniquely\ndetermined by chaining the relevant remembered facts together; the\nother four options cannot be inferred from those facts.\n\nRespond with a single JSON object on its own line and nothing else,\nusing this exact schema:\n  {\"selected_choice\": \"<one of A, B, C, D, E>\"}",
+    "choices": {
+      "A": "call a close friend",
+      "B": "eat a big breakfast",
+      "C": "pay some bills",
+      "D": "organize his bookshelf",
+      "E": "water the houseplants"
+    },
+    "correct_choice": "B",
+    "retrieved_memories": "- [HISTORICAL MEMORY | 2026-08-26T17:26:00.000] The assistant has noted that morning biking makes Jonas eat a big breakfast and will remember this for future conversations.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] Jonas loves morning biking.\n- [HISTORICAL MEMORY | 2026-08-26T17:26:00.000] Morning biking causes Jonas to eat a big breakfast.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The assistant acknowledged the user's statement and showed supportive engagement by confirming they would keep the advice in mind.\n- [CURRENT MEMORY | 2026-08-26T17:26:00.000] The assistant acknowledged and validated the user's preference regarding noisy cafes, indicating attentiveness to the user's needs for future interactions.\n- [CURRENT SUMMARY | 2026-08-26T17:26:00.000] Throughout the recorded interactions on 2026-08-26, the user shared several routines and sensitivities related to their well-being. The user finds that morning meditation provides a clear head, which they believe helps them tackle email. Furthermore, early yoga helps the user achieve a calm mind, which in turn assists them in finishing journaling.\n\nRegarding physical responses, the user experiences headaches, which prompts them to take a nap, and they avoid noisy cafes because these trigger headaches. Additionally, the user experiences jitters when consuming black coffee, a symptom that has caused them to cancel meetings.\n\nIn terms of habits, morning biking is noted to cause Jonas to eat a big breakfast. The assistant consistently demonstrated supportive engagement throughout these disclosures. For instance, when the user shared their anxiety regarding canceling meetings due to jitters, the assistant acknowledged this vulnerability and committed to keeping it in mind. Similarly, the assistant validated the benefits of morning meditation and yoga, confirming they would remember the user's preferences regarding avoiding noisy cafes and the positive effects of their morning routines for future interactions.",
+    "llm_response": "{\"selected_choice\": \"B\"}",
+    "conversation_id": "ed0ff428-4d43-4540-856c-4b42dc57c9c0",
+    "eval_input_tokens": 771,
+    "eval_output_tokens": 9,
+    "eval_cost": 0.0,
+    "per_fact_results": [
+      {
+        "target_message": "Jonas loves morning biking.",
+        "fact_index": 0,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Jonas loves morning biking' is present verbatim in the memory store.",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Jonas loves morning biking' is stored verbatim in the memory entry: 'Jonas loves morning biking.' Both entities and the relation are perfectly preserved.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Jonas loves morning biking' is explicitly stated in the second memory: '[CURRENT MEMORY | 2026-08-26T17:26:00.000] Jonas loves morning biking.'"
+      },
+      {
+        "target_message": "Morning biking makes Jonas eat a big breakfast.",
+        "fact_index": 1,
+        "category": "correct",
+        "fact_in_store": true,
+        "storage_reasoning": "The target fact 'Morning biking makes Jonas eat a big breakfast' is stored verbatim in two separate memories: 'Morning biking causes Jonas to eat a big breakfast' and 'The assistant has noted that morning biking makes Jonas eat a big breakfast and will remember this for future conversations.'",
+        "summary_passed": true,
+        "summary_reasoning": "The target fact 'Morning biking makes Jonas eat a big breakfast' is explicitly and faithfully preserved in multiple memory entries (e.g., 'Morning biking causes Jonas to eat a big breakfast'). Both entities and the causal relationship between them are clearly maintained without any corruption or loss of detail.",
+        "fact_in_retrieved": true,
+        "retrieval_reasoning": "The target fact 'Morning biking makes Jonas eat a big breakfast' is explicitly stated multiple times in the retrieved memories: once in a historical memory ('morning biking makes Jonas eat a big breakfast'), again in another historical memory ('Morning biking causes Jonas to eat a big breakfast'), and once in the current summary ('morning biking is noted to cause Jonas to eat a big breakfast')."
+      }
+    ],
+    "judge_result": "correct",
+    "error_type": "correct",
+    "correctly_invoked": true,
+    "invocation_reasoning": "model selected B; correct choice is B",
+    "selected_choice": "B",
+    "final_answer_correct": true,
+    "analysis_error": null
+  }
+]

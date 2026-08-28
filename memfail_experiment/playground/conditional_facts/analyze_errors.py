@@ -727,7 +727,11 @@ def main() -> None:
     output_dir = Path(args.output_dir) if args.output_dir else traces_path.parent
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    client = OpenAI(api_key=api_key)
+    # Honour OPENAI_BASE_URL so the judge can run on an OpenAI-compatible
+    # proxy (NCHC). Without it the client silently targets api.openai.com
+    # and every judge call fails to parse, scoring the whole run 0.
+    _base = os.getenv("OPENAI_BASE_URL")
+    client = OpenAI(api_key=api_key, base_url=_base) if _base else OpenAI(api_key=api_key)
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     results: List[Optional[dict]] = [None] * len(graded_traces)

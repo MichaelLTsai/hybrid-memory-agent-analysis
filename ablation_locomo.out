@@ -1,0 +1,9 @@
+=== LoCoMo E1_m1 started (pid 50404) ===
+=== LoCoMo E2_m1_m3 started (pid 50422) ===
+=== LoCoMo E3_m1_m4 started (pid 50430) ===
+=== LoCoMo E4_full started (pid 50445) ===
+LoCoMo E1_m1 exit=0
+LoCoMo E3_m1_m4 exit=0
+LoCoMo E4_full exit=0
+LoCoMo E2_m1_m3 exit=0
+=== LOCOMO ARMS FINISHED ===

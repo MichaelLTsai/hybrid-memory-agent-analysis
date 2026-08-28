@@ -1,0 +1,21 @@
+{
+  "run": "structmem-user2nd_gemma431b_probe",
+  "n": 147,
+  "P1_fail": 0.068,
+  "P4_fail": 0.2449,
+  "P5_fail": 0.3401,
+  "not_counted": 3,
+  "abstain_n": 41,
+  "unadjudicated": 0,
+  "verdicts": {
+    "NOT_COUNTED": 3,
+    "OK": 48,
+    "P5b_OK": 38,
+    "SUMMARY": 10,
+    "RETRIEVAL": 36,
+    "REASONING": 50,
+    "P5b_FAIL": 3
+  },
+  "judge_failures": {},
+  "attributable_error_rate": 0.653
+}

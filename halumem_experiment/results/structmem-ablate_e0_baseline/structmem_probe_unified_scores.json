@@ -1,0 +1,21 @@
+{
+  "run": "structmem-ablate_e0_baseline",
+  "n": 125,
+  "P1_fail": 0.048,
+  "P4_fail": 0.2,
+  "P5_fail": 0.344,
+  "not_counted": 2,
+  "abstain_n": 39,
+  "unadjudicated": 0,
+  "verdicts": {
+    "P5b_OK": 36,
+    "OK": 49,
+    "REASONING": 43,
+    "P5b_FAIL": 3,
+    "RETRIEVAL": 25,
+    "SUMMARY": 6,
+    "NOT_COUNTED": 2
+  },
+  "judge_failures": {},
+  "attributable_error_rate": 0.592
+}

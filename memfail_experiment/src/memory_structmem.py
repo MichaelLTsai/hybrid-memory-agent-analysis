@@ -55,6 +55,13 @@ class StructMemMemorySystem:
         # Cross-event consolidation is expensive; run it every N writes.
         self.summarize_every = summarize_every or int(os.getenv("STRUCTMEM_SUMMARIZE_EVERY", "10"))
 
+        # Each ablation arm owns its own collections so no two arms share a store.
+        from lightmem.memory.state import config as _state_config
+        self.state_cfg = _state_config.from_env()
+        if run_dir:
+            self.state_cfg.trace_dir = os.path.join(run_dir, "traces")
+        collection_name = collection_name + self.state_cfg.collection_suffix()
+
         base = qdrant_path or (os.path.join(run_dir, "structmem_qdrant") if run_dir
                                else "./structmem_qdrant")
         shutil.rmtree(os.path.join(base, collection_name), ignore_errors=True)
@@ -70,6 +77,7 @@ class StructMemMemorySystem:
             "model_kwargs": {"device": embedding_device}}}
 
         cfg = {
+            "state_ablation": self.state_cfg,
             "pre_compress": False,
             "topic_segment": False,
             "messages_use": "hybrid",
@@ -104,7 +112,9 @@ class StructMemMemorySystem:
     # ── read path ───────────────────────────────────────────────────────────
     def get_memories(self, prompt: Prompt, conversation: Conversation) -> str:
         try:
-            mems = self.memory.retrieve(str(prompt), limit=self.num_memories) or []
+            # Dual-circuit retrieval; state-aware ordering only when M4 is on.
+            mems, _packet = self.memory.retrieve_for_qa(str(prompt), limit=self.num_memories)
+            mems = mems or []
         except Exception:
             mems = []
         self.probe["retrievals"].append(
@@ -127,12 +137,32 @@ class StructMemMemorySystem:
             self.probe["add_failures"] += 1
 
         if self.enable_summary and self.probe["writes_attempted"] % self.summarize_every == 0:
-            try:
-                self.memory.summarize(process_all=True, enable_cross_event=True,
-                                      retrieval_scope="global", top_k_seeds=15)
-                self.probe["consolidations"] += 1
-            except Exception:
-                pass
+            # LightMem's offline update was never wired into this adapter, so
+            # MemFail was previously measured with no update mechanism running.
+            # Enabled here for every arm: E0 gets the original
+            # update/delete/ignore, the M1 arms get the state commit.
+            def _run_update():
+                if os.getenv("STRUCTMEM_OFFLINE_UPDATE", "1") != "1":
+                    return
+                try:
+                    self.memory.construct_update_queue_all_entries(top_k=20, keep_top_n=10)
+                    self.memory.offline_update_all_entries(score_threshold=0.9)
+                except Exception:
+                    pass
+
+            def _run_summarize():
+                try:
+                    self.memory.summarize(process_all=True, enable_cross_event=True,
+                                          retrieval_scope="global", top_k_seeds=15)
+                    self.probe["consolidations"] += 1
+                except Exception:
+                    pass
+
+            # M3 needs the state commit before summaries are written.
+            if self.state_cfg.enable_m3_summary_sync:
+                _run_update(); _run_summarize()
+            else:
+                _run_summarize(); _run_update()
 
         after = len(self._entries())
         if after != before:

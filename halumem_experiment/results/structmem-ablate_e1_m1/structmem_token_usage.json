@@ -1,0 +1,53 @@
+{
+  "total_tokens": 3201363,
+  "ingest": {
+    "calls": 1242,
+    "prompt_tokens": 2151126,
+    "completion_tokens": 529418,
+    "total_tokens": 2680544,
+    "llm_seconds": 18001.46,
+    "units": 65,
+    "errors": 0,
+    "calls_per_unit": 19.108,
+    "tokens_per_unit": 41239.1,
+    "prompt_tokens_per_unit": 33094.2,
+    "completion_tokens_per_unit": 8144.9,
+    "sec_per_unit_mean": 74.486,
+    "sec_per_unit_median": 58.718,
+    "sec_per_unit_p90": 119.293
+  },
+  "qa": {
+    "calls": 164,
+    "prompt_tokens": 519598,
+    "completion_tokens": 1221,
+    "total_tokens": 520819,
+    "llm_seconds": 75.46,
+    "units": 164,
+    "errors": 0,
+    "calls_per_unit": 1.0,
+    "tokens_per_unit": 3175.7,
+    "prompt_tokens_per_unit": 3168.3,
+    "completion_tokens_per_unit": 7.4,
+    "sec_per_unit_mean": 0.504,
+    "sec_per_unit_median": 0.478,
+    "sec_per_unit_p90": 0.584
+  },
+  "other": {
+    "calls": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "total_tokens": 0,
+    "llm_seconds": 0.0,
+    "units": 0,
+    "errors": 0,
+    "calls_per_unit": null,
+    "tokens_per_unit": null,
+    "prompt_tokens_per_unit": null,
+    "completion_tokens_per_unit": null,
+    "sec_per_unit_mean": null,
+    "sec_per_unit_median": null,
+    "sec_per_unit_p90": null
+  },
+  "note": "StructMem routes both extraction and answering through the same NCHC proxy; the ingest bucket covers add_memory plus the summarize/offline_update that runs once every 10 sessions (amortized into calls_per_unit)",
+  "granularity": "session"
+}

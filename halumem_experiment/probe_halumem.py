@@ -70,8 +70,7 @@ def judge_all_present(context_mems, evidences):
         return False                      # an empty context is a valid verdict
     ev_block = "\n".join(f"{i+1}. {e}" for i, e in enumerate(evidences))
     ctx_block = "\n".join(f"- {m}" for m in context_mems)
-    prompt = RETRIEVAL_PRESENCE_PROMPT.format(context=ctx_block, evidence=ev_block,
-                                              n=len(evidences))
+    prompt = RETRIEVAL_PRESENCE_PROMPT.format(context=ctx_block, evidence=ev_block)
     try:
         present = llm_request_for_json(prompt).get("present", [])
         if not isinstance(present, list) or len(present) != len(evidences):

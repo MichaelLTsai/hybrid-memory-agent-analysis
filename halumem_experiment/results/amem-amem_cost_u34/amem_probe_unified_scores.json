@@ -1,0 +1,21 @@
+{
+  "run": "amem-amem_cost_u34",
+  "n": 290,
+  "P1_fail": 0.0414,
+  "P4_fail": 0.1103,
+  "P5_fail": 0.4586,
+  "not_counted": 5,
+  "abstain_n": 70,
+  "unadjudicated": 0,
+  "verdicts": {
+    "OK": 108,
+    "REASONING": 133,
+    "P5b_OK": 63,
+    "SUMMARY": 12,
+    "RETRIEVAL": 32,
+    "NOT_COUNTED": 5,
+    "P5b_FAIL": 7
+  },
+  "judge_failures": {},
+  "attributable_error_rate": 0.6103
+}

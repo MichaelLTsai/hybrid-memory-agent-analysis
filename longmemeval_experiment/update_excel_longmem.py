@@ -87,7 +87,9 @@ def _load_meta(run_dir, frame):
 
 def scan_runs():
     runs = []
-    for frame in ["mem0", "rag", "graphiti", "amem", "letta", "memos", "zep"]:
+    # structmem was missing from this list, so no StructMem run has ever
+    # appeared in the LongMemEval workbook.
+    for frame in ["mem0", "rag", "graphiti", "amem", "letta", "memos", "zep", "structmem"]:
         for sp in sorted(glob.glob(os.path.join(RESULTS_DIR, f"{frame}-*", f"{frame}_lme_scores.json"))):
             run_dir = os.path.dirname(sp)
             version = os.path.basename(run_dir)[len(frame) + 1:]
@@ -100,7 +102,7 @@ def scan_runs():
                 "date": datetime.fromtimestamp(os.path.getmtime(sp)).strftime("%Y-%m-%d"),
                 "backend": {"mem0": "Mem0 OSS", "rag": "RAG", "graphiti": "Graphiti",
                             "amem": "A-MEM", "letta": "Letta", "memos": "MemOS",
-                            "zep": "Zep Cloud"}.get(frame, frame),
+                            "zep": "Zep Cloud", "structmem": "StructMem"}.get(frame, frame),
                 "granularity": meta.get("granularity"), "extraction_llm": meta.get("extraction_llm"),
                 "judge_llm": meta.get("judge_llm"), "embed_model": meta.get("embed_model"),
                 "qa_num": d.get("qa_num"), "acc_all": d.get("qa_accuracy_all"),
