@@ -1,0 +1,10 @@
+(eval):6: command not found: setsid
+=== LongMemEval ablation, lme21 ===
+    arms        : E0_baseline E1_m1 E3_m1_m4
+    quota       : knowledge-update=6,multi-session=3,temporal-reasoning=3,single-session-user=3,single-session-assistant=3,single-session-preference=3
+    qdrant base : /Users/stud113/Documents/lintsai/Memory_Experience/longmemeval_experiment/qdrant_structmem_lme21
+
+=== E0_baseline started (pid 97810) -> results/structmem-ablate_e0_baseline_lme21/ ===
+=== E1_m1 started (pid 97827) -> results/structmem-ablate_e1_m1_lme21/ ===
+=== E3_m1_m4 started (pid 97844) -> results/structmem-ablate_e3_m1_m4_lme21/ ===
+=== 3 lines running, waiting ===

@@ -199,10 +199,11 @@ T2_ROWS = [
 ]
 
 FINDINGS = [
-    ("E1", "M1 alone is the only module that costs nothing.",
-     "LoCoMo 0.643 to 0.673, reasoning failure 0.224 to 0.193, the best update landing of the "
-     "five (0.739), MemFail held at 29 of 35. Storage does not grow, 765 entries against 777, "
-     "and answer cost does not rise. Nothing regresses anywhere."),
+    ("E1", "M1 is the cheapest gain, and the only write-side one.",
+     "LoCoMo 0.643 to 0.673 with reasoning failure 0.224 to 0.193, and the best update landing "
+     "of the five, 0.739. Coexistence holds at 17 of 20, storage does not grow, 765 entries "
+     "against 777, and answer cost is flat. The price is 5% more write tokens and HaluMem "
+     "accuracy, 0.530 to 0.457."),
     ("E2", "M3 buries the facts it summarises.",
      "Update landing falls to 0.641, the worst of the five, and adjudicable points drop to 110 "
      "of 142 against E1's 120. Table 2 gives the mechanism: atomic cover falls 14 to 12 while "
@@ -242,7 +243,8 @@ def build():
     y1, r1 = draw_table(sl, 0.48, 1.52, T1_COLS, T1_ROWS, highlight="E1  M1", row_pitch=0.27)
     tbox(sl, 0.48, y1 + 0.10, 12.4, 0.18,
          "Bold is the best value in a column, underline the second best. P1 + P4 + P5 is that "
-         "benchmark's error rate. HaluMem P4 and P5 for E3 and E4 are the corrected figures.",
+         "benchmark's error rate. HaluMem P4 and P5 for E3 and E4 are the corrected figures. "
+         "No arm improves HaluMem end-to-end accuracy over E0; the gains are on LoCoMo and on update landing.",
          size=8.5, italic=True, color=C["ink3"])
 
     # Table 2

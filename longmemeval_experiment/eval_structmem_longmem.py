@@ -42,7 +42,14 @@ import token_tracker as _tk
 from llms import llm_request
 from eval_structmem import _build_config, _store_dump, SM_LLM, SUMMARIZE_EVERY
 
-QDRANT_BASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "qdrant_structmem")
+# Scratch root for the per-question Qdrant stores. The per-question tag is keyed
+# on question id and ablation arm, not on --version, so two runs of the same arm
+# would reuse (and rmtree) the same directories. Overriding this per batch keeps
+# an earlier batch's stores intact.
+QDRANT_BASE = os.getenv(
+    "LME_QDRANT_BASE",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "qdrant_structmem"),
+)
 
 QA_PROMPT = """You are answering a question using ONLY the memories retrieved from a user's long chat history.
 
@@ -120,7 +127,16 @@ def _stratified_sample(data, n):
             except ValueError:
                 pass
     out = []
-    for t, qs in by_type.items():
+    # Question types are otherwise processed in data-file order, which puts
+    # knowledge-update last. A run that dies partway then has none of the
+    # questions the state ablation is actually about. LME_TYPE_ORDER promotes
+    # the named types to the front so the critical ones land first; it only
+    # reorders, never changes the selection, so results stay identical.
+    order = [t.strip() for t in os.getenv("LME_TYPE_ORDER", "").split(",") if t.strip()]
+    types = ([t for t in order if t in by_type]
+             + [t for t in by_type if t not in order])
+    for t in types:
+        qs = by_type[t]
         out.extend(qs[:quota.get(t, per)])
     if quota:
         return out
