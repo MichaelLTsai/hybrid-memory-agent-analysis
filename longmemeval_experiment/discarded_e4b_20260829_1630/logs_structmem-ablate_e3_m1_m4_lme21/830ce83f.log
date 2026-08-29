@@ -1,0 +1,2 @@
+2026-08-29 16:10:43,540 [INFO] === Start 830ce83f (knowledge-update) | StructMem | LLM=gemma-4-E4B-it ===
+2026-08-29 16:10:43,540 [INFO] Ablation arm: {'experiment_id': 'E3_m1_m4', 'enable_m1_state_bank': True, 'enable_m3_summary_sync': False, 'enable_m4_state_qa': True, 'm1_min_judge_confidence': 0.7, 'm1_max_candidates_per_call': 10, 'm1_skip_audited_pairs': True, 'm4_event_budget': None, 'm4_summary_budget': None, 'm4_total_evidence_budget': None, 'retrieve_summaries': True, 'collection_suffix': '_e3_m1_m4'}

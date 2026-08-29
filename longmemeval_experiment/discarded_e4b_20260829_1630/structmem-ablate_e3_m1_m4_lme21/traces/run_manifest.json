@@ -1,0 +1,14 @@
+{
+  "experiment_id": "E3_m1_m4",
+  "enable_m1_state_bank": true,
+  "enable_m3_summary_sync": false,
+  "enable_m4_state_qa": true,
+  "m1_min_judge_confidence": 0.7,
+  "m1_max_candidates_per_call": 10,
+  "m1_skip_audited_pairs": true,
+  "m4_event_budget": null,
+  "m4_summary_budget": null,
+  "m4_total_evidence_budget": null,
+  "retrieve_summaries": true,
+  "collection_suffix": "_e3_m1_m4"
+}

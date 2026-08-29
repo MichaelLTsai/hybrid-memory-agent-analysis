@@ -1,0 +1,5 @@
+2026-08-28 23:47:39,859 [INFO] === Start gpt4_59c863d7 (multi-session) | StructMem | LLM=gemma-4-E4B-it ===
+2026-08-28 23:47:39,860 [INFO] Ablation arm: {'experiment_id': 'E0_baseline', 'enable_m1_state_bank': False, 'enable_m3_summary_sync': False, 'enable_m4_state_qa': False, 'm1_min_judge_confidence': 0.7, 'm1_max_candidates_per_call': 10, 'm1_skip_audited_pairs': True, 'm4_event_budget': None, 'm4_summary_budget': None, 'm4_total_evidence_budget': None, 'retrieve_summaries': True, 'collection_suffix': '_e0_baseline'}
+2026-08-29 00:39:51,650 [INFO] Fed 47/47 sessions in 3129s
+2026-08-29 00:39:51,797 [INFO] Dumped 2229 memories
+2026-08-29 00:39:52,794 [INFO] gpt4_59c863d7 complete → ./results/structmem-ablate_e0_baseline_lme21/tmp/gpt4_59c863d7.json

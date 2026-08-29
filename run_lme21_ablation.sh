@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Re-run the StructMem state ablation on a wider LongMemEval slice.
 #
-#   ./run_lme21_ablation.sh            # E0, E1, E3 concurrently, then probes
+#   ./run_lme21_ablation.sh            # E0, then E1, then E3; each probed on finish
 #   ARMS="E1_m1" ./run_lme21_ablation.sh
 #   SKIP_PROBE=1 ./run_lme21_ablation.sh
 #
@@ -23,9 +23,13 @@
 # on question id and arm rather than on --version, so without the override this
 # run would rmtree the earlier batch's stores.
 #
-# Concurrency. Three lines. The NCHC endpoint measured roughly linear to ~12
-# concurrent requests and collapsed at 16, and each line adds its ingest request
-# plus whatever STRUCTMEM_M1_AUDIT_WORKERS allows during the M1 audit phase.
+# Extraction LLM. gemma-4-31B-it, matching every other architecture in the
+# study. Set explicitly, never inherited from eval_structmem.py's E4B default.
+#
+# Order. Arms run sequentially, E0 first, each probed as soon as it finishes.
+# The endpoint is decode-saturated, so three concurrent lines only split a fixed
+# pie: sequential gets a complete, usable baseline in a third of the time and
+# leaves a finished arm rather than three partial ones if anything interrupts.
 set -uo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -34,6 +38,14 @@ PY="$HOME/structmem_env/bin/python"
 
 IFS=' ' read -r -a ARMS <<< "${ARMS:-E0_baseline E1_m1 E3_m1_m4}"
 SUFFIX="${SUFFIX:-lme21}"
+
+# Extraction LLM. eval_structmem.py defaults SM_LLM to gemma-4-E4B-it, which is
+# NOT what the rest of the study uses: Mem0 v1/v2, A-MEM and Letta all ingest
+# with gemma-4-31B-it. The first attempt inherited that default and produced a
+# batch that could not be compared across architectures; it is archived under
+# longmemeval_experiment/discarded_e4b_*. Set explicitly here so the model can
+# never again be decided by a default.
+export STRUCTMEM_LLM_MODEL="${STRUCTMEM_LLM_MODEL:-gemma-4-31B-it}"
 
 export STRUCTMEM_M1_AUDIT_WORKERS="${STRUCTMEM_M1_AUDIT_WORKERS:-2}"
 export LME_QDRANT_BASE="${LME_QDRANT_BASE:-$LME/qdrant_structmem_$SUFFIX}"
@@ -63,36 +75,30 @@ echo "    quota       : $QUOTA"
 echo "    qdrant base : $LME_QDRANT_BASE"
 echo
 
-pids=()
+# Arms run ONE AT A TIME, in the order given, E0 first. Running them
+# concurrently splits a decode-saturated endpoint three ways, so the baseline
+# only lands when the whole batch lands. Sequential means E0 is complete and
+# usable in about a third of the total time, and if the batch is interrupted
+# there is a finished arm rather than three partial ones. Total wall time is
+# roughly the same either way.
 for arm in "${ARMS[@]}"; do
   ver="$(version_for "$arm")"
+  echo "=== ${arm} starting $(date '+%F %T') -> results/structmem-${ver}/ ==="
   ( cd "$LME" && \
     STRUCTMEM_EXPERIMENT="$arm" LME_TYPE_QUOTA="$QUOTA" \
     "$PY" run_longmem.py --backend structmem --version "$ver" --max-questions 21 \
-      > "logs_${ver}.out" 2>&1
-    echo "[$(date '+%F %T')] LME ${arm} exit=$?" ) &
-  pids+=($!)
-  echo "=== ${arm} started (pid $!) -> results/structmem-${ver}/ ==="
-  sleep 3          # stagger model loading so the lines do not thrash at once
-done
+      > "logs_${ver}.out" 2>&1 )
+  echo "=== ${arm} finished $(date '+%F %T') exit=$? ==="
 
-echo "=== ${#pids[@]} lines running, waiting ==="
-wait
+  # Probe each arm as soon as it is done, so its stage attribution is available
+  # while the next arm ingests, instead of waiting for the whole batch.
+  if [ "${SKIP_PROBE:-0}" != "1" ]; then
+    echo "=== probing ${arm} ==="
+    ( cd "$LME" && "$PY" probe_longmem.py --run "structmem-${ver}" \
+        > "probe_${ver}.out" 2>&1
+      echo "    probe exit=$?" )
+  fi
+done
 echo "=== all arms finished $(date '+%F %T') ==="
 
-if [ "${SKIP_PROBE:-0}" = "1" ]; then
-  echo "=== SKIP_PROBE=1, stopping before the probes ==="
-  exit 0
-fi
-
-# P1 / P4 / P5 stage attribution. Sequential: the probe is judge-bound and the
-# ingest lines have just freed the endpoint, so there is nothing to gain from
-# overlapping them and a saturated judge produces parse failures.
-for arm in "${ARMS[@]}"; do
-  ver="$(version_for "$arm")"
-  echo "=== probing ${arm} ==="
-  ( cd "$LME" && "$PY" probe_longmem.py --run "structmem-${ver}" \
-      > "probe_${ver}.out" 2>&1
-    echo "    probe exit=$?" )
-done
-echo "=== PROBES FINISHED $(date '+%F %T') ==="
+echo "=== BATCH FINISHED $(date '+%F %T') ==="

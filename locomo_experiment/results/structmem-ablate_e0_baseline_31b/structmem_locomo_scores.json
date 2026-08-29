@@ -1,0 +1,84 @@
+{
+  "qa_accuracy_all": 0.7085427135678392,
+  "token_f1_all": 0.20620335317843166,
+  "qa_num": 199,
+  "retrieval": {
+    "recall@3": null,
+    "recall@5": null,
+    "recall@10": null,
+    "ndcg@3": null,
+    "ndcg@5": null,
+    "ndcg@10": null
+  },
+  "retrieval_note": "exact dia_id matching (each memory carries its source dia_id)",
+  "per_category": {
+    "multi_hop": {
+      "accuracy": 0.53125,
+      "token_f1": 0.14241879397825005,
+      "num": 32
+    },
+    "temporal": {
+      "accuracy": 0.8378378378378378,
+      "token_f1": 0.22254064668925352,
+      "num": 37
+    },
+    "open_domain": {
+      "accuracy": 0.3076923076923077,
+      "token_f1": 0.07057387057387057,
+      "num": 13
+    },
+    "single_hop": {
+      "accuracy": 0.6714285714285714,
+      "token_f1": 0.25191491472649896,
+      "num": 70
+    },
+    "adversarial": {
+      "accuracy": 0.8936170212765957,
+      "token_f1": null,
+      "num": 47
+    }
+  },
+  "extraction": {
+    "memory_integrity_recall": 0.9293478260869565,
+    "memory_accuracy_precision": 0.8333333333333334,
+    "memory_extraction_f1": 0.8787255909558067,
+    "integrity_num": 184,
+    "accuracy_num": 636,
+    "integrity_unknown": 0,
+    "accuracy_unknown": 0,
+    "unknown_ratio": 0.0,
+    "judge_failures": {},
+    "speaker_confusion_num": 1,
+    "speaker_confusion_ratio": 0.005434782608695652,
+    "scope": "session",
+    "scope_note": "session-scoped (turn provenance available), aligned with HaluMem and comparable",
+    "conversations_evaluated": 1,
+    "conversations_total": 1,
+    "judge_note": "Reuses HaluMem's official EVALUATION_PROMPT_FOR_MEMORY_INTEGRITY / _ACCURACY; strict = score 2, and score 1 (partial coverage) counts as a failure",
+    "per_sample": [
+      {
+        "sample_id": "conv-26",
+        "scope": "session",
+        "integrity_recall": 0.9293478260869565,
+        "integrity_num": 184,
+        "integrity_unknown": 0,
+        "integrity_score_dist": {
+          "2": 171,
+          "1": 12,
+          "0": 1
+        },
+        "accuracy_precision": 0.8333333333333334,
+        "accuracy_num": 636,
+        "accuracy_unknown": 0,
+        "accuracy_score_dist": {
+          "2": 530,
+          "1": 65,
+          "0": 41
+        },
+        "extraction_f1": 0.8787255909558067,
+        "speaker_confusion_num": 1,
+        "speaker_confusion_ratio": 0.005434782608695652
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+2026-08-28 21:13:29,763 [INFO] === Start 118b2229 (single-session-user) | StructMem | LLM=gemma-4-E4B-it ===
+2026-08-28 21:13:29,764 [INFO] Ablation arm: {'experiment_id': 'E3_m1_m4', 'enable_m1_state_bank': True, 'enable_m3_summary_sync': False, 'enable_m4_state_qa': True, 'm1_min_judge_confidence': 0.7, 'm1_max_candidates_per_call': 10, 'm1_skip_audited_pairs': True, 'm4_event_budget': None, 'm4_summary_budget': None, 'm4_total_evidence_budget': None, 'retrieve_summaries': True, 'collection_suffix': '_e3_m1_m4'}
+2026-08-28 21:50:11,445 [WARNING] 728deb4d_5 summarize error: 3 validation errors for MatchValue
+value.bool
+  Input should be a valid boolean [type=bool_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.12/v/bool_type
+value.int
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.12/v/int_type
+value.str
+  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.12/v/string_type
+2026-08-28 21:54:49,496 [WARNING] final summarize error: 3 validation errors for MatchValue
+value.bool
+  Input should be a valid boolean [type=bool_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.12/v/bool_type
+value.int
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.12/v/int_type
+value.str
+  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.12/v/string_type
+2026-08-28 21:57:33,299 [INFO] Fed 45/45 sessions in 2641s
+2026-08-28 21:57:33,446 [INFO] Dumped 2413 memories
+2026-08-28 21:57:34,070 [INFO] 118b2229 complete → ./results/structmem-ablate_e3_m1_m4_lme21/tmp/118b2229.json

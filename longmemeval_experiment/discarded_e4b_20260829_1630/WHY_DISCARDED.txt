@@ -1,0 +1,15 @@
+Discarded 2026-08-29 16:30:41.
+
+These runs used the wrong extraction LLM. eval_structmem.py:50 defaults
+SM_LLM to gemma-4-E4B-it, the driver passed no --llm-model, and neither
+STRUCTMEM_LLM_MODEL nor OPENAI_MODEL was set, so all three arms ingested with
+E4B while the rest of the study (Mem0 v1/v2, A-MEM, Letta) uses
+gemma-4-31B-it. Per the user's decision the batch is rerun on 31B.
+
+Archived rather than deleted for two reasons: the results are real data that
+happens to answer a different question, and leaving the tmp/*.json in place
+would have been actively harmful -- run_extraction resumes by skipping any
+question whose tmp file exists, so the 31B rerun would have silently inherited
+E4B answers for the 12 completed questions.
+
+State when stopped: 12/21 per arm, 2 of 6 knowledge-update questions done.

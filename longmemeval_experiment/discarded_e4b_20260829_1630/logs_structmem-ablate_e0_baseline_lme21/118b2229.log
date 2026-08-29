@@ -1,0 +1,5 @@
+2026-08-28 21:15:06,087 [INFO] === Start 118b2229 (single-session-user) | StructMem | LLM=gemma-4-E4B-it ===
+2026-08-28 21:15:06,088 [INFO] Ablation arm: {'experiment_id': 'E0_baseline', 'enable_m1_state_bank': False, 'enable_m3_summary_sync': False, 'enable_m4_state_qa': False, 'm1_min_judge_confidence': 0.7, 'm1_max_candidates_per_call': 10, 'm1_skip_audited_pairs': True, 'm4_event_budget': None, 'm4_summary_budget': None, 'm4_total_evidence_budget': None, 'retrieve_summaries': True, 'collection_suffix': '_e0_baseline'}
+2026-08-28 21:53:02,530 [INFO] Fed 45/45 sessions in 2274s
+2026-08-28 21:53:02,686 [INFO] Dumped 2385 memories
+2026-08-28 21:53:03,377 [INFO] 118b2229 complete → ./results/structmem-ablate_e0_baseline_lme21/tmp/118b2229.json

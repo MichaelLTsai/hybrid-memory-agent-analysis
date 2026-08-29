@@ -1,0 +1,5 @@
+2026-08-29 02:52:23,224 [INFO] === Start gpt4_59149c77 (temporal-reasoning) | StructMem | LLM=gemma-4-E4B-it ===
+2026-08-29 02:52:23,225 [INFO] Ablation arm: {'experiment_id': 'E1_m1', 'enable_m1_state_bank': True, 'enable_m3_summary_sync': False, 'enable_m4_state_qa': False, 'm1_min_judge_confidence': 0.7, 'm1_max_candidates_per_call': 10, 'm1_skip_audited_pairs': True, 'm4_event_budget': None, 'm4_summary_budget': None, 'm4_total_evidence_budget': None, 'retrieve_summaries': True, 'collection_suffix': '_e1_m1'}
+2026-08-29 03:33:55,896 [INFO] Fed 48/48 sessions in 2490s
+2026-08-29 03:33:56,045 [INFO] Dumped 2229 memories
+2026-08-29 03:33:56,839 [INFO] gpt4_59149c77 complete → ./results/structmem-ablate_e1_m1_lme21/tmp/gpt4_59149c77.json
