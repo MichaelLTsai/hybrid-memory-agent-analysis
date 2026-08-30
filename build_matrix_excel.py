@@ -18,6 +18,7 @@ so after changing a run it is enough to re-run this script.
 import os
 import re
 import json
+from collections import Counter, defaultdict
 from datetime import datetime
 
 import openpyxl
@@ -80,6 +81,59 @@ BACKENDS = [
     ("StructMem E2 M1+M3",    "structmem-ablate_e2_m1_m3",    "structmem-ablate_e2_m1_m3",    "structmem-ablate_e2_m1_m3",    "results_ablate_e2_m1_m3",    "gemma-4-E4B-it"),
     ("StructMem E3 M1+M4",    "structmem-ablate_e3_m1_m4",    "structmem-ablate_e3_m1_m4",    "structmem-ablate_e3_m1_m4",    "results_ablate_e3_m1_m4",    "gemma-4-E4B-it"),
     ("StructMem E4 full",     "structmem-ablate_e4_full",     "structmem-ablate_e4_full",     "structmem-ablate_e4_full",     "results_ablate_e4_full",     "gemma-4-E4B-it"),
+
+    # ── Batch 5 (2026-08-29): the ablation redone on gemma-4-31B-it ─────────
+    # Batch 4 ingested with gemma-4-E4B-it, the default in eval_structmem.py,
+    # while every comparator (Mem0 v1/v2, A-MEM, Letta) uses gemma-4-31B-it on
+    # LongMemEval, HaluMem and LoCoMo. Those arms therefore could not be placed
+    # beside the other architectures at all. This batch re-runs them on 31B and
+    # widens the slice:
+    #   LongMemEval  21 questions (knowledge-update x6 plus 3 of each other
+    #                type) rather than the 5 knowledge-update questions, so the
+    #                column covers all six types. The 6 knowledge-update
+    #                questions are a strict superset of batch 4's five.
+    #   HaluMem      E0 runs users #3 and #4, the slice the four comparator
+    #                architectures ran, so E0 is comparable across backends.
+    #                E1 and E3 run user #3 only (half the ingest, inside E0's
+    #                set): read the E1/E3-vs-E0 HaluMem delta as indicative,
+    #                since it compares one user against two.
+    #   LoCoMo       conv-26, 199 questions, extraction 31B and judge E4B,
+    #                matching the comparator runs exactly.
+    #   MemFail      points at the BATCH 4 directories on purpose. All five
+    #                architectures ingested MemFail with gemma-4-E4B-it, so the
+    #                E4B ablation runs are already the correct, comparable
+    #                measurement; re-running them on 31B would put StructMem on
+    #                a different model from every comparator. The MemFail cells
+    #                in these rows are therefore E4B while the rest is 31B.
+    ("StructMem E0 · 31B", "structmem-ablate_e0_baseline_31b", "structmem-ablate_e0_baseline_31b", "structmem-ablate_e0_baseline_31b", "results_ablate_e0_baseline", "gemma-4-31B-it"),
+    ("StructMem E1 · 31B", "structmem-ablate_e1_m1_31b",       "structmem-ablate_e1_m1_31b",       "structmem-ablate_e1_m1_31b",       "results_ablate_e1_m1",       "gemma-4-31B-it"),
+    ("StructMem E3 · 31B", "structmem-ablate_e3_m1_m4_31b",    "structmem-ablate_e3_m1_m4_31b",    "structmem-ablate_e3_m1_m4_31b",    "results_ablate_e3_m1_m4",    "gemma-4-31B-it"),
+
+    # ── Batch 6 (2026-08-30): the five-architecture comparison, all on 31B ──
+    # These rows point at runs that already appear above; they are repeated here
+    # because no single existing batch is a valid cross-architecture comparison:
+    #
+    #   Batch 2 holds the four comparators on gemma-4-31B-it, but its StructMem
+    #   row is gemma-4-E4B-it (and a much smaller slice: 5 LongMemEval questions
+    #   and 164 HaluMem, against 22 and 360), so ranking StructMem inside batch 2
+    #   compares a different model on different data.
+    #
+    #   Batch 5 has StructMem on 31B, but only StructMem: E0/E1/E3 are ablation
+    #   arms of one architecture, with E0 as their shared baseline.
+    #
+    # Batch 6 is the intersection that is actually comparable: every row is
+    # gemma-4-31B-it, LoCoMo is conv-26's 199 questions and MemFail the same 35
+    # for all five. StructMem E0 keeps its batch 5 row as the ablation baseline;
+    # duplicating it here is what lets one run serve both comparisons.
+    #
+    # Not perfectly matched: StructMem E0 answered 21 LongMemEval and 353 HaluMem
+    # questions against the comparators' 22 and 360. Every metric here is a rate,
+    # so the gap does not bias them, but the denominators are not identical.
+    ("Mem0 v1 ⑥",     "mem0_oss-v1_cost_u34",   "mem0-v1_cost",     "mem0-v1_cost",     "results_cost_mem0v1",   "gemma-4-31B-it"),
+    ("Mem0 v2 ⑥",     "mem0_oss-v2_cost_u34",   "mem0-v2_cost",     "mem0-v2_cost",     "results_cost_mem0v2",   "gemma-4-31B-it"),
+    ("StructMem ⑥",   "structmem-ablate_e0_baseline_31b", "structmem-ablate_e0_baseline_31b", "structmem-ablate_e0_baseline_31b", "results_ablate_e0_baseline", "gemma-4-31B-it"),
+    ("A-MEM ⑥",       "amem-amem_cost_u34",     "amem-amem_cost",   "amem-amem_cost",   "results_cost_amem",     "gemma-4-31B-it"),
+    ("Letta ⑥",       "letta-letta_cost_u34",   "letta-letta_cost", "letta-letta_cost", "results_cost_letta",    "openai-proxy/gemma-4-31B-it"),
 ]
 
 # Which batch each row belongs to. Batch 2 uses exactly the same sampling as
@@ -92,7 +146,12 @@ BATCH = {"Mem0 v1": "① 08-14", "Mem0 v2": "① 08-14", "StructMem": "① 08-14
          "Letta · 0819": "② 08-19",
          "StructMem E0 baseline": "④ ablation", "StructMem E1 M1": "④ ablation",
          "StructMem E2 M1+M3": "④ ablation", "StructMem E3 M1+M4": "④ ablation",
-         "StructMem E4 full": "④ ablation"}
+         "StructMem E4 full": "④ ablation",
+         "StructMem E0 · 31B": "⑤ 31B", "StructMem E1 · 31B": "⑤ 31B",
+         "StructMem E3 · 31B": "⑤ 31B",
+         "Mem0 v1 ⑥": "⑥ 31B compare", "Mem0 v2 ⑥": "⑥ 31B compare",
+         "StructMem ⑥": "⑥ 31B compare", "A-MEM ⑥": "⑥ 31B compare",
+         "Letta ⑥": "⑥ 31B compare"}
 
 FRAME = {"mem0_oss": "mem0_oss", "mem0": "mem0", "structmem": "structmem",
          "amem": "amem", "letta": "letta"}
@@ -127,6 +186,15 @@ GRANULARITY = {
     "StructMem E2 M1+M3":    ("session", "session", "session", "turn"),
     "StructMem E3 M1+M4":    ("session", "session", "session", "turn"),
     "StructMem E4 full":     ("session", "session", "session", "turn"),
+    # Batch 5 is the same StructMem configuration, only the LLM and slice differ.
+    "Mem0 v1 ⑥":        ("turn",    "session",   "session", "turn"),
+    "Mem0 v2 ⑥":        ("turn",    "session",   "session", "turn"),
+    "StructMem ⑥":      ("session", "session",   "session", "turn"),
+    "A-MEM ⑥":          ("turn",    "turn",      "turn",    "turn"),
+    "Letta ⑥":          ("session", "session",   "session", "turn"),
+    "StructMem E0 · 31B":    ("session", "session", "session", "turn"),
+    "StructMem E1 · 31B":    ("session", "session", "session", "turn"),
+    "StructMem E3 · 31B":    ("session", "session", "session", "turn"),
 }
 
 
@@ -154,6 +222,19 @@ TURNS_BY_BATCH = {
     # turns) rather than the 18-question stratified sample. Reusing the old
     # denominators would misstate entries-per-turn for both.
     "④ ablation": {"halumem": 2806, "longmem": 468},
+    # Batch 5: HaluMem E0 is users #3 and #4 (6,170 messages, the comparator
+    # slice); LongMemEval is the 21-question sample whose median haystack is 485
+    # turns. E1 and E3 run one HaluMem user, so their entries-per-turn on that
+    # dataset is computed against a denominator twice their true size and reads
+    # low; the raw entry counts beside it are the honest figure.
+    "⑤ 31B": {"halumem": 6170, "longmem": 485},
+    # Batch 6: every row is the HaluMem users #3 and #4 sample, so it takes batch
+    # 2's HaluMem denominator. LongMemEval is the one place the rows differ: the
+    # four comparators ran the 22-question sample and StructMem the 21-question
+    # one, whose median haystack is 485 rather than the default. Only entries-per-
+    # turn is denominated that way, so that single cell in the StructMem row is
+    # computed on a slightly different base; every rate is unaffected.
+    "⑥ 31B compare": {"halumem": 6170},
 }
 
 
@@ -249,7 +330,6 @@ def halumem(run):
     at = d.get("qa_attribution") or {}
     mi = d.get("memory_integrity", {})
     ma = d.get("memory_accuracy", {})
-    pr = d.get("probe") or {}
     return {
         "hal_f1":        d.get("memory_extraction_f1"),
         "hal_integrity": mi.get("recall(all)"),
@@ -273,11 +353,6 @@ def halumem(run):
         "hal_upd_judged":  (mu.get("update_memory_valid_num") / mu["update_memory_num"]
                             if mu.get("update_memory_num") else None),
         "hal_upd_n":       mu.get("update_memory_num"),
-        # Stage-capability probes (probe_halumem.py, denominator = all questions)
-        "hal_p4_suff":   pr.get("P4_sufficient"),
-        "hal_p5_fail":   pr.get("P5_fail_given_P4"),
-        "hal_p5_n":      pr.get("P5_n"),
-        "hal_probe_unk": pr.get("unknown_ratio"),
     }
 
 
@@ -444,6 +519,38 @@ def memfail(run):
     return {}
 
 
+def memfail_subsets(run):
+    """The same file's non-TOTAL rows, one entry per subset.
+
+    MemFail is the one dataset whose official output is already per subset, so
+    nothing has to be recomputed from per-question files here: the four stage
+    error counts are read straight out of the table and divided by that subset's
+    own question count.
+    """
+    md = os.path.join(BASE, "memfail_experiment", "experiment_results.md")
+    out = {}
+    try:
+        for line in open(md, encoding="utf-8"):
+            c = [x.strip() for x in line.strip().strip("|").split("|")]
+            if len(c) < 10 or c[0] != run or c[1] in ("TOTAL", "Dataset"):
+                continue
+            n = int(c[2])
+            if not n:
+                continue
+            out[c[1]] = {
+                "mf_n":       n,
+                "mf_correct": float(c[4]),
+                "mf_storage": int(c[5]) / n,
+                "mf_summary": int(c[6]) / n,
+                "mf_retr":    int(c[7]) / n,
+                "mf_reason":  int(c[8]) / n,
+                "mf_store":   int(c[9]),
+            }
+    except Exception:
+        pass
+    return out
+
+
 # ── Stage failure rates (definition adopted 2026-08-25) ─────────────────────
 # Denominator: all adjudicated questions. Numerator: questions attributed to
 # that stage AND answered wrong. A stage failure that still produced the right
@@ -530,18 +637,30 @@ COLUMNS = [
     # HaluMem, MemFail. Header markers: ↑ higher is better, ↓ lower is better.
     # Differences in denominators are documented in the Definitions sheet.
     ("Summary",   "LongMemEval P1 fail (all) ↓", "lme_sf_p1", "Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics. SUMMARY includes NO_WRITE."),
-    ("Summary",   "LoCoMo P1 recall ↑",    "loc_p1",  "extraction_locomo.py; observations treated as golden memories, strict=2"),
+    ("Summary",   "LoCoMo extraction recall ↑", "loc_p1",
+     "extraction_locomo.py; observations treated as golden memories, strict=2. "
+     "NOTE: the denominator is the number of golden observations (184 for conv-26), "
+     "not the number of questions, so this is NOT the same quantity as "
+     "LoCoMo P1 fail (all) and cannot be broken down by subset."),
     ("Summary",   "LoCoMo precision ↑",    "loc_acc", "Precision counterpart of the above (whether what was recorded is correct)"),
     ("Summary",   "LoCoMo F1 ↑",           "loc_f1",  "Harmonic mean of the two above"),
     ("Summary",   "LoCoMo P1 fail (all) ↓", "loc_sf_p1", "Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics."),
     ("Summary",   "HaluMem recall ↑",      "hal_integrity", "Official memory_integrity recall (all)"),
     ("Summary",   "HaluMem precision ↑",   "hal_target",    "Official target_accuracy (all); this is the precision used by f1"),
     ("Summary",   "HaluMem F1 ↑",          "hal_f1",  "Official memory_extraction_f1"),
-    ("Summary",   "HaluMem interference ↑","hal_interf","Official interference_accuracy (all); correct-rejection rate on distractors, not part of f1"),
+    ("Summary",   "HaluMem interference ↑","hal_interf",
+     "Official interference_accuracy (all). The dataset seeds 125 decoy memory points "
+     "(memory_source=interference) that read plausibly but never happened. This metric "
+     "scores the OPPOSITE way round to recall: a decoy earns a point only when the judge "
+     "finds it ABSENT from the store, so it measures correct rejection. It belongs to "
+     "Summary because it is still about what extraction did, only the suppression side "
+     "rather than the retention side. Two caveats: it is NOT part of memory_extraction_f1 "
+     "(which uses recall and target_accuracy only), and it is in tension with recall, "
+     "since an indiscriminate extractor scores high on recall and low here. Read the two "
+     "together; either one alone is misleading."),
     ("Summary",   "HaluMem P1 fail (all) ↓", "hal_sf_p1", "probe_halumem_unified.py; scope taken from the evidence's source session. Stage failure rate (definition adopted 2026-08-25): share of all adjudicated questions attributed to this stage AND answered wrong. A stage failure that still produced the right answer is not counted; it is reported under Attribution summary. Same definition as MemFail's official error metrics."),
     ("Summary",   "MemFail summary_error ↓","mf_summary","Official analyze_errors summary_error as a share of all questions"),
 
-    ("Storage",   "LongMemEval KU acc ↑",  "lme_ku",     "QA accuracy on the knowledge-update subset (end-to-end, not a storage-specific metric)"),
     ("Storage",   "HaluMem update ↑",      "hal_update", "Official correct_update_memory_ratio (all); omission and hallucination are its subcategories and are not listed separately"),
     ("Storage",   "MemFail storage_error ↓","mf_storage","Official analyze_errors not_stored as a share of all questions"),
 
@@ -637,14 +756,32 @@ COLUMNS = [
     ("Quality", "LoCoMo speaker confusion ↓","loc_spk","Fact recorded correctly but attributed to the wrong speaker (specific to LoCoMo two-party dialogue)"),
     ("Quality", "HaluMem update judged rate ↑","hal_upd_judged","Successfully judged / all update points; below 1 means update is underestimated"),
     ("Quality", "HaluMem attribution unknown ↓","hal_unknown","Share that qa_attribution could not adjudicate"),
-    ("Quality", "HaluMem probe unknown ↓","hal_probe_unk","Share that probe_halumem could not adjudicate"),
 ]
 
-# ── Subset scores ───────────────────────────────────────────────────────────
-# Each dataset's official metric broken out by subset. Subsets are ordered by
-# purpose group so that members of a group sit adjacent, and the group code is
-# printed in the column header: 1 single-point recall / 2a chained / 2b parallel /
-# 2c mixed / 3 temporal / 4 post-update / 5 abstention. The grouping dimension is
+# ── Stage failure rates lead their own stage group ──────────────────────────
+# P1 / P4 / P5 are this study's headline numbers; the official per-dataset
+# metrics that follow them are supporting evidence. The reordering happens here
+# rather than in the list above so that list can stay grouped by dataset, which
+# is the order it is easiest to edit in. Sorting is stable and keyed on each
+# group's first position, so the stage groups themselves do not move.
+_STAGE_FIRST = {
+    "Summary":   ("lme_sf_p1", "loc_sf_p1", "hal_sf_p1", "mf_summary"),
+    "Retrieval": ("lme_sf_p4", "loc_sf_p4", "hal_sf_p4", "mf_retr"),
+    "Reasoning": ("lme_sf_p5", "loc_sf_p5", "hal_sf_p5", "mf_reason"),
+}
+_GRP_POS = {}
+for _i, _c in enumerate(COLUMNS):
+    _GRP_POS.setdefault(_c[0], _i)
+
+
+def _stage_first_key(c):
+    lead = _STAGE_FIRST.get(c[0], ())
+    return (_GRP_POS[c[0]], 0, lead.index(c[2])) if c[2] in lead else (_GRP_POS[c[0]], 1, 0)
+
+
+COLUMNS.sort(key=_stage_first_key)
+
+
 # what kind of memory a correct answer demands, not the shape of the answer.
 PURPOSE_GROUPS = [
     ("1",  "Single-point recall",
@@ -659,14 +796,14 @@ PURPOSE_GROUPS = [
      "the answer incomplete. The typical failure is extraction merging them into a "
      "single superordinate concept, or deduplication treating them as one entry so "
      "that they overwrite each other."),
-    ("2c", "Multi-memory, mixed",
-     "Within one official subset, chained, parallel, and redundant relations all "
-     "coexist, and the official labels do not distinguish them, so no finer split "
-     "is possible. HaluMem's Multi-hop Inference and Generalization & Application "
-     "cannot even be separated from each other: their evidence-count distributions "
-     "overlap and their answer vocabulary coverage differs by only 6 percentage "
-     "points. Note: redundant means two or more evidence items are attached even "
-     "though one would suffice."),
+    ("2c", "Multi-hop",
+     "The answer is reached by combining two or more entries, but the official "
+     "labels do not say how they relate: chained, parallel and redundant cases all "
+     "sit inside one subset, so this group is where 2a and 2b cannot be told apart. "
+     "Everything the answer needs was stated outright somewhere, which is what "
+     "separates this from Application and extrapolation: the demand is composition, "
+     "not inference beyond the record. Note: redundant means two or more evidence "
+     "items are attached even though one would suffice."),
     ("3",  "Temporal reasoning",
      "A correct answer requires the memory to retain timestamps (date differences, "
      "ordering, most recent occurrence). Dropping time information during "
@@ -680,8 +817,16 @@ PURPOSE_GROUPS = [
      "scoring logic differs from the other groups: it judges whether the system "
      "correctly avoided answering, not whether it produced some value, so scores in "
      "this group should not be pooled with the others."),
+    ("6",  "Application and extrapolation",
+     "No memory entry holds the answer verbatim. What is remembered has to be "
+     "applied to a situation that was never discussed, or extrapolated past what "
+     "was actually stated, so a faithful recall of the right entry is necessary "
+     "but not sufficient. This separates a reasoning demand from a retrieval "
+     "demand: a system can pass P4 here, having surfaced exactly the right "
+     "memories, and still answer wrong."),
 ]
 
+# The single source of truth for the subset -> purpose group mapping.
 _SUBSETS = [
     # (key prefix, subset name, display name, purpose group code)
     ("lme_sub_", "single-session-user",          "single-session-user",      "1"),
@@ -692,12 +837,12 @@ _SUBSETS = [
     ("lme_sub_", "knowledge-update",             "knowledge-update",         "4"),
     ("loc_sub_", "single_hop",                   "cat4 single_hop",          "1"),
     ("loc_sub_", "multi_hop",                    "cat1 multi_hop",           "2c"),
-    ("loc_sub_", "open_domain",                  "cat3 open_domain",         "2c"),
+    ("loc_sub_", "open_domain",                  "cat3 open_domain",         "6"),
     ("loc_sub_", "temporal",                     "cat2 temporal",            "3"),
     ("loc_sub_", "adversarial",                  "cat5 adversarial",         "5"),
     ("hal_sub_", "Basic Fact Recall",            "Basic Fact Recall",        "1"),
     ("hal_sub_", "Multi-hop Inference",          "Multi-hop Inference",      "2c"),
-    ("hal_sub_", "Generalization & Application", "Generalization & App.",    "2c"),
+    ("hal_sub_", "Generalization & Application", "Generalization & App.",    "6"),
     ("hal_sub_", "Dynamic Update",               "Dynamic Update",           "4"),
     ("hal_sub_", "Memory Boundary",              "Memory Boundary",          "5"),
     ("hal_sub_", "Memory Conflict",              "Memory Conflict",          "5"),
@@ -707,18 +852,20 @@ _SUBSETS = [
     ("mf_sub_",  "conditional_hard",             "conditional_hard",         "2a"),
     ("mf_sub_",  "coexisting_facts",             "coexisting_facts",         "2b"),
 ]
-_SRC = {"lme_sub_": "Official per_type accuracy",
-        "loc_sub_": "Official per_category accuracy",
-        "hal_sub_": "Official output gives only the overall value; per-type is recomputed from the per-question file (the overall value matches the official one)",
-        "mf_sub_":  "Acc column from the official compare_runs output"}
+
+# Keyed by the raw subset name and by the display name alike: LoCoMo's breakdown
+# arrives already mapped through LOCOMO_CAT ("cat4 single_hop"), while the other
+# three datasets hand back the raw question_type, and both must find their group.
+_GROUP_NAME = {_code: _name for _code, _name, _desc in PURPOSE_GROUPS}
+_SUBSET_GROUP = {}
+_SUBSET_DISP = {}
 for _p, _k, _disp, _g in _SUBSETS:
-    COLUMNS.append(("Subset scores", f"[{_g}] {_disp} \u2191", _p + _k, _SRC[_p]))
-# LoCoMo token F1: the original paper's headline metric, also present in the
-# official per_category output, listed separately below
-for _p, _k, _disp, _g in _SUBSETS:
-    if _p == "loc_sub_":
-        COLUMNS.append(("Subset scores", f"[{_g}] {_disp} F1 \u2191", "loc_subf1_" + _k,
-                        "Official per_category token_f1 (blank for cat5, which has no answer column)"))
+    # The Category cell spells the purpose group out; the short codes stay
+    # internal, where they keep the table above readable.
+    _SUBSET_GROUP[_k] = _SUBSET_GROUP[_disp] = _GROUP_NAME[_g]
+    _SUBSET_DISP[_k] = _SUBSET_DISP[_disp] = _disp
+
+
 
 GROUP_FILL = {
     "":                    "F2F5F8",
@@ -797,9 +944,6 @@ def collect():
             r[k + "_pt"] = (v / turns_for(r["batch"], ds)) if isinstance(v, (int, float)) else None
         r["lme_store_pt"] = (r["lme_store_med"] / TURNS["longmem"]
                              if isinstance(r.get("lme_store_med"), (int, float)) else None)
-        # Subset scores: the official metric broken out per subset (column
-        # definitions in SUBSET_COLS)
-        r.update(subset_scores(name, hal, loc, lme, mf))
         # Cost and latency: only runs executed after 2026-08-18 carry staged data
         r.update(stage_rates("longmem", lme, "lme"))
         r.update(stage_rates("locomo", loc, "loc"))
@@ -810,11 +954,23 @@ def collect():
         r["loc_gran"], r["lme_gran"], r["hal_gran"], r["mf_gran"] = g
         # Scale: question counts alone do not convey workload, so user / session /
         # turn counts are added
-        r["hal_scale"] = ("2 users (#3, #4) / 6,170 turns"
-                          if r["batch"] == "② 08-19"
-                          else "1 user / 77 sessions / 3,242 turns")
+        # Batch 5 splits by arm: E0 ran the comparator slice (users #3 and #4)
+        # so it can sit beside the other architectures, while E1 and E3 ran only
+        # user #3 to halve the ingest.
+        if r["batch"] == "⑤ 31B":
+            r["hal_scale"] = ("2 users (#3, #4) / 6,170 turns"
+                              if "E0" in name
+                              else "1 user (#3) / 3,210 turns")
+        elif r["batch"] == "② 08-19":
+            r["hal_scale"] = "2 users (#3, #4) / 6,170 turns"
+        else:
+            r["hal_scale"] = "1 user / 77 sessions / 3,242 turns"
         r["loc_scale"] = "1 conv (conv-26) / 19 sessions / 419 turns"
-        r["lme_scale"] = "about 50 sessions, 491 turns per question"
+        # Batch 5 widened LongMemEval from 5 knowledge-update questions to a
+        # 21-question sample spanning all six types.
+        r["lme_scale"] = ("21 questions (KU x6 + 3 each of five types), median 485 turns"
+                          if r["batch"] == "⑤ 31B"
+                          else "about 50 sessions, 491 turns per question")
         rows.append(r)
     return rows
 
@@ -824,54 +980,9 @@ KEY_PREFIX = {"lme_": "LongMemEval", "loc_": "LoCoMo", "hal_": "HaluMem", "mf_":
 SHEET_ORDER = ["LongMemEval", "LoCoMo", "HaluMem", "MemFail"]
 
 
-# ── Subset breakdown ────────────────────────────────────────────────────────
-# The 22 official subsets mapped to purpose groups by what kind of memory a
-# correct answer demands. The grouping dimension is uniformly the memory
-# requirement (how many entries, whether timestamps are needed, whether the latest
-# value is needed) rather than the shape of the answer; whether external world
-# knowledge or arithmetic is required are cross-cutting attributes and do not
-# define groups.
-#   1   single-point recall      one entry suffices
-#   2a  multi-memory, chained    entries depend on one another; a missing link breaks it
-#   2b  multi-memory, parallel   several independent entries must all be present
-#   2c  multi-memory, mixed      chained/parallel/redundant coexist within one subset
-#                                and the official labels cannot separate them
-#   3   temporal reasoning       memory must retain timestamps
-#   4   post-update value        the stale value must be removed or superseded
-#   5   abstention and correction  absent from memory, or the question's premise is false
-SUBSET_GROUP = {
-    # LongMemEval: all three single-session-* types have answer_session == 1,
-    # so all are single-point
-    "single-session-user": "1 single-point recall",
-    "single-session-assistant": "1 single-point recall",
-    "single-session-preference": "1 single-point recall",
-    "multi-session": "2b multi-memory parallel",
-    "temporal-reasoning": "3 temporal reasoning",
-    "knowledge-update": "4 post-update value",
-    # LoCoMo
-    "single_hop": "1 single-point recall",
-    "multi_hop": "2c multi-memory mixed",
-    "open_domain": "2c multi-memory mixed",
-    "temporal": "3 temporal reasoning",
-    "adversarial": "5 abstention and correction",
-    # HaluMem: the official Multi-hop and Generalization labels cannot be
-    # separated from each other (their evidence counts overlap and answer
-    # vocabulary coverage differs by only 6 percentage points), so both go to 2c
-    "Basic Fact Recall": "1 single-point recall",
-    "Multi-hop Inference": "2c multi-memory mixed",
-    "Generalization & Application": "2c multi-memory mixed",
-    "Dynamic Update": "4 post-update value",
-    "Memory Boundary": "5 abstention and correction",
-    "Memory Conflict": "5 abstention and correction",
-    # MemFail: the generator deliberately splits each conditional_hard rule across
-    # three non-adjacent sentences, so it requires cross-sentence composition and
-    # belongs to the chained group rather than single-point
-    "persona_retrieval": "1 single-point recall",
-    "conditional_easy": "1 single-point recall",
-    "long_hop": "2a multi-memory chained",
-    "conditional_hard": "2a multi-memory chained",
-    "coexisting_facts": "2b multi-memory parallel",
-}
+# A second copy of the subset -> purpose group mapping used to sit here and was
+# never read by anything. It is gone: _SUBSETS above is the only copy, so a
+# reclassification cannot silently apply to one table and not the other.
 
 # The experiments name their verdicts differently; normalize to five categories
 # before comparing
@@ -971,13 +1082,434 @@ def dataset_of(key: str):
     return None
 
 
+
+# ── Per-subset breakdown for the dataset sheets ─────────────────────────────
+# Every stage-failure rate uses the same denominator (adjudicated questions), so
+# each one can simply be regrouped by subset. Recomputed from the per-question
+# files; scores.json only ever stored the aggregate. Metrics whose denominator is
+# NOT the question (extraction recall counts golden memories, memory volume and
+# cost count the whole ingest) cannot be split and are marked "n/a".
+LOCOMO_CAT = {"1": "cat1 multi_hop", "2": "cat2 temporal", "3": "cat3 open_domain",
+              "4": "cat4 single_hop", "5": "cat5 adversarial"}
+
+# Which verdict counts as which stage failure. NO_WRITE means the session wrote
+# nothing at all, which is a summary failure.
+# The unified HaluMem probe emits RETRIEVAL; the older probe_detail called the
+# same thing NOT_RETRIEVED. Fold that alias into the shared stage map.
+_SF_STAGE.setdefault("NOT_RETRIEVED", "p4")
+
+
+def _read_jsonl(path):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return [json.loads(l) for l in f if l.strip()]
+    except Exception:
+        return []
+
+
+def subset_breakdown(dataset: str, run: str):
+    """{subset: {metric: value}} recomputed per subset, or {} when unavailable."""
+    if not run:
+        return {}
+    if dataset == "locomo":
+        frame = run.split("-")[0]
+        rd = os.path.join(BASE, "locomo_experiment", "results", run)
+        probe = _read_jsonl(os.path.join(rd, f"{frame}_locomo_probe_detail.jsonl"))
+        detail = _read_jsonl(os.path.join(rd, f"{frame}_locomo_detail.jsonl"))
+        keyof = lambda r: LOCOMO_CAT.get(str(r.get("category")), str(r.get("category")))
+    elif dataset == "longmem":
+        frame = run.split("-")[0]
+        rd = os.path.join(BASE, "longmemeval_experiment", "results", run)
+        probe = _read_jsonl(os.path.join(rd, f"{frame}_lme_probe_detail.jsonl"))
+        detail = _read_jsonl(os.path.join(rd, f"{frame}_lme_detail.jsonl"))
+        keyof = lambda r: r.get("question_type")
+    elif dataset == "halumem":
+        frame = "mem0_oss" if run.startswith("mem0_oss") else run.split("-")[0]
+        rd = os.path.join(BASE, "halumem_experiment", "results", run)
+        # probe_halumem_unified.py is the only HaluMem probe now: it carries P1 as
+        # well as P4/P5 and emits the SUMMARY / RETRIEVAL / REASONING vocabulary of
+        # Algorithm 1. The retired probe_halumem.py wrote *_probe_detail.jsonl with
+        # neither P1 nor a SUMMARY verdict, and called retrieval failure
+        # NOT_RETRIEVED; reading it silently produced P1 = P4 = 0, so there is
+        # deliberately no fallback to it.
+        probe = _read_jsonl(os.path.join(rd, f"{frame}_probe_unified.jsonl"))
+        detail = [r for r in _read_jsonl(os.path.join(rd, f"{frame}_eval_detail.jsonl"))
+                  if "result_type" in r and "question" in r]
+        keyof = lambda r: r.get("question_type")
+    else:
+        return {}
+    if not probe and not detail:
+        return {}
+
+    out = {}
+
+    # Stage failure rates, from the probe verdicts
+    by = defaultdict(list)
+    for r in probe:
+        by[keyof(r)].append(r)
+    for sub, rs in by.items():
+        # Abstention questions are excluded from the denominator: the right
+        # behaviour there is to decline, so they never enter stage attribution.
+        # This matches how the official stage-failure rates are computed.
+        # Reuse the official definition verbatim so a subset row and the TOTAL row
+        # are the same quantity: abstention and unadjudicable questions leave the
+        # denominator, and a stage failure that still answered correctly (a lucky
+        # hit) is not counted as a failure.
+        adj = [r for r in rs if r.get("verdict") not in _SF_EXCLUDE
+               and r.get("verdict") not in _SF_ABSTAIN]
+        d = out.setdefault(sub, {})
+        d["n"] = len(rs)              # every question, used for QA accuracy
+        d["n_stage"] = len(adj)       # stage-failure denominator
+        if not adj:
+            continue                  # a purely abstention subset has no stage rates
+        cnt = Counter()
+        for r in adj:
+            st = _SF_STAGE.get(r.get("verdict"))
+            if st and r.get("is_correct") is not True:
+                cnt[st] += 1
+        for st in ("p1", "p4", "p5"):
+            d[f"sf_{st}"] = cnt[st] / len(adj)
+
+    # QA accuracy, token f1 and retrieval, from the evaluation detail
+    by2 = defaultdict(list)
+    for r in detail:
+        by2[keyof(r)].append(r)
+    for sub, rs in by2.items():
+        d = out.setdefault(sub, {})
+        d.setdefault("n", len(rs))
+        ok = [r for r in rs if ("is_correct" in r or "result_type" in r)]
+        if ok:
+            d["qa"] = sum(1 for r in ok
+                          if r.get("is_correct") or r.get("result_type") == "Correct") / len(ok)
+        f1 = [r["token_f1"] for r in rs if isinstance(r.get("token_f1"), (int, float))]
+        if f1:
+            d["f1"] = sum(f1) / len(f1)
+        for k in ("recall@5", "ndcg@5"):
+            vals = [r["retrieval"][k] for r in rs
+                    if isinstance(r.get("retrieval"), dict)
+                    and isinstance(r["retrieval"].get(k), (int, float))]
+            if vals:
+                d[k.replace("@", "")] = sum(vals) / len(vals)
+    return out
+
+# Two columns that exist only on the dataset sheets, where a run occupies several
+# rows. Run name stays identical to the Failure Matrix sheet on every one of a
+# run's rows, so the same run is looked up the same way on both sheets; which row
+# is which is carried by Sub-dataset instead.
+_SUBSET_COLS = [
+    ("", "Sub-dataset", "_sub_name",
+     "The official subset this row scores, or TOTAL for the whole run. TOTAL is "
+     "the value that appears on the Failure Matrix sheet."),
+    ("", "Category", "_sub_group",
+     "The purpose group this subset belongs to: what kind of memory a correct "
+     "answer demands. The groups are defined at the bottom of this sheet. Two "
+     "subsets sharing a group answer to the same demand and can be read against "
+     "each other even across datasets."),
+]
+
+
+# ── Subset detail as extra columns, one row per run ─────────────────────────
+# The sheet keeps the Failure Matrix's shape, one row per run, and widens each
+# question-denominated metric into "TOTAL" plus one column per official subset.
+# The subset columns sit at column outline level 1, so the 1/2 buttons above the
+# sheet switch between TOTAL only and TOTAL plus every subset.
+#
+# Two earlier attempts are worth not repeating. Grouping subsets by purpose group
+# kept four benchmarks in shared metric columns they do not share, so most cells
+# were "n/a". Putting each subset on its own row fixed that but broke the thing
+# the Failure Matrix is for: one row per run, every benchmark side by side.
+# Widening the columns instead keeps both.
+_SUB_DROP_GROUPS = {"Memory volume", "Scale", "Quality"}
+
+# Column key -> the metric to read out of subset_breakdown / memfail_subsets.
+# Anything absent here is a whole-run quantity (extraction recall is denominated
+# over memory points, cost over an ingest batch) and stays a single column.
+_SPLIT_METRIC = {
+    "lme_sf_p1": "sf_p1", "lme_sf_p4": "sf_p4", "lme_sf_p5": "sf_p5",
+    "lme_qa": "qa", "lme_recall": "recall5", "lme_ndcg": "ndcg5",
+    "loc_sf_p1": "sf_p1", "loc_sf_p4": "sf_p4", "loc_sf_p5": "sf_p5",
+    "loc_qa": "qa", "loc_tf1": "f1", "loc_recall": "recall5", "loc_ndcg": "ndcg5",
+    "hal_sf_p1": "sf_p1", "hal_sf_p4": "sf_p4", "hal_sf_p5": "sf_p5", "hal_qa": "qa",
+    "mf_summary": "mf_summary", "mf_storage": "mf_storage", "mf_retr": "mf_retr",
+    "mf_reason": "mf_reason", "mf_correct": "mf_correct",
+}
+_DS_OF_PREFIX = {"lme_sub_": "longmem", "loc_sub_": "locomo",
+                 "hal_sub_": "halumem", "mf_sub_": "memfail"}
+# Declaration order, not per-run question counts, so a column sits in the same
+# place on every row and the sheet can be read down a column.
+_DS_SUBSETS = {ds: [(k, disp) for p, k, disp, g in _SUBSETS
+                    if _DS_OF_PREFIX[p] == ds]
+               for ds in ("longmem", "locomo", "halumem", "memfail")}
+_KEY_DS = {"lme": "longmem", "loc": "locomo", "hal": "halumem", "mf": "memfail"}
+
+
+def _split_title(title, label):
+    """'LongMemEval P1 fail (all) \u2193' + 'temporal-reasoning' ->
+    'LongMemEval P1 fail \u00b7 temporal-reasoning \u2193'"""
+    arrow = title[-1] if title and title[-1] in "\u2191\u2193" else ""
+    base = (title[:-1] if arrow else title).strip().replace(" (all)", "")
+    return f"{base} \u00b7 {label} {arrow}".strip()
+
+
+def subset_columns():
+    """Failure Matrix columns, minus the un-splittable groups, with every
+    splittable metric widened into TOTAL plus one column per subset.
+
+    Returns (columns, levels): levels[i] is 1 for a subset column, 0 otherwise.
+    """
+    cols, levels = [], []
+    for grp, title, key, desc in COLUMNS:
+        if grp in _SUB_DROP_GROUPS:
+            continue
+        if key not in _SPLIT_METRIC:
+            cols.append((grp, title, key, desc))
+            levels.append(0)
+            continue
+        ds = _KEY_DS[key.split("_")[0]]
+        cols.append((grp, _split_title(title, "TOTAL"), key,
+                     desc + " | Whole-run value, identical to the Failure Matrix sheet."))
+        levels.append(0)
+        for raw, disp in _DS_SUBSETS[ds]:
+            cols.append((grp, _split_title(title, disp), f"{key}@{raw}",
+                         desc + f" | Restricted to the {disp} subset."))
+            levels.append(1)
+    return cols, levels
+
+
+def _subset_cell(d, metric):
+    """One subset cell: the value, "n/a", or None.
+
+    "n/a" means the metric does not apply to this subset, and is only ever
+    written when the measurement that would produce it did run. A stage rate is
+    inapplicable when the subset has no adjudicated questions at all (HaluMem's
+    Memory Boundary is entirely abstention, so its denominator is zero); token F1
+    is inapplicable to LoCoMo's cat5, which has no answer column to score. If the
+    probe has simply not been run for this subset yet, the cell stays None so it
+    reads as a missing measurement, not as a structural absence.
+    """
+    if metric in d:
+        return d[metric]
+    if metric.startswith("sf_"):
+        return "n/a" if "n_stage" in d else None    # n_stage present => probe ran
+    return "n/a" if d else None                     # eval ran but no such metric
+
+
+def subset_sheet_rows(rows):
+    """The Failure Matrix rows, each carrying its per-subset values as well."""
+    out = []
+    for row, be in zip(rows, BACKENDS):
+        r = dict(row)
+        for ds in ("longmem", "locomo", "halumem", "memfail"):
+            run = be[_DS_RUN_IDX[ds]]
+            bd = (memfail_subsets(run) if ds == "memfail"
+                  else subset_breakdown(ds, run)) if run else {}
+            for key, metric in _SPLIT_METRIC.items():
+                if _KEY_DS[key.split("_")[0]] != ds:
+                    continue
+                for raw, disp in _DS_SUBSETS[ds]:
+                    # LoCoMo's breakdown is keyed by display name, the rest by the
+                    # raw question_type, so both spellings are tried.
+                    d = bd.get(raw) or bd.get(disp) or {}
+                    r[f"{key}@{raw}"] = _subset_cell(d, metric)
+        out.append(r)
+    return out
+
+
 def columns_for(ds: str):
-    """Columns for a per-dataset sheet: the shared columns plus that dataset's own,
-    in the order they appear in COLUMNS."""
-    return [c for c in COLUMNS if dataset_of(c[2]) in (None, ds)]
+    """Columns for a per-dataset sheet: the shared columns, Sub-dataset and
+    Category, then that dataset's own, in the order they appear in COLUMNS."""
+    cols = [c for c in COLUMNS if dataset_of(c[2]) in (None, ds)]
+    at = next(i for i, c in enumerate(cols) if c[2] == "batch") + 1
+    return cols[:at] + _SUBSET_COLS + cols[at:]
 
 
-def write_sheet(ws, columns, rows):
+
+# ── Expand a dataset sheet into one row per subset ──────────────────────────
+# Every stage-failure rate shares one denominator (adjudicated questions), so a
+# subset row is just a regrouping. Anything counted per memory point (extraction
+# recall) or per ingest batch (memory volume, cost) has no subset-level value and
+# is written as "n/a" so it reads differently from a run that has not finished.
+_SUBSET_KEYS = {
+    "locomo":  {"qa": "loc_qa", "f1": "loc_tf1", "sf_p1": "loc_sf_p1",
+                "sf_p4": "loc_sf_p4", "sf_p5": "loc_sf_p5",
+                "recall5": "loc_recall", "ndcg5": "loc_ndcg"},
+    "longmem": {"qa": "lme_qa", "sf_p1": "lme_sf_p1", "sf_p4": "lme_sf_p4",
+                "sf_p5": "lme_sf_p5", "recall5": "lme_recall", "ndcg5": "lme_ndcg"},
+    "halumem": {"qa": "hal_qa", "sf_p1": "hal_sf_p1", "sf_p4": "hal_sf_p4",
+                "sf_p5": "hal_sf_p5"},
+}
+_DS_RUN_IDX = {"locomo": 2, "longmem": 3, "halumem": 1, "memfail": 4}
+
+
+def expand_rows_for(ds: str, rows: list, columns: list):
+    """Return rows for a dataset sheet: each run becomes its subsets plus TOTAL."""
+    dskey = {"LoCoMo": "locomo", "LongMemEval": "longmem",
+             "HaluMem": "halumem", "MemFail": "memfail"}[ds]
+    owned = {c[2] for c in columns if dataset_of(c[2]) == ds}
+    idx = _DS_RUN_IDX[dskey]
+    out = []
+    for row in rows:
+        run = next((be[idx] for be in BACKENDS if be[0] == row["backend"]), "")
+        if dskey == "memfail":
+            # Already per subset upstream, so the values are copied over directly
+            # rather than recomputed; sort by question count like the others.
+            bd = memfail_subsets(run) if run else {}
+            order = sorted(bd, key=lambda k: -bd[k]["mf_n"])
+            fill = lambda sub: {k: v for k, v in bd[sub].items() if k in owned}
+        else:
+            bd = subset_breakdown(dskey, run) if run else {}
+            order = sorted(bd, key=lambda k: -bd[k].get("n", 0))
+            keymap = _SUBSET_KEYS[dskey]
+            def fill(sub, _km=keymap):
+                d = {c: bd[sub][m] for m, c in _km.items()
+                     if c in owned and m in bd[sub]}
+                n = bd[sub].get("n")
+                for cand in ("loc_n", "lme_n", "hal_n"):
+                    if cand in owned and n is not None:
+                        d[cand] = n
+                        break
+                return d
+        for sub in order:
+            # Run name, backend, LLM and batch are repeated verbatim from the
+            # Failure Matrix row so a run reads the same on both sheets.
+            r = {k: row.get(k) for k in ("run_name", "backend", "llm", "batch")}
+            r.update({"_sub_name": _SUBSET_DISP.get(sub, sub),
+                      "_sub_group": _SUBSET_GROUP.get(sub, ""),
+                      "_done": row.get("_done", {}), "_subset": True})
+            for k in owned:
+                r[k] = "n/a"                          # not measurable per subset
+            r.update(fill(sub))
+            out.append(r)
+        total = dict(row)
+        total["_sub_name"] = "TOTAL" if bd else ""
+        out.append(total)
+    return out
+
+
+# ── One row per run per dataset per subset ──────────────────────────────────
+# Long format, replacing the earlier pooled-by-purpose-group shape. Each row is
+# a single measurement: one run, one dataset, one official subset. Category is
+# the last column, a label to pivot on rather than a level the numbers were
+# aggregated into.
+#
+# Nothing is pooled. The previous shape averaged the subsets a benchmark
+# contributed to one group (HaluMem put both Memory Boundary and Memory Conflict
+# into abstention), which forced a weight choice and hid the two components. Here
+# both subsets keep their own row and the reader groups them if they want to.
+#
+# Metric columns are dataset-neutral so the four datasets stack: MemFail's own
+# error names map onto the same stage columns as the probe rates, which is the
+# mapping the Failure Matrix sheet already uses for its stage grouping.
+_LONG_STAGE = {
+    "longmem": {"sf_p1": "P1", "sf_p4": "P4", "sf_p5": "P5", "qa": "QA",
+                "recall5": "R5", "ndcg5": "N5", "n": "N"},
+    "locomo":  {"sf_p1": "P1", "sf_p4": "P4", "sf_p5": "P5", "qa": "QA",
+                "f1": "TF1", "recall5": "R5", "ndcg5": "N5", "n": "N"},
+    "halumem": {"sf_p1": "P1", "sf_p4": "P4", "sf_p5": "P5", "qa": "QA", "n": "N"},
+}
+# MemFail reports per-stage error shares under its own names; mf_correct is its
+# accuracy. Storage is the one stage only MemFail measures per question.
+_LONG_MF = {"mf_summary": "P1", "mf_storage": "STO", "mf_retr": "P4",
+            "mf_reason": "P5", "mf_correct": "QA", "mf_n": "N"}
+
+_LONG_COLS = [
+    ("", "Run name",    "run_name", "Row label; matches the Failure Matrix sheet."),
+    ("", "Backend",     "backend",  "Memory architecture."),
+    ("", "LLM",         "llm",      "Extraction LLM for this run."),
+    ("", "Batch",       "batch",    "Which experiment batch the run belongs to."),
+    ("", "Dataset",     "DS",       "Which benchmark this row scores."),
+    ("", "Sub-dataset", "SUB",      "The official subset within that benchmark, or "
+                                    "TOTAL for the whole run on that benchmark."),
+    ("", "Questions",   "N",        "Questions in this subset for this run. Stage "
+                                    "rates are denominated over adjudicated "
+                                    "questions, accuracy over all of them."),
+    ("Summary",   "P1 fail \u2193",  "P1",
+     "Extraction-stage failure share. MemFail contributes its summary_error here."),
+    ("Storage",   "Storage fail \u2193", "STO",
+     "MemFail's not_stored share. The other three benchmarks have no per-question "
+     "storage measurement, so their cells carry the not-measured marker, not zero."),
+    ("Retrieval", "P4 fail \u2193",  "P4",
+     "Retrieval-stage failure share. MemFail contributes its retr_error here."),
+    ("Retrieval", "Recall@5 \u2191", "R5",  "Official retrieval recall, where the benchmark defines one."),
+    ("Retrieval", "NDCG@5 \u2191",   "N5",  "Official retrieval NDCG, where the benchmark defines one."),
+    ("Reasoning", "P5 fail \u2193",  "P5",
+     "Reasoning-stage failure share. MemFail contributes its reason_error here."),
+    ("Attribution summary", "Error \u2193", "ERR",
+     "Sum of the stage columns on this row, which equals 1 minus accuracy by "
+     "construction of the short-circuit attribution."),
+    ("Memory Performance", "QA \u2191", "QA",
+     "End-to-end accuracy on this subset. MemFail contributes its correct share."),
+    ("Memory Performance", "token F1 \u2191", "TF1", "LoCoMo only."),
+    ("", "Category", "CAT",
+     "The purpose group this subset belongs to: what kind of memory a correct "
+     "answer demands. Subsets sharing a group answer to the same demand and can "
+     "be read against each other across datasets. Rows whose Sub-dataset is "
+     "TOTAL carry TOTAL here too, so a pivot can exclude them in one filter."),
+]
+
+_LONG_DS_NAME = {"longmem": "LongMemEval", "locomo": "LoCoMo",
+                 "halumem": "HaluMem", "memfail": "MemFail"}
+
+
+def category_rows(rows, columns=None):
+    """One row per run per dataset per subset, plus that dataset's TOTAL."""
+    out = []
+    for row, be in zip(rows, BACKENDS):
+        head = {k: row.get(k) for k in ("run_name", "backend", "llm", "batch")}
+        for ds in ("longmem", "locomo", "halumem", "memfail"):
+            run = be[_DS_RUN_IDX[ds]]
+            if not run:
+                continue
+            bd = (memfail_subsets(run) if ds == "memfail"
+                  else subset_breakdown(ds, run)) or {}
+            if not bd:
+                continue
+            nkey = "mf_n" if ds == "memfail" else "n"
+            order = sorted(bd, key=lambda k: -(bd[k].get(nkey) or 0))
+            mapping = _LONG_MF if ds == "memfail" else _LONG_STAGE[ds]
+            body = []
+            for sub in order:
+                d = bd[sub]
+                r = dict(head)
+                r.update({"DS": _LONG_DS_NAME[ds],
+                          "SUB": _SUBSET_DISP.get(sub, sub),
+                          "CAT": _SUBSET_GROUP.get(sub, ""),
+                          "_done": row.get("_done", {}), "_subset": True})
+                for m, col in mapping.items():
+                    v = d.get(m)
+                    if isinstance(v, (int, float)):
+                        r[col] = v
+                stages = [r.get(c) for c in ("P1", "STO", "P4", "P5")
+                          if isinstance(r.get(c), (int, float))]
+                if stages:
+                    r["ERR"] = sum(stages)
+                body.append(r)
+            out.extend(body)
+            # The run's TOTAL for this dataset, taken from the Failure Matrix row
+            # so the two sheets cannot disagree.
+            tot = dict(head)
+            tot.update({"DS": _LONG_DS_NAME[ds], "SUB": "TOTAL", "CAT": "TOTAL",
+                        "_done": row.get("_done", {})})
+            src = (_LONG_MF if ds == "memfail"
+                   else {v: c for v, c in
+                         ((_SUBSET_KEYS[ds].get(m), c) for m, c in _LONG_STAGE[ds].items())
+                         if v})
+            for key, col in src.items():
+                v = row.get(key)
+                if isinstance(v, (int, float)):
+                    tot[col] = v
+            for key, col in ((f"{p}_n", "N") for p in ("lme", "loc", "hal")):
+                if _KEY_DS.get(key.split("_")[0]) == ds and isinstance(row.get(key), (int, float)):
+                    tot["N"] = row[key]
+            stages = [tot.get(c) for c in ("P1", "STO", "P4", "P5")
+                      if isinstance(tot.get(c), (int, float))]
+            if stages:
+                tot["ERR"] = sum(stages)
+            out.append(tot)
+    return out
+
+
+def write_sheet(ws, columns, rows, col_levels=None):
     """Write one set of columns as a sheet: two header rows, merged group headers,
     best value in bold, and RUNNING markers."""
     thin = Side(style="thin", color="C8D0D8")
@@ -996,8 +1528,11 @@ def write_sheet(ws, columns, rows):
         h.font = Font(bold=True, size=9, color=GROUP_FONT.get(grp, "000000"))
         h.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
         h.border = border
+        # Sub-dataset and Category hold spelled-out names far longer than their
+        # own headers, so they are sized to the content instead of the title.
         ws.column_dimensions[openpyxl.utils.get_column_letter(ci)].width = \
-            max(11, min(20, len(title) + 3))
+            {"_sub_ds": 14, "_sub_name": 26, "_sub_group": 30}.get(
+                key, max(11, min(20, len(title) + 3)))
 
     # Merge the group header cells
     start = 1
@@ -1010,25 +1545,33 @@ def write_sheet(ws, columns, rows):
             start = ci
 
     # Best value per column: max for ↑ columns, min for ↓ columns. Ties are all
-    # bolded. Best values are only compared within a comparable group. Batches 1
-    # and 2 ran the same data (HaluMem user #1, LoCoMo conv-26) so comparing them
-    # is meaningful. Batch 3 ran users #3 and #4, a completely different set of
-    # 360 questions, so ranking it against batches 1 and 2 would be wrong and it
-    # forms its own group.
+    # bolded. Ranking only means something between rows that answered the same
+    # questions, so each batch is its own comparison group. This used to test for
+    # a "③" label that no row carries: the HaluMem users #3 and #4 sample is
+    # batch 2, so every batch fell into one pool and batch 1 (user #1, 188
+    # questions) was being ranked against batch 2 (users #3 and #4, 360 entirely
+    # different questions).
     def _cmp_group(row):
-        return "u34" if str(row.get("batch", "")).startswith("③") else "main"
+        return str(row.get("batch", "")) or "main"
 
+    # Only whole-run rows compete for the best value. A subset row is a slice of
+    # one run, so letting it into the comparison would crown, say, the single
+    # easiest category of one backend over every other backend's full score.
+    ranked = [r for r in rows if not r.get("_subset")]
     best = {}
     for ci, (grp, title, key, _) in enumerate(columns, 1):
         if "↑" not in title and "↓" not in title:
             continue
-        for g in {_cmp_group(r) for r in rows}:
-            vals = [row.get(key) for row in rows
+        for g in {_cmp_group(r) for r in ranked}:
+            vals = [row.get(key) for row in ranked
                     if _cmp_group(row) == g and isinstance(row.get(key), (int, float))]
             if vals:
                 best[(ci, g)] = max(vals) if "↑" in title else min(vals)
 
+    text_keys = {"run_name", "backend", "llm", "batch",
+                 "_sub_ds", "_sub_name", "_sub_group"}
     for ri, row in enumerate(rows, 3):
+        sub = bool(row.get("_subset"))
         for ci, (grp, title, key, _) in enumerate(columns, 1):
             v = row.get(key)
             c = ws.cell(row=ri, column=ci, value=v)
@@ -1036,10 +1579,14 @@ def write_sheet(ws, columns, rows):
             c.alignment = Alignment(horizontal="center", vertical="center")
             if isinstance(v, float):
                 c.number_format = "0.0000"
-            if ci <= 3:
-                c.font = Font(bold=(ci <= 2), size=9)
+            if key in text_keys:
+                # Subset rows print their identity a shade lighter than the TOTAL
+                # rows, enough to tell the two apart without making the subset
+                # labels hard to read.
+                c.font = (Font(size=9, color="3D444C") if sub
+                          else Font(bold=(key in ("run_name", "backend")), size=9))
                 c.alignment = Alignment(horizontal="left", vertical="center")
-            elif (isinstance(v, (int, float))
+            elif (not sub and isinstance(v, (int, float))
                   and best.get((ci, _cmp_group(row))) == v):
                 c.font = Font(bold=True, size=9, color="1A4F8A")
             if v is None:
@@ -1055,9 +1602,75 @@ def write_sheet(ws, columns, rows):
                     c.value = "—"
                     c.font = Font(color="B0B8C0", size=9)
 
-    ws.freeze_panes = "D3"
+    # Outline the subset rows so the left-hand +/- collapses each run down to its
+    # TOTAL. Level 1 is the subsets, level 2 (the outline's "2" button) shows them
+    # all; summaryBelow says the TOTAL row sits underneath its own group, which is
+    # how the rows are emitted. Groups start collapsed so a sheet opens on the
+    # same view as the Failure Matrix.
+    # Column outline: the subset columns collapse under the TOTAL that precedes
+    # them, so summaryRight is False. The 1/2 buttons above the sheet then switch
+    # between TOTAL only and TOTAL plus every subset.
+    if col_levels and any(col_levels):
+        for ci, lv in enumerate(col_levels, 1):
+            if lv:
+                cd = ws.column_dimensions[openpyxl.utils.get_column_letter(ci)]
+                cd.outlineLevel = lv
+                cd.hidden = True
+        ws.sheet_properties.outlinePr.summaryRight = False
+        ws.sheet_format.outlineLevelCol = max(col_levels)
+        ws.sheet_view.showOutlineSymbols = True
+
+    ws.sheet_properties.outlinePr.summaryBelow = True
+    ws.sheet_properties.outlinePr.applyStyles = False
+    grouped = False
+    for ri, row in enumerate(rows, 3):
+        if row.get("_subset"):
+            ws.row_dimensions[ri].outlineLevel = 1
+            ws.row_dimensions[ri].hidden = True
+            grouped = True
+    if grouped:
+        ws.sheet_view.showOutlineSymbols = True
+        # Excel sizes the outline gutter from this; without it the +/- buttons can
+        # fail to appear even though the rows carry an outline level.
+        ws.sheet_format.outlineLevelRow = 1
+
+    # Freeze everything up to and including the identity columns
+    last_text = max((ci for ci, c in enumerate(columns, 1)
+                     if c[2] in ("run_name", "backend", "llm", "batch",
+                                 "_sub_ds", "_sub_name", "_sub_group")), default=3)
+    ws.freeze_panes = f"{openpyxl.utils.get_column_letter(last_text + 1)}3"
     ws.row_dimensions[1].height = 20
     ws.row_dimensions[2].height = 34
+
+
+def _write_outline_level_col(path):
+    """Add sheetFormatPr@outlineLevelCol, which openpyxl never serializes.
+
+    openpyxl writes each column's own outlineLevel but derives no sheet-level
+    maximum for columns the way it does for rows, and Excel sizes the outline
+    gutter from that attribute: without it the collapse buttons above the columns
+    can fail to appear even though the grouping is present. Rewritten in place
+    over the saved file, touching only that one attribute.
+    """
+    import re
+    import shutil
+    import zipfile
+
+    src = zipfile.ZipFile(path)
+    tmp = path + ".tmp"
+    with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as dst:
+        for item in src.infolist():
+            data = src.read(item.filename)
+            if item.filename.startswith("xl/worksheets/sheet"):
+                x = data.decode("utf-8")
+                lv = [int(m) for m in re.findall(r'<col [^>]*outlineLevel="(\d+)"', x)]
+                if lv and "outlineLevelCol" not in x:
+                    x = re.sub(r"<sheetFormatPr ",
+                               f'<sheetFormatPr outlineLevelCol="{max(lv)}" ', x, count=1)
+                    data = x.encode("utf-8")
+            dst.writestr(item, data)
+    src.close()
+    shutil.move(tmp, path)
 
 
 def build():
@@ -1069,9 +1682,17 @@ def build():
     ws.title = "Failure Matrix"
     write_sheet(ws, COLUMNS, rows)
 
+    # The same comparison one level down: every subset of every benchmark
+    sc, lv = subset_columns()
+    write_sheet(wb.create_sheet("By Sub-dataset"), sc, subset_sheet_rows(rows), lv)
+
+    # A third view: one row per run per dataset per subset, Category as a label
+    write_sheet(wb.create_sheet("By Category"), _LONG_COLS, category_rows(rows))
+
     # One sheet per dataset: same structure, only that dataset's columns
     for ds in SHEET_ORDER:
-        write_sheet(wb.create_sheet(ds), columns_for(ds), rows)
+        cols = columns_for(ds)
+        write_sheet(wb.create_sheet(ds), cols, expand_rows_for(ds, rows, cols))
 
     # ── Definitions sheet ───────────────────────────────────────────────────
     ws2 = wb.create_sheet("Definitions")
@@ -1089,14 +1710,15 @@ def build():
     t = ws2.cell(row=ri, column=1, value="Purpose group codes")
     t.font = Font(bold=True, size=11, color="3D6B2E")
     ws2.cell(row=ri, column=3,
-             value="The [1] [2a] ... prefix on each Subset scores column names the "
-                   "purpose group that subset belongs to. The grouping dimension is "
+             value="The Category column on each dataset sheet holds one of these codes, "
+                   "naming the purpose group that row's subset belongs to. The grouping dimension is "
                    "what kind of memory a correct answer demands: how many entries, "
                    "whether timestamps are needed, whether the latest value is needed. "
                    "Whether external world knowledge is required, whether arithmetic is "
                    "involved, and whether the answer is open-ended are cross-cutting "
-                   "attributes and do not define groups. Subsets in the same group sit "
-                   "adjacent in the sheet so comparable abilities can be read across."
+                   "attributes and do not define groups. Two subsets carrying the same "
+                   "code answer to the same demand and can be read against each other "
+                   "even when they come from different datasets."
              ).alignment = Alignment(wrap_text=True)
     for ci, h in enumerate(["Code", "Group", "Definition"], 1):
         c = ws2.cell(row=ri + 1, column=ci, value=h)
@@ -1106,6 +1728,29 @@ def build():
         ws2.cell(row=k, column=1, value=code).font = Font(bold=True, size=10)
         ws2.cell(row=k, column=2, value=gname)
         ws2.cell(row=k, column=3, value=gdesc).alignment = Alignment(wrap_text=True)
+
+    # ── The By Category sheet carries its own column set ────────────────────
+    ri = ri + 2 + len(PURPOSE_GROUPS) + 1
+    t = ws2.cell(row=ri, column=1, value="By Category sheet")
+    t.font = Font(bold=True, size=11, color="3D6B2E")
+    ws2.cell(row=ri, column=3,
+             value="Long format: one row per run per dataset per subset, plus that run's "
+                   "TOTAL on each dataset. Nothing is pooled, so Category is a label to "
+                   "pivot on rather than a level the numbers were averaged into. Rows "
+                   "whose Sub-dataset is TOTAL carry TOTAL in Category as well, so a "
+                   "pivot excludes them with one filter. Metric columns are "
+                   "dataset-neutral and MemFail's own error names map onto the same "
+                   "stage columns: summary_error to P1, retr_error to P4, reason_error "
+                   "to P5, correct to QA."
+             ).alignment = Alignment(wrap_text=True)
+    for ci, h in enumerate(["Stage", "Column", "Source / definition"], 1):
+        c = ws2.cell(row=ri + 1, column=ci, value=h)
+        c.font = Font(bold=True, size=10)
+        c.fill = PatternFill("solid", fgColor="EDF3EA")
+    for k, (grp, title, _key, desc) in enumerate(_LONG_COLS, ri + 2):
+        ws2.cell(row=k, column=1, value=grp or "—")
+        ws2.cell(row=k, column=2, value=title)
+        ws2.cell(row=k, column=3, value=desc).alignment = Alignment(wrap_text=True)
 
     ws2.column_dimensions["A"].width = 18
     ws2.column_dimensions["B"].width = 24
@@ -1155,6 +1800,7 @@ def build():
     ws3.column_dimensions["B"].width = 100
 
     wb.save(OUT)
+    _write_outline_level_col(OUT)
     print(f"✅ {OUT}")
     filled = sum(1 for r in rows for k, v in r.items() if v is not None)
     print(f"   {len(rows)} rows x {len(COLUMNS)} columns, {filled} cells filled")
