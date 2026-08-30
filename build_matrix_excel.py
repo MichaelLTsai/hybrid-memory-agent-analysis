@@ -786,24 +786,27 @@ COLUMNS.sort(key=_stage_first_key)
 PURPOSE_GROUPS = [
     ("1",  "Single-point recall",
      "One memory entry suffices; the answer is a value held directly in it."),
-    ("2a", "Multi-memory, chained",
-     "Entries depend on one another (A->B->C) and a missing link breaks the chain. "
-     "MemFail's conditional_hard belongs here: the generator deliberately splits "
-     "each rule across three non-adjacent sentences, so the condition can only be "
-     "recovered by combining them."),
+    ("2a", "Multi-hop composition",
+     "The answer is reached by traversing entries in order: the next one cannot be "
+     "located until the previous has been read, because it is found through a bridge "
+     "the previous supplies. A missing link breaks the traversal and the question is "
+     "unanswerable, not merely incomplete. This is multi-hop in the sense the QA "
+     "literature uses it. Whether a benchmark constructs the chain deliberately "
+     "(MemFail's long_hop verifies strict transitivity) or simply labels a subset "
+     "multi-hop (LoCoMo, HaluMem) is a property of the benchmark, not of the memory "
+     "demand, so both sit here; the difference is recorded in the run notes instead. "
+     "Note that MemFail's long_hop is 5-way multiple choice while the other two are "
+     "open-ended, so their scores are not directly comparable."),
     ("2b", "Multi-memory, parallel",
-     "Several mutually independent entries must all be present; missing one leaves "
-     "the answer incomplete. The typical failure is extraction merging them into a "
+     "Several entries must all be present, but every one of them is reachable from "
+     "the original query: no traversal is needed, only completeness. Missing one "
+     "leaves the answer incomplete or, where the entries qualify one another, "
+     "confidently wrong. The typical failure is extraction merging them into a "
      "single superordinate concept, or deduplication treating them as one entry so "
-     "that they overwrite each other."),
-    ("2c", "Multi-hop",
-     "The answer is reached by combining two or more entries, but the official "
-     "labels do not say how they relate: chained, parallel and redundant cases all "
-     "sit inside one subset, so this group is where 2a and 2b cannot be told apart. "
-     "Everything the answer needs was stated outright somewhere, which is what "
-     "separates this from Application and extrapolation: the demand is composition, "
-     "not inference beyond the record. Note: redundant means two or more evidence "
-     "items are attached even though one would suffice."),
+     "that they overwrite each other. MemFail's conditional_hard belongs here: its "
+     "behavior, condition and linking sentences all describe the same entity and "
+     "surface together on one query, so the demand is to keep all three rather than "
+     "to hop between them."),
     ("3",  "Temporal reasoning",
      "A correct answer requires the memory to retain timestamps (date differences, "
      "ordering, most recent occurrence). Dropping time information during "
@@ -836,12 +839,12 @@ _SUBSETS = [
     ("lme_sub_", "temporal-reasoning",           "temporal-reasoning",       "3"),
     ("lme_sub_", "knowledge-update",             "knowledge-update",         "4"),
     ("loc_sub_", "single_hop",                   "cat4 single_hop",          "1"),
-    ("loc_sub_", "multi_hop",                    "cat1 multi_hop",           "2c"),
+    ("loc_sub_", "multi_hop",                    "cat1 multi_hop",           "2a"),
     ("loc_sub_", "open_domain",                  "cat3 open_domain",         "6"),
     ("loc_sub_", "temporal",                     "cat2 temporal",            "3"),
     ("loc_sub_", "adversarial",                  "cat5 adversarial",         "5"),
     ("hal_sub_", "Basic Fact Recall",            "Basic Fact Recall",        "1"),
-    ("hal_sub_", "Multi-hop Inference",          "Multi-hop Inference",      "2c"),
+    ("hal_sub_", "Multi-hop Inference",          "Multi-hop Inference",      "2a"),
     ("hal_sub_", "Generalization & Application", "Generalization & App.",    "6"),
     ("hal_sub_", "Dynamic Update",               "Dynamic Update",           "4"),
     ("hal_sub_", "Memory Boundary",              "Memory Boundary",          "5"),
@@ -849,7 +852,7 @@ _SUBSETS = [
     ("mf_sub_",  "persona_retrieval",            "persona_retrieval",        "1"),
     ("mf_sub_",  "conditional_easy",             "conditional_easy",         "1"),
     ("mf_sub_",  "long_hop",                     "long_hop",                 "2a"),
-    ("mf_sub_",  "conditional_hard",             "conditional_hard",         "2a"),
+    ("mf_sub_",  "conditional_hard",             "conditional_hard",         "2b"),
     ("mf_sub_",  "coexisting_facts",             "coexisting_facts",         "2b"),
 ]
 
