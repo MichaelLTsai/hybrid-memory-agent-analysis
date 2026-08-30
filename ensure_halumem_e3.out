@@ -1,0 +1,4 @@
+[ensure] attempt 1/4 for ablate_e3_m1_m4_31b  2026-08-30 09:37:53
+[ensure] attempt 1 exit=0 memory_num=425
+[ensure] SUCCESS, running unified probe
+[ensure] probe exit=0 2026-08-30 10:38:25

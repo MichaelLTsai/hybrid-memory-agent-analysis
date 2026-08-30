@@ -190,7 +190,7 @@ stages**, which is exactly what a single aggregate score conceals.
 │   ├── run.py                   entry point
 │   ├── eval_*.py                per-backend adapters
 │   ├── evaluation.py            official metric scoring
-│   ├── probe_halumem.py         P4 / P5 / P5b stage probes
+│   ├── probe_halumem_unified.py P1 / P4 / P5 / P5b stage probes
 │   ├── qa_attribution.py        per-question failure attribution
 │   ├── token_tracker.py         staged cost and latency instrumentation
 │   └── results/<run>/           per-run scoring summaries

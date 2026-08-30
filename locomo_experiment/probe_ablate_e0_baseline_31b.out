@@ -1,0 +1,39 @@
+Retrying llms.llm_request_for_json in 1 seconds as it raised AuthenticationError: Error code: 401 - {'status': 'error', 'message': {'error': {'message': 'Authentication Error, relation "LiteLLM_VerificationToken" does not exist', 'type': 'auth_error', 'param': 'None', 'code': '401'}}, 'code': 'HTTPException'}.
+Retrying llms.llm_request_for_json in 1.07 seconds as it raised AuthenticationError: Error code: 401 - {'status': 'error', 'message': {'error': {'message': 'Authentication Error, relation "LiteLLM_VerificationToken" does not exist', 'type': 'auth_error', 'param': 'None', 'code': '401'}}, 'code': 'HTTPException'}.
+Retrying llms.llm_request_for_json in 1.71 seconds as it raised AuthenticationError: Error code: 401 - {'status': 'error', 'message': {'error': {'message': 'Authentication Error, relation "LiteLLM_VerificationToken" does not exist', 'type': 'auth_error', 'param': 'None', 'code': '401'}}, 'code': 'HTTPException'}.
+Retrying llms.llm_request_for_json in 7.6 seconds as it raised AuthenticationError: Error code: 401 - {'status': 'error', 'message': {'error': {'message': 'Authentication Error, relation "LiteLLM_VerificationToken" does not exist', 'type': 'auth_error', 'param': 'None', 'code': '401'}}, 'code': 'HTTPException'}.
+Probing conv-26: 199 questions ...
+✅ wrote the "probe" block of /Users/stud113/Documents/lintsai/Memory_Experience/locomo_experiment/results/structmem-ablate_e0_baseline_31b/structmem_locomo_scores.json; per-question -> /Users/stud113/Documents/lintsai/Memory_Experience/locomo_experiment/results/structmem-ablate_e0_baseline_31b/structmem_locomo_probe_detail.jsonl
+
+=== LoCoMo probe ===
+{
+  "n_total": 199,
+  "n_answerable": 152,
+  "n_adversarial": 47,
+  "P4_sufficient": 0.8486842105263158,
+  "P4_n": 152,
+  "P1_scoped_sufficient": 0.5909090909090909,
+  "P1_scoped_n": 22,
+  "P5_fail_given_P4": 0.26356589147286824,
+  "P5_n": 129,
+  "P5b_avoid_rate": 0.8936170212765957,
+  "P5b_n": 47,
+  "verdicts": {
+    "OK": 137,
+    "REASONING": 34,
+    "SUMMARY": 9,
+    "RETRIEVAL": 13,
+    "NO_WRITE": 1,
+    "P5b_FAIL": 5
+  },
+  "attribution": {
+    "OK": 0.6884422110552764,
+    "SUMMARY": 0.04522613065326633,
+    "RETRIEVAL": 0.06532663316582915,
+    "REASONING": 0.1708542713567839,
+    "NO_WRITE": 0.005025125628140704,
+    "P5b_FAIL": 0.02512562814070352
+  },
+  "unknown_ratio": 0.0,
+  "judge_failures": {}
+}

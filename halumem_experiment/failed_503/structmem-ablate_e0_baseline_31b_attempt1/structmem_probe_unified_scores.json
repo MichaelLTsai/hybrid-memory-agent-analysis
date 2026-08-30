@@ -1,0 +1,13 @@
+{
+  "run": "structmem-ablate_e0_baseline_31b",
+  "n": 0,
+  "P1_fail": null,
+  "P4_fail": null,
+  "P5_fail": null,
+  "not_counted": 0,
+  "abstain_n": 0,
+  "unadjudicated": 0,
+  "verdicts": {},
+  "judge_failures": {},
+  "attributable_error_rate": 0
+}

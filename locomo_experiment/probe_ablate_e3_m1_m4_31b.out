@@ -1,0 +1,35 @@
+Probing conv-26: 199 questions ...
+✅ wrote the "probe" block of /Users/stud113/Documents/lintsai/Memory_Experience/locomo_experiment/results/structmem-ablate_e3_m1_m4_31b/structmem_locomo_scores.json; per-question -> /Users/stud113/Documents/lintsai/Memory_Experience/locomo_experiment/results/structmem-ablate_e3_m1_m4_31b/structmem_locomo_probe_detail.jsonl
+
+=== LoCoMo probe ===
+{
+  "n_total": 199,
+  "n_answerable": 152,
+  "n_adversarial": 47,
+  "P4_sufficient": 0.8223684210526315,
+  "P4_n": 152,
+  "P1_scoped_sufficient": 0.6923076923076923,
+  "P1_scoped_n": 26,
+  "P5_fail_given_P4": 0.216,
+  "P5_n": 125,
+  "P5b_avoid_rate": 0.851063829787234,
+  "P5b_n": 47,
+  "verdicts": {
+    "OK": 138,
+    "REASONING": 27,
+    "RETRIEVAL": 18,
+    "NO_WRITE": 1,
+    "SUMMARY": 8,
+    "P5b_FAIL": 7
+  },
+  "attribution": {
+    "OK": 0.6934673366834171,
+    "SUMMARY": 0.04020100502512563,
+    "RETRIEVAL": 0.09045226130653267,
+    "REASONING": 0.135678391959799,
+    "NO_WRITE": 0.005025125628140704,
+    "P5b_FAIL": 0.035175879396984924
+  },
+  "unknown_ratio": 0.0,
+  "judge_failures": {}
+}

@@ -1,0 +1,13 @@
+[chain] 2026-08-30 01:13:34 waiting for E1 to finish
+[chain] 2026-08-30 01:44:48 waiting for E1 to finish
+[chain] 2026-08-30 09:19:26 waiting for the endpoint line to be free
+[chain] 2026-08-30 09:19:56 line free
+[chain] 2026-08-30 09:19:56 repairing LongMemEval E1 (6a1eabeb)
+[chain]   repair exit=0
+[chain]   re-probe exit=0
+[chain]   E1 LME now 21/21
+[chain] 2026-08-30 09:37:53 E3 HaluMem via ensure_halumem
+[chain]   ensure_halumem exit=0
+[chain] 2026-08-30 10:38:25 E3 LongMemEval + LoCoMo via driver
+[chain]   driver exit=0
+[chain] ALL DONE 2026-08-30 12:20:15

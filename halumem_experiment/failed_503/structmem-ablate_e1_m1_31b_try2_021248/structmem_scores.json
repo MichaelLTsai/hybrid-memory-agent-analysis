@@ -1,0 +1,85 @@
+{
+  "memory_integrity": {
+    "recall(all)": 0,
+    "recall(valid)": 0,
+    "weighted_recall(all)": 0,
+    "weighted_recall(valid)": 0,
+    "memory_valid_importance_sum": 0,
+    "memory_importance_sum": 0,
+    "memory_valid_num": 0,
+    "memory_num": 0
+  },
+  "memory_accuracy": {
+    "interference_accuracy(all)": 0,
+    "interference_accuracy(valid)": 0,
+    "interference_memory_valid_num": 0,
+    "interference_memory_num": 0,
+    "target_accuracy(all)": 0,
+    "target_accuracy(valid)": 0,
+    "target_memory_valid_num": 0,
+    "target_memory_num": 0,
+    "weighted_accuracy(all)": 0,
+    "weighted_accuracy(valid)": 0,
+    "memory_valid_num": 0,
+    "memory_num": 0
+  },
+  "memory_update": {
+    "correct_update_memory_ratio(all)": 0,
+    "correct_update_memory_ratio(valid)": 0,
+    "hallucination_update_memory_ratio(all)": 0,
+    "hallucination_update_memory_ratio(valid)": 0,
+    "omission_update_memory_ratio(all)": 0,
+    "omission_update_memory_ratio(valid)": 0,
+    "other_update_memory_ratio(all)": 0,
+    "other_update_memory_ratio(valid)": 0,
+    "update_memory_valid_num": 0,
+    "update_memory_num": 0
+  },
+  "question_answering": {
+    "correct_qa_ratio(all)": 0,
+    "correct_qa_ratio(valid)": 0,
+    "hallucination_qa_ratio(all)": 0,
+    "hallucination_qa_ratio(valid)": 0,
+    "omission_qa_ratio(all)": 0,
+    "omission_qa_ratio(valid)": 0,
+    "qa_valid_num": 0,
+    "qa_num": 0
+  },
+  "memory_extraction_f1": 0.0,
+  "memory_type_accuracy": {
+    "Persona Memory": {
+      "memory_integrity_acc": 0,
+      "memory_update_acc": 0,
+      "memory_acc": 0,
+      "total_num": 0
+    },
+    "Event Memory": {
+      "memory_integrity_acc": 0,
+      "memory_update_acc": 0,
+      "memory_acc": 0,
+      "total_num": 0
+    },
+    "Relationship Memory": {
+      "memory_integrity_acc": 0,
+      "memory_update_acc": 0,
+      "memory_acc": 0,
+      "total_num": 0
+    }
+  },
+  "qa_attribution": {
+    "total_wrong": 0,
+    "attributable": 0,
+    "storage_num": 0,
+    "retrieval_num": 0,
+    "generation_num": 0,
+    "unknown_num": 0,
+    "no_evidence_num": 0,
+    "storage_ratio": 0,
+    "retrieval_ratio": 0,
+    "generation_ratio": 0,
+    "unknown_ratio": 0,
+    "judge_failures": {},
+    "storage_topk": 25,
+    "by_question_type": {}
+  }
+}

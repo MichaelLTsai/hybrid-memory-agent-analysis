@@ -1,0 +1,5 @@
+[repair] 2026-08-29 22:26:49 starting HaluMem eval-only for ablate_e0_baseline_31b
+[repair] eval-only exit=0 2026-08-29 23:32:56
+[repair] scores written, running unified probe
+[repair] probe exit=0 2026-08-29 23:35:22
+[repair] DONE 2026-08-29 23:35:22

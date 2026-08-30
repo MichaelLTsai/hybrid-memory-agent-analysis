@@ -1,0 +1,36 @@
+Probing 21 questions ...
+✅ wrote the "probe" block of /Users/stud113/Documents/lintsai/Memory_Experience/longmemeval_experiment/results/structmem-ablate_e3_m1_m4_31b/structmem_lme_scores.json; per-question -> /Users/stud113/Documents/lintsai/Memory_Experience/longmemeval_experiment/results/structmem-ablate_e3_m1_m4_31b/structmem_lme_probe_detail.jsonl
+
+=== LongMemEval probe ===
+{
+  "n_total": 21,
+  "n_answerable": 21,
+  "n_abstention": 0,
+  "P4_sufficient": 0.6190476190476191,
+  "P4_n": 21,
+  "P1_sufficient": 0.0,
+  "P1_n": 8,
+  "P5_fail_given_P4": 0.23076923076923078,
+  "P5_n": 13,
+  "P5b_abstain_rate": null,
+  "P5b_n": 0,
+  "verdicts": {
+    "REASONING": 3,
+    "OK": 10,
+    "SUMMARY": 7,
+    "NO_WRITE": 1
+  },
+  "attribution": {
+    "OK": 0.47619047619047616,
+    "SUMMARY": 0.3333333333333333,
+    "RETRIEVAL": 0.0,
+    "REASONING": 0.14285714285714285,
+    "NO_WRITE": 0.047619047619047616,
+    "P5b_FAIL": 0.0
+  },
+  "unknown_ratio": 0.0,
+  "judge_failures": {},
+  "scope": [
+    "session"
+  ]
+}

@@ -1,0 +1,7 @@
+[ensure] attempt 1/4 for ablate_e1_m1_31b  2026-08-30 02:10:22
+[ensure] attempt 1 exit=0 memory_num=0
+[ensure] attempt 1 produced empty scores, backing off 120s
+[ensure] attempt 2/4 for ablate_e1_m1_31b  2026-08-30 02:12:48
+[ensure] attempt 2 exit=0 memory_num=425
+[ensure] SUCCESS, running unified probe
+[ensure] probe exit=0 2026-08-30 03:14:08

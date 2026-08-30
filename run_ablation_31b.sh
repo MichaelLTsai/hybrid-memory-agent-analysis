@@ -12,8 +12,9 @@
 # controls is WHICH results exist early. Running all of E0's benchmarks first
 # means the complete E0 row (LongMemEval + HaluMem + LoCoMo) is usable after
 # roughly a third of the batch, instead of three arms all finishing at the end.
-# Inside a phase the three benchmarks run concurrently: three lines was the
-# measured-safe concurrency, and they are independent workloads.
+# Inside a phase the benchmarks run SEQUENTIALLY. Three concurrent lines was
+# fine on E4B but collapsed the endpoint on 31B (998x HTTP 503), so one line at
+# a time is the only setting that completes.
 #
 # Model per benchmark, matched to what the other four architectures used
 # ---------------------------------------------------------------------
@@ -63,42 +64,65 @@ halumem_scope () {
   esac
 }
 
+# Benchmarks run ONE AT A TIME. Three concurrent lines was survivable on
+# gemma-4-E4B-it but is not on 31B: the first attempt at three-way concurrency
+# drew 998 HTTP 503s plus 500 "系統繁忙" from the NCHC endpoint, failed 5 of 21
+# LongMemEval questions, and killed BOTH HaluMem users outright, leaving
+# memory_num=0. The endpoint, not the client, is the constraint, and it is
+# already saturated by a single 31B line.
+#
+# A benchmark that already has scores is skipped, so a repair run only redoes
+# what is actually missing.
+has_scores () {
+  case "$1" in
+    lme)     ls "$ROOT/longmemeval_experiment/results/structmem-$2/"*_lme_scores.json >/dev/null 2>&1 ;;
+    halumem) [ -s "$ROOT/halumem_experiment/results/structmem-$2/structmem_scores.json" ] &&
+             [ "$("$PY" -c "import json,sys;d=json.load(open(sys.argv[1]));print(d.get('memory_integrity',{}).get('memory_num',0))" \
+                  "$ROOT/halumem_experiment/results/structmem-$2/structmem_scores.json" 2>/dev/null)" != "0" ] ;;
+    locomo)  [ -s "$ROOT/locomo_experiment/results/structmem-$2/structmem_locomo_scores.json" ] ;;
+  esac
+}
+
 run_phase () {
   local arm="$1" ver; ver="$(ver_for "$arm")"
   echo "=== PHASE ${arm} starting $(date '+%F %T') ==="
-  local pids=()
+
+  # HaluMem first: it is the longest and the one that was destroyed, and the
+  # ask is to get a complete E0 as early as possible.
+  if has_scores halumem "$ver"; then
+    echo "    HaluMem ${arm} already has scores, skipping"
+  else
+    echo "    HaluMem ${arm} starting  scope: $(halumem_scope "$arm")"
+    ( cd "$ROOT/halumem_experiment" && \
+      STRUCTMEM_EXPERIMENT="$arm" \
+      "$PY" run.py --backend structmem --version "$ver" \
+        $(halumem_scope "$arm") --llm-model "$EXTRACT_LLM" \
+        > "logs_${ver}.out" 2>&1 )
+    echo "    HaluMem ${arm} exit=$?  $(date '+%H:%M')"
+  fi
 
   if [ "${SKIP_LME:-0}" != "1" ]; then
+    echo "    LME ${arm} starting"
     ( cd "$ROOT/longmemeval_experiment" && \
       STRUCTMEM_EXPERIMENT="$arm" LME_TYPE_QUOTA="$LME_QUOTA" \
       LME_QDRANT_BASE="$ROOT/longmemeval_experiment/qdrant_structmem_${SUFFIX}" \
       "$PY" run_longmem.py --backend structmem --version "$ver" \
         --max-questions 21 --llm-model "$EXTRACT_LLM" \
-        > "logs_${ver}.out" 2>&1
-      echo "    LME ${arm} exit=$?" ) &
-    pids+=($!); echo "    LME started (pid $!)"
-    sleep 3
+        > "logs_${ver}.out" 2>&1 )
+    echo "    LME ${arm} exit=$?  $(date '+%H:%M')"
   fi
 
-  ( cd "$ROOT/halumem_experiment" && \
-    STRUCTMEM_EXPERIMENT="$arm" \
-    "$PY" run.py --backend structmem --version "$ver" \
-      $(halumem_scope "$arm") --llm-model "$EXTRACT_LLM" \
-      > "logs_${ver}.out" 2>&1
-    echo "    HaluMem ${arm} exit=$?" ) &
-  pids+=($!); echo "    HaluMem started (pid $!)  scope: $(halumem_scope "$arm")"
-  sleep 3
-
-  ( cd "$ROOT/locomo_experiment" && \
-    STRUCTMEM_EXPERIMENT="$arm" \
-    "$PY" run_locomo.py --backend structmem --version "$ver" \
-      --max-convs 1 --llm-model "$EXTRACT_LLM" \
-      > "logs_${ver}.out" 2>&1
-    echo "    LoCoMo ${arm} exit=$?" ) &
-  pids+=($!); echo "    LoCoMo started (pid $!)"
-
-  echo "    ${#pids[@]} lines running, waiting"
-  wait "${pids[@]}"
+  if has_scores locomo "$ver"; then
+    echo "    LoCoMo ${arm} already has scores, skipping"
+  else
+    echo "    LoCoMo ${arm} starting"
+    ( cd "$ROOT/locomo_experiment" && \
+      STRUCTMEM_EXPERIMENT="$arm" \
+      "$PY" run_locomo.py --backend structmem --version "$ver" \
+        --max-convs 1 --llm-model "$EXTRACT_LLM" \
+        > "logs_${ver}.out" 2>&1 )
+    echo "    LoCoMo ${arm} exit=$?  $(date '+%H:%M')"
+  fi
   echo "=== PHASE ${arm} ingest done $(date '+%F %T') ==="
 
   # Stage attribution, sequential: the probes are judge-bound and would only

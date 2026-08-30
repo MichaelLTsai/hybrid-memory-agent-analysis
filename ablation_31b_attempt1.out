@@ -1,0 +1,23 @@
+=== StructMem ablation on gemma-4-31B-it ===
+    phases : E0_baseline E1_m1 E3_m1_m4
+    suffix : 31b
+    MemFail: not run (already correct on E4B, matching all five architectures)
+
+=== PHASE E0_baseline starting 2026-08-29 16:49:39 ===
+    LME started (pid 10392)
+    HaluMem started (pid 10398)  scope: --skip-users 2 --max-users 2
+    LoCoMo started (pid 10411)
+    3 lines running, waiting
+    LoCoMo E0_baseline exit=0
+    HaluMem E0_baseline exit=0
+    LME E0_baseline exit=0
+=== PHASE E0_baseline ingest done 2026-08-29 19:27:10 ===
+    probe LME exit=0
+    probe HaluMem exit=0
+    probe LoCoMo exit=0
+=== PHASE E0_baseline COMPLETE 2026-08-29 19:29:34 ===
+=== PHASE E1_m1 starting 2026-08-29 19:29:34 ===
+    LME started (pid 32654)
+    HaluMem started (pid 32664)  scope: --skip-users 2 --max-users 1
+    LoCoMo started (pid 32672)
+    3 lines running, waiting

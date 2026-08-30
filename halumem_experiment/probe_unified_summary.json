@@ -1,22 +1,23 @@
 [
   {
-    "run": "structmem-ablate_e4_full",
-    "n": 125,
-    "P1_fail": 0.056,
-    "P4_fail": 0.192,
-    "P5_fail": 0.392,
-    "not_counted": 0,
-    "abstain_n": 39,
+    "run": "structmem-ablate_e3_m1_m4_31b",
+    "n": 126,
+    "P1_fail": 0.0079,
+    "P4_fail": 0.0952,
+    "P5_fail": 0.4048,
+    "not_counted": 2,
+    "abstain_n": 43,
     "unadjudicated": 0,
     "verdicts": {
-      "P5b_OK": 37,
-      "OK": 45,
-      "REASONING": 49,
-      "P5b_FAIL": 2,
-      "RETRIEVAL": 24,
-      "SUMMARY": 7
+      "OK": 60,
+      "P5b_OK": 40,
+      "RETRIEVAL": 12,
+      "REASONING": 51,
+      "P5b_FAIL": 3,
+      "SUMMARY": 1,
+      "NOT_COUNTED": 2
     },
     "judge_failures": {},
-    "attributable_error_rate": 0.64
+    "attributable_error_rate": 0.5079
   }
 ]

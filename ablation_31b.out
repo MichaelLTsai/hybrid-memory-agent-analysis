@@ -1,12 +1,18 @@
 === StructMem ablation on gemma-4-31B-it ===
-    phases : E0_baseline E1_m1 E3_m1_m4
+    phases : E0_baseline
     suffix : 31b
     MemFail: not run (already correct on E4B, matching all five architectures)
 
-=== PHASE E0_baseline starting 2026-08-29 16:49:39 ===
-    LME started (pid 10392)
-    HaluMem started (pid 10398)  scope: --skip-users 2 --max-users 2
-    LoCoMo started (pid 10411)
-    3 lines running, waiting
-    LoCoMo E0_baseline exit=0
-    HaluMem E0_baseline exit=0
+=== PHASE E0_baseline starting 2026-08-29 19:39:53 ===
+    HaluMem E0_baseline starting  scope: --skip-users 2 --max-users 2
+/Users/stud113/Documents/lintsai/Memory_Experience/run_ablation_31b.sh: line 86: 33780 Segmentation fault: 11  STRUCTMEM_EXPERIMENT="$arm" "$PY" run.py --backend structmem --version "$ver" $(halumem_scope "$arm") --llm-model "$EXTRACT_LLM" > "logs_${ver}.out" 2>&1
+    HaluMem E0_baseline exit=139  21:47
+    LME E0_baseline starting
+    LME E0_baseline exit=0  22:14
+    LoCoMo E0_baseline already has scores, skipping
+=== PHASE E0_baseline ingest done 2026-08-29 22:14:43 ===
+    probe LME exit=0
+    probe HaluMem exit=0
+    probe LoCoMo exit=0
+=== PHASE E0_baseline COMPLETE 2026-08-29 22:18:25 ===
+=== ALL PHASES FINISHED 2026-08-29 22:18:25 ===

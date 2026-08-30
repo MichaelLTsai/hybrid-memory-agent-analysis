@@ -45,7 +45,9 @@ EXCLUDE = {"UNKNOWN", "NO_DUMP", None}
 DATASETS = [
     ("LongMemEval", "longmemeval_experiment/results/*/*_lme_probe_detail.jsonl"),
     ("LoCoMo", "locomo_experiment/results/*/*_locomo_probe_detail.jsonl"),
-    ("HaluMem", "halumem_experiment/results/*/*_probe_detail.jsonl"),
+    # probe_halumem_unified.py, not the retired probe_halumem.py: only the unified
+    # probe carries P1 and the SUMMARY / RETRIEVAL vocabulary.
+    ("HaluMem", "halumem_experiment/results/*/*_probe_unified.jsonl"),
 ]
 
 
@@ -123,11 +125,12 @@ def main():
                   f"{f(r['P1_fail']):>8s}{f(r['P4_fail']):>8s}{f(r['P5_fail']):>8s}"
                   f"{f(r['attributable_error_rate']):>9s}{sbc:>11d}{r['excluded_n']:>6d}")
 
-    # HaluMem 目前無法拆 P1 / P4，明確標示
+    # NOT_RETRIEVED 是已退役的 probe_halumem.py 的用詞，它不做 P1，讀到就會讓
+    # P1 與 P4 靜默算成 0。正常情況下不該再出現，出現代表讀到了舊檔。
     hal = results.get("HaluMem") or []
     if hal and any("NOT_RETRIEVED" in r["verdicts"] for r in hal):
-        print("\n注意：HaluMem 的 verdict 只有 NOT_RETRIEVED，尚未拆成 SUMMARY / RETRIEVAL。")
-        print("      上表 HaluMem 的 P1 與 P4 皆為 0，須待 probe_halumem_p1.py 補齊後才有意義。")
+        print("\n警告：HaluMem 出現 NOT_RETRIEVED verdict，那是已退役的 probe_halumem.py 的輸出。")
+        print("      該檔不含 P1，上表的 P1 與 P4 會是 0。請改跑 probe_halumem_unified.py。")
 
     if args.json:
         with open(args.json, "w", encoding="utf-8") as f:

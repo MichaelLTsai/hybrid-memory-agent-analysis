@@ -1,0 +1,17 @@
+=== StructMem ablation on gemma-4-31B-it ===
+    phases : E3_m1_m4
+    suffix : 31b
+    MemFail: not run (already correct on E4B, matching all five architectures)
+
+=== PHASE E3_m1_m4 starting 2026-08-30 10:38:25 ===
+    HaluMem E3_m1_m4 already has scores, skipping
+    LME E3_m1_m4 starting
+    LME E3_m1_m4 exit=0  12:07
+    LoCoMo E3_m1_m4 starting
+    LoCoMo E3_m1_m4 exit=0  12:18
+=== PHASE E3_m1_m4 ingest done 2026-08-30 12:18:48 ===
+    probe LME exit=0
+    probe HaluMem exit=0
+    probe LoCoMo exit=0
+=== PHASE E3_m1_m4 COMPLETE 2026-08-30 12:20:15 ===
+=== ALL PHASES FINISHED 2026-08-30 12:20:15 ===

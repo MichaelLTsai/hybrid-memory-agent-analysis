@@ -1388,71 +1388,47 @@ def expand_rows_for(ds: str, rows: list, columns: list):
 
 # ── One row per run per dataset per subset ──────────────────────────────────
 # Long format, replacing the earlier pooled-by-purpose-group shape. Each row is
-# a single measurement: one run, one dataset, one official subset. Category is
-# the last column, a label to pivot on rather than a level the numbers were
-# aggregated into.
+# a single measurement: one run, one dataset, one official subset. Dataset,
+# Sub-dataset and Category sit together right after Batch, so the three keys
+# that identify a row read as one block.
 #
 # Nothing is pooled. The previous shape averaged the subsets a benchmark
 # contributed to one group (HaluMem put both Memory Boundary and Memory Conflict
 # into abstention), which forced a weight choice and hid the two components. Here
 # both subsets keep their own row and the reader groups them if they want to.
 #
-# Metric columns are dataset-neutral so the four datasets stack: MemFail's own
-# error names map onto the same stage columns as the probe rates, which is the
-# mapping the Failure Matrix sheet already uses for its stage grouping.
-_LONG_STAGE = {
-    "longmem": {"sf_p1": "P1", "sf_p4": "P4", "sf_p5": "P5", "qa": "QA",
-                "recall5": "R5", "ndcg5": "N5", "n": "N"},
-    "locomo":  {"sf_p1": "P1", "sf_p4": "P4", "sf_p5": "P5", "qa": "QA",
-                "f1": "TF1", "recall5": "R5", "ndcg5": "N5", "n": "N"},
-    "halumem": {"sf_p1": "P1", "sf_p4": "P4", "sf_p5": "P5", "qa": "QA", "n": "N"},
-}
-# MemFail reports per-stage error shares under its own names; mf_correct is its
-# accuracy. Storage is the one stage only MemFail measures per question.
-_LONG_MF = {"mf_summary": "P1", "mf_storage": "STO", "mf_retr": "P4",
-            "mf_reason": "P5", "mf_correct": "QA", "mf_n": "N"}
-
-_LONG_COLS = [
-    ("", "Run name",    "run_name", "Row label; matches the Failure Matrix sheet."),
-    ("", "Backend",     "backend",  "Memory architecture."),
-    ("", "LLM",         "llm",      "Extraction LLM for this run."),
-    ("", "Batch",       "batch",    "Which experiment batch the run belongs to."),
-    ("", "Dataset",     "DS",       "Which benchmark this row scores."),
-    ("", "Sub-dataset", "SUB",      "The official subset within that benchmark, or "
-                                    "TOTAL for the whole run on that benchmark."),
-    ("", "Questions",   "N",        "Questions in this subset for this run. Stage "
-                                    "rates are denominated over adjudicated "
-                                    "questions, accuracy over all of them."),
-    ("Summary",   "P1 fail \u2193",  "P1",
-     "Extraction-stage failure share. MemFail contributes its summary_error here."),
-    ("Storage",   "Storage fail \u2193", "STO",
-     "MemFail's not_stored share. The other three benchmarks have no per-question "
-     "storage measurement, so their cells carry the not-measured marker, not zero."),
-    ("Retrieval", "P4 fail \u2193",  "P4",
-     "Retrieval-stage failure share. MemFail contributes its retr_error here."),
-    ("Retrieval", "Recall@5 \u2191", "R5",  "Official retrieval recall, where the benchmark defines one."),
-    ("Retrieval", "NDCG@5 \u2191",   "N5",  "Official retrieval NDCG, where the benchmark defines one."),
-    ("Reasoning", "P5 fail \u2193",  "P5",
-     "Reasoning-stage failure share. MemFail contributes its reason_error here."),
-    ("Attribution summary", "Error \u2193", "ERR",
-     "Sum of the stage columns on this row, which equals 1 minus accuracy by "
-     "construction of the short-circuit attribution."),
-    ("Memory Performance", "QA \u2191", "QA",
-     "End-to-end accuracy on this subset. MemFail contributes its correct share."),
-    ("Memory Performance", "token F1 \u2191", "TF1", "LoCoMo only."),
-    ("", "Category", "CAT",
-     "The purpose group this subset belongs to: what kind of memory a correct "
-     "answer demands. Subsets sharing a group answer to the same demand and can "
-     "be read against each other across datasets. Rows whose Sub-dataset is "
-     "TOTAL carry TOTAL here too, so a pivot can exclude them in one filter."),
-]
-
+# The metric columns are the Failure Matrix's, unchanged and complete. A row
+# therefore carries values only in its own dataset's columns and n/a everywhere
+# else, which is the price of stacking four benchmarks into one sheet and is
+# paid deliberately: a column means exactly what it means on the Failure Matrix,
+# with no renaming or remapping in between.
 _LONG_DS_NAME = {"longmem": "LongMemEval", "locomo": "LoCoMo",
                  "halumem": "HaluMem", "memfail": "MemFail"}
+_LONG_NCOL = {"longmem": "lme_n", "locomo": "loc_n", "halumem": "hal_n"}
+
+_LONG_KEY_COLS = [
+    ("", "Dataset", "_ds_name",
+     "Which benchmark this row scores. Only this dataset's columns carry a value; "
+     "the other three read n/a."),
+    ("", "Sub-dataset", "_sub_name",
+     "The official subset within that benchmark, or TOTAL for the whole run on it."),
+    ("", "Category", "_sub_group",
+     "The purpose group this subset belongs to: what kind of memory a correct "
+     "answer demands. Subsets sharing a group answer to the same demand and can "
+     "be read against each other across datasets. Rows whose Sub-dataset is TOTAL "
+     "carry TOTAL here too, so a pivot excludes them with one filter."),
+]
+
+
+def long_columns():
+    """Failure Matrix columns with Dataset, Sub-dataset and Category after Batch."""
+    at = next(i for i, c in enumerate(COLUMNS) if c[2] == "batch") + 1
+    return COLUMNS[:at] + _LONG_KEY_COLS + COLUMNS[at:]
 
 
 def category_rows(rows, columns=None):
-    """One row per run per dataset per subset, plus that dataset's TOTAL."""
+    """One row per run per dataset per subset, plus that run's TOTAL per dataset."""
+    owned = {c[2] for c in COLUMNS if dataset_of(c[2])}
     out = []
     for row, be in zip(rows, BACKENDS):
         head = {k: row.get(k) for k in ("run_name", "backend", "llm", "batch")}
@@ -1464,47 +1440,40 @@ def category_rows(rows, columns=None):
                   else subset_breakdown(ds, run)) or {}
             if not bd:
                 continue
+            dsname = _LONG_DS_NAME[ds]
             nkey = "mf_n" if ds == "memfail" else "n"
-            order = sorted(bd, key=lambda k: -(bd[k].get(nkey) or 0))
-            mapping = _LONG_MF if ds == "memfail" else _LONG_STAGE[ds]
-            body = []
-            for sub in order:
-                d = bd[sub]
+            for sub in sorted(bd, key=lambda k: -(bd[k].get(nkey) or 0)):
                 r = dict(head)
-                r.update({"DS": _LONG_DS_NAME[ds],
-                          "SUB": _SUBSET_DISP.get(sub, sub),
-                          "CAT": _SUBSET_GROUP.get(sub, ""),
+                r.update({"_ds_name": dsname,
+                          "_sub_name": _SUBSET_DISP.get(sub, sub),
+                          "_sub_group": _SUBSET_GROUP.get(sub, ""),
                           "_done": row.get("_done", {}), "_subset": True})
-                for m, col in mapping.items():
-                    v = d.get(m)
-                    if isinstance(v, (int, float)):
-                        r[col] = v
-                stages = [r.get(c) for c in ("P1", "STO", "P4", "P5")
-                          if isinstance(r.get(c), (int, float))]
-                if stages:
-                    r["ERR"] = sum(stages)
-                body.append(r)
-            out.extend(body)
-            # The run's TOTAL for this dataset, taken from the Failure Matrix row
-            # so the two sheets cannot disagree.
+                # Everything starts not-measurable: another dataset's column, or
+                # this dataset's but denominated over something other than the
+                # question (extraction recall, memory volume, cost).
+                for k in owned:
+                    r[k] = "n/a"
+                d = bd[sub]
+                if ds == "memfail":
+                    for k, v in d.items():
+                        if k in owned:
+                            r[k] = v
+                else:
+                    for metric, col in _SUBSET_KEYS[ds].items():
+                        if col in owned and metric in d:
+                            r[col] = d[metric]
+                    ncol = _LONG_NCOL[ds]
+                    if ncol in owned and d.get("n") is not None:
+                        r[ncol] = d["n"]
+                out.append(r)
+            # The run's TOTAL on this dataset, copied from the Failure Matrix row
+            # so the two sheets cannot disagree. Here the whole-run metrics that
+            # have no subset value (extraction recall, cost) are real again.
             tot = dict(head)
-            tot.update({"DS": _LONG_DS_NAME[ds], "SUB": "TOTAL", "CAT": "TOTAL",
-                        "_done": row.get("_done", {})})
-            src = (_LONG_MF if ds == "memfail"
-                   else {v: c for v, c in
-                         ((_SUBSET_KEYS[ds].get(m), c) for m, c in _LONG_STAGE[ds].items())
-                         if v})
-            for key, col in src.items():
-                v = row.get(key)
-                if isinstance(v, (int, float)):
-                    tot[col] = v
-            for key, col in ((f"{p}_n", "N") for p in ("lme", "loc", "hal")):
-                if _KEY_DS.get(key.split("_")[0]) == ds and isinstance(row.get(key), (int, float)):
-                    tot["N"] = row[key]
-            stages = [tot.get(c) for c in ("P1", "STO", "P4", "P5")
-                      if isinstance(tot.get(c), (int, float))]
-            if stages:
-                tot["ERR"] = sum(stages)
+            tot.update({"_ds_name": dsname, "_sub_name": "TOTAL",
+                        "_sub_group": "TOTAL", "_done": row.get("_done", {})})
+            for k in owned:
+                tot[k] = row.get(k) if dataset_of(k) == dsname else "n/a"
             out.append(tot)
     return out
 
@@ -1687,7 +1656,7 @@ def build():
     write_sheet(wb.create_sheet("By Sub-dataset"), sc, subset_sheet_rows(rows), lv)
 
     # A third view: one row per run per dataset per subset, Category as a label
-    write_sheet(wb.create_sheet("By Category"), _LONG_COLS, category_rows(rows))
+    write_sheet(wb.create_sheet("By Category"), long_columns(), category_rows(rows))
 
     # One sheet per dataset: same structure, only that dataset's columns
     for ds in SHEET_ORDER:
@@ -1739,15 +1708,15 @@ def build():
                    "pivot on rather than a level the numbers were averaged into. Rows "
                    "whose Sub-dataset is TOTAL carry TOTAL in Category as well, so a "
                    "pivot excludes them with one filter. Metric columns are "
-                   "dataset-neutral and MemFail's own error names map onto the same "
-                   "stage columns: summary_error to P1, retr_error to P4, reason_error "
-                   "to P5, correct to QA."
+                   "the Failure Matrix's, unchanged, so a row carries values only in its own "
+                   "dataset's columns and n/a in the other three. Only the three key "
+                   "columns below are added; every metric column is documented above."
              ).alignment = Alignment(wrap_text=True)
     for ci, h in enumerate(["Stage", "Column", "Source / definition"], 1):
         c = ws2.cell(row=ri + 1, column=ci, value=h)
         c.font = Font(bold=True, size=10)
         c.fill = PatternFill("solid", fgColor="EDF3EA")
-    for k, (grp, title, _key, desc) in enumerate(_LONG_COLS, ri + 2):
+    for k, (grp, title, _key, desc) in enumerate(_LONG_KEY_COLS, ri + 2):
         ws2.cell(row=k, column=1, value=grp or "—")
         ws2.cell(row=k, column=2, value=title)
         ws2.cell(row=k, column=3, value=desc).alignment = Alignment(wrap_text=True)

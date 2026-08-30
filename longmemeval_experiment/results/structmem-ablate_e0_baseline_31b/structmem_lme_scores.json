@@ -1,0 +1,99 @@
+{
+  "qa_accuracy_all": 0.42857142857142855,
+  "token_f1_all": 0.15278905613872934,
+  "qa_num": 21,
+  "retrieval": {
+    "recall@3": null,
+    "recall@5": null,
+    "recall@10": null,
+    "ndcg@3": null,
+    "ndcg@5": null,
+    "ndcg@10": null
+  },
+  "per_type": {
+    "knowledge-update": {
+      "accuracy": 0.6666666666666666,
+      "num": 6
+    },
+    "multi-session": {
+      "accuracy": 0.3333333333333333,
+      "num": 3
+    },
+    "single-session-assistant": {
+      "accuracy": 0.0,
+      "num": 3
+    },
+    "single-session-preference": {
+      "accuracy": 0.0,
+      "num": 3
+    },
+    "single-session-user": {
+      "accuracy": 0.6666666666666666,
+      "num": 3
+    },
+    "temporal-reasoning": {
+      "accuracy": 0.6666666666666666,
+      "num": 3
+    }
+  },
+  "probe": {
+    "n_total": 21,
+    "n_answerable": 21,
+    "n_abstention": 0,
+    "P4_sufficient": 0.6190476190476191,
+    "P4_n": 21,
+    "P1_sufficient": 0.125,
+    "P1_n": 8,
+    "P5_fail_given_P4": 0.38461538461538464,
+    "P5_n": 13,
+    "P5b_abstain_rate": null,
+    "P5b_n": 0,
+    "verdicts": {
+      "OK": 8,
+      "REASONING": 5,
+      "SUMMARY": 6,
+      "RETRIEVAL": 1,
+      "NO_WRITE": 1
+    },
+    "attribution": {
+      "OK": 0.38095238095238093,
+      "SUMMARY": 0.2857142857142857,
+      "RETRIEVAL": 0.047619047619047616,
+      "REASONING": 0.23809523809523808,
+      "NO_WRITE": 0.047619047619047616,
+      "P5b_FAIL": 0.0
+    },
+    "unknown_ratio": 0.0,
+    "judge_failures": {},
+    "scope": [
+      "session"
+    ],
+    "by_question_type": {
+      "single-session-user": {
+        "OK": 2,
+        "REASONING": 1
+      },
+      "single-session-preference": {
+        "REASONING": 2,
+        "SUMMARY": 1
+      },
+      "knowledge-update": {
+        "OK": 4,
+        "REASONING": 1,
+        "NO_WRITE": 1
+      },
+      "temporal-reasoning": {
+        "SUMMARY": 1,
+        "OK": 2
+      },
+      "multi-session": {
+        "RETRIEVAL": 1,
+        "SUMMARY": 1,
+        "REASONING": 1
+      },
+      "single-session-assistant": {
+        "SUMMARY": 3
+      }
+    }
+  }
+}
