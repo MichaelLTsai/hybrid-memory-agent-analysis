@@ -1462,6 +1462,74 @@ def expand_rows_for(ds: str, rows: list, columns: list):
     return out
 
 
+# ── Metric families: the same measurement under four dataset prefixes ───────
+# On the long sheets a row belongs to exactly one dataset, so the four
+# per-dataset copies of a metric are mutually exclusive and collapse into one
+# column. Scanning P1 down a column across benchmarks is the whole point of
+# those sheets, and four columns of which three are always blank defeats it.
+#
+# Two families need their synonyms reconciled first: LoCoMo calls its extraction
+# recall "extraction recall" and HaluMem calls the same measurement "recall";
+# MemFail calls its end-to-end accuracy "correct" where the other three say "QA".
+#
+# MemFail's summary_error, storage_error, retr_error and reason_error are NOT
+# folded into P1/P4/P5. They come from the benchmark's own analyze_errors, not
+# from this study's probes, and a column that silently mixed the two definitions
+# is exactly the kind of thing that produces a wrong claim later.
+_FAM_SYNONYM = {"recall ↑": "extraction recall ↑", "correct ↑": "QA ↑"}
+_FAM_TITLE = {"P1 fail (all) ↓": "P1 fail ↓", "P4 fail (all) ↓": "P4 fail ↓",
+              "P5 fail (all) ↓": "P5 fail ↓", "error ↓": "Error ↓",
+              "lucky n": "Lucky n", "questions": "Questions",
+              "entries": "Entries", "/turn": "Entries/turn",
+              "granularity": "Granularity",
+              "extraction recall ↑": "Extraction recall ↑",
+              "precision ↑": "Extraction precision ↑",
+              "F1 ↑": "Extraction F1 ↑"}
+_DS_PREFIX = ("LongMemEval ", "LoCoMo ", "HaluMem ", "MemFail ", "LME ")
+
+
+def _family(title):
+    """The dataset-independent name of a metric, or None for a shared column."""
+    for pre in _DS_PREFIX:
+        if title.startswith(pre):
+            rest = title[len(pre):].strip()
+            return _FAM_SYNONYM.get(rest, rest) if rest else None
+    return None
+
+
+def merged_columns():
+    """Failure Matrix columns with the three key columns inserted after Batch and
+    every multi-dataset metric family collapsed to one column."""
+    at = next(i for i, c in enumerate(COLUMNS) if c[2] == "batch") + 1
+    head, tail = COLUMNS[:at], COLUMNS[at:]
+    members = {}
+    for grp, title, key, desc in tail:
+        fam = _family(title)
+        if fam:
+            members.setdefault(fam, []).append(key)
+    out, seen = [], set()
+    for grp, title, key, desc in tail:
+        fam = _family(title)
+        if not fam or len(members[fam]) == 1:
+            out.append((grp, title, key, desc))
+            continue
+        if fam in seen:
+            continue
+        seen.add(fam)
+        out.append((grp, _FAM_TITLE.get(fam, fam), f"fam::{fam}",
+                    desc + " Merged across " +
+                    ", ".join(dataset_of(k) or "?" for k in members[fam]) +
+                    "; a row carries the value for its own dataset."))
+    return head + _LONG_KEY_COLS + out, members
+
+
+def _fill_merged(dst, src, members):
+    """Copy src's per-dataset values into their merged column keys."""
+    for fam, keys in members.items():
+        vals = [src.get(k) for k in keys if isinstance(src.get(k), (int, float))]
+        dst[f"fam::{fam}"] = vals[0] if vals else "n/a"
+
+
 # ── One row per run per dataset per subset ──────────────────────────────────
 # Long format, replacing the earlier pooled-by-purpose-group shape. Each row is
 # a single measurement: one run, one dataset, one official subset. Dataset,
@@ -1502,7 +1570,7 @@ def long_columns():
     return COLUMNS[:at] + _LONG_KEY_COLS + COLUMNS[at:]
 
 
-def category_rows(rows, columns=None):
+def category_rows(rows, members):
     """One row per run per dataset per subset, plus that run's TOTAL per dataset."""
     owned = {c[2] for c in COLUMNS if dataset_of(c[2])}
     out = []
@@ -1527,20 +1595,21 @@ def category_rows(rows, columns=None):
                 # Everything starts not-measurable: another dataset's column, or
                 # this dataset's but denominated over something other than the
                 # question (extraction recall, memory volume, cost).
-                for k in owned:
-                    r[k] = "n/a"
+                raw = {k: "n/a" for k in owned}
                 d = bd[sub]
                 if ds == "memfail":
                     for k, v in d.items():
                         if k in owned:
-                            r[k] = v
+                            raw[k] = v
                 else:
                     for metric, col in _SUBSET_KEYS[ds].items():
                         if col in owned and metric in d:
-                            r[col] = d[metric]
+                            raw[col] = d[metric]
                     ncol = _LONG_NCOL[ds]
                     if ncol in owned and d.get("n") is not None:
-                        r[ncol] = d["n"]
+                        raw[ncol] = d["n"]
+                r.update(raw)
+                _fill_merged(r, raw, members)
                 out.append(r)
             # The run's TOTAL on this dataset, copied from the Failure Matrix row
             # so the two sheets cannot disagree. Here the whole-run metrics that
@@ -1548,10 +1617,36 @@ def category_rows(rows, columns=None):
             tot = dict(head)
             tot.update({"_ds_name": dsname, "_sub_name": "TOTAL",
                         "_sub_group": "TOTAL", "_done": row.get("_done", {})})
-            for k in owned:
-                tot[k] = row.get(k) if dataset_of(k) == dsname else "n/a"
+            raw = {k: (row.get(k) if dataset_of(k) == dsname else "n/a")
+                   for k in owned}
+            tot.update(raw)
+            _fill_merged(tot, raw, members)
             out.append(tot)
     return out
+
+
+# ── The same rows, ordered so a purpose group reads as one block ────────────
+# By Category is ordered by run, which answers "what did this run do". Sorting
+# by group first answers the other question: "how does every architecture handle
+# temporal reasoning", with LongMemEval and LoCoMo adjacent instead of pages
+# apart. TOTAL rows sink to the bottom so they never break a group's block.
+_BACKEND_ORDER = ["Mem0 v1", "Mem0 v2", "A-MEM", "Letta", "StructMem"]
+_CODE_OF_GROUP = {name: code for code, name, _d in PURPOSE_GROUPS}
+
+
+def _sort_key(r):
+    grp = r.get("_sub_group") or ""
+    code = _CODE_OF_GROUP.get(grp, "~")            # TOTAL and unknowns last
+    be = str(r.get("backend") or "")
+    fam = next((i for i, b in enumerate(_BACKEND_ORDER) if be.startswith(b)),
+               len(_BACKEND_ORDER))
+    ds = r.get("_ds_name") or ""
+    dsi = SHEET_ORDER.index(ds) if ds in SHEET_ORDER else len(SHEET_ORDER)
+    return (code, fam, be, dsi, str(r.get("_sub_name") or ""))
+
+
+def group_sorted_rows(rows, members):
+    return sorted(category_rows(rows, members), key=_sort_key)
 
 
 def write_sheet(ws, columns, rows, col_levels=None):
@@ -1732,7 +1827,11 @@ def build():
     write_sheet(wb.create_sheet("By Sub-dataset"), sc, subset_sheet_rows(rows), lv)
 
     # A third view: one row per run per dataset per subset, Category as a label
-    write_sheet(wb.create_sheet("By Category"), long_columns(), category_rows(rows))
+    lc, members = merged_columns()
+    write_sheet(wb.create_sheet("By Category"), lc, category_rows(rows, members))
+
+    # The same rows ordered group first, so one purpose group reads as a block
+    write_sheet(wb.create_sheet("By Group"), lc, group_sorted_rows(rows, members))
 
     # One sheet per dataset: same structure, only that dataset's columns
     for ds in SHEET_ORDER:
