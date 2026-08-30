@@ -870,6 +870,79 @@ for _p, _k, _disp, _g in _SUBSETS:
 
 
 
+# ── Per-subset notes for the Subset Map sheet ───────────────────────────────
+# Only properties that change how a number should be read go here: what the
+# subset demands, and anything that makes its score not comparable with its
+# neighbours. Keyed by (prefix, raw subset name) so the two spellings of a
+# LoCoMo subset cannot drift apart.
+_SUBSET_NOTE = {
+    ("lme_sub_", "single-session-user"):
+        "Answer stated by the user inside one session.",
+    ("lme_sub_", "single-session-assistant"):
+        "Answer stated by the assistant inside one session. Extraction that keeps "
+        "only the user side loses this subset entirely.",
+    ("lme_sub_", "single-session-preference"):
+        "A preference stated once, to be returned verbatim.",
+    ("lme_sub_", "multi-session"):
+        "Evidence spans several sessions. The official label does not say how the "
+        "pieces relate, and they are reachable from the query without traversal.",
+    ("lme_sub_", "temporal-reasoning"):
+        "Requires timestamps to survive extraction.",
+    ("lme_sub_", "knowledge-update"):
+        "The same fact was updated; the latest value must be returned.",
+    ("loc_sub_", "single_hop"):
+        "One turn holds the answer.",
+    ("loc_sub_", "multi_hop"):
+        "Official multi-hop label; open-ended answer, so not directly comparable "
+        "with MemFail's long_hop, which is multiple choice.",
+    ("loc_sub_", "open_domain"):
+        "Answer is not stated outright anywhere and must be extrapolated from what "
+        "was remembered.",
+    ("loc_sub_", "temporal"):
+        "Timestamps must survive extraction. The sharpest single separator in the "
+        "study: event-anchored storage answers it, rewrite-style extraction does not.",
+    ("loc_sub_", "adversarial"):
+        "The question rests on a false premise; the correct behavior is to say so.",
+    ("hal_sub_", "Basic Fact Recall"):
+        "One memory point holds the answer.",
+    ("hal_sub_", "Multi-hop Inference"):
+        "Open-ended composition across memory points.",
+    ("hal_sub_", "Generalization & Application"):
+        "The stored fact must be applied to a situation never discussed.",
+    ("hal_sub_", "Dynamic Update"):
+        "The latest value of an updated fact. Small subset; read as a pattern.",
+    ("hal_sub_", "Memory Boundary"):
+        "Abstention: the answer is deliberately absent from the record and the "
+        "correct behavior is to say so. The official annotation therefore carries no "
+        "evidence, the sufficiency judgment has nothing to apply to, and these "
+        "questions are excluded from the stage-rate denominator. Accuracy is the "
+        "only figure this subset reports; its P1, P4 and P5 cells read n/a by "
+        "construction, not for want of a measurement.",
+    ("hal_sub_", "Memory Conflict"):
+        "Two values that were each correct at some point both sit in the store; the "
+        "current one must be chosen. Unlike Memory Boundary it does carry evidence, "
+        "so it has full stage rates.",
+    ("mf_sub_",  "persona_retrieval"):
+        "Half the graded queries name a distractor and require abstention, so this "
+        "subset mixes a single-point recall demand with an abstention demand and "
+        "cannot be split into the two groups.",
+    ("mf_sub_",  "conditional_easy"):
+        "The whole rule sits in one sentence; copying it verbatim succeeds.",
+    ("mf_sub_",  "long_hop"):
+        "A strictly transitive chain, verified by construction. Graded as 5-way "
+        "multiple choice with shape-matched distractors, so its scores run high and "
+        "do not compare with the open-ended multi-hop subsets.",
+    ("mf_sub_",  "conditional_hard"):
+        "The rule is split across three non-adjacent sentences (behavior, condition, "
+        "link) describing one entity, so all three surface on a single query and the "
+        "demand is to keep them, not to hop between them.",
+    ("mf_sub_",  "coexisting_facts"):
+        "N compatible preferences delivered in separate conversations; all must be "
+        "returned. Graded all-or-nothing per question over five questions, so one "
+        "missed item moves the subset score by 0.2.",
+}
+
+
 GROUP_FILL = {
     "":                    "F2F5F8",
     "Summary":             "E8F3F0",
@@ -1727,6 +1800,34 @@ def build():
     ws2.column_dimensions["A"].width = 18
     ws2.column_dimensions["B"].width = 24
     ws2.column_dimensions["C"].width = 80
+
+    # ── Subset Map: which purpose group each official subset belongs to ─────
+    ws4 = wb.create_sheet("Subset Map")
+    heads = ["Dataset", "Sub-dataset", "Benchmark's own label", "Category",
+             "Category name", "Notes"]
+    for ci, h in enumerate(heads, 1):
+        c = ws4.cell(row=1, column=ci, value=h)
+        c.font = Font(bold=True)
+        c.fill = PatternFill("solid", fgColor="F2F5F8")
+    ri = 2
+    for pre, raw, disp, code in _SUBSETS:
+        ds = _LONG_DS_NAME[_DS_OF_PREFIX[pre]]
+        ws4.cell(row=ri, column=1, value=ds)
+        ws4.cell(row=ri, column=2, value=disp).font = Font(bold=True)
+        ws4.cell(row=ri, column=3, value=raw if raw != disp else "")
+        ws4.cell(row=ri, column=4, value=code).font = Font(bold=True)
+        ws4.cell(row=ri, column=5, value=_GROUP_NAME[code])
+        ws4.cell(row=ri, column=6,
+                 value=_SUBSET_NOTE.get((pre, raw), "")).alignment = Alignment(wrap_text=True)
+        if code in GROUP_FILL:
+            for ci in range(1, 7):
+                ws4.cell(row=ri, column=ci).fill = PatternFill(
+                    "solid", fgColor=GROUP_FILL[code])
+        ri += 1
+    ws4.freeze_panes = "A2"
+    ws4.auto_filter.ref = f"A1:F{ri - 1}"
+    for col, w in zip("ABCDEF", (14, 26, 22, 10, 26, 78)):
+        ws4.column_dimensions[col].width = w
 
     # ── Run parameters sheet ────────────────────────────────────────────────
     ws3 = wb.create_sheet("Run parameters")
