@@ -1,0 +1,17 @@
+[add4] ==== E1_m1 ====
+[add4] 2026-08-30 20:08:52 E1_m1 attempt 1, scope users #3+#4
+[add4]   exit=0
+[add4]   qa_num=353 qa_valid=353 users_ingested=2
+[add4]   OK, probing
+[add4]   probe exit=0
+[add4] ==== E3_m1_m4 ====
+[add4] 2026-08-30 22:10:53 E3_m1_m4 attempt 1, scope users #3+#4
+[add4]   exit=0
+[add4]   qa_num=353 qa_valid=208 users_ingested=2
+[add4]   incomplete, retrying after 120s
+[add4] 2026-08-30 23:32:14 E3_m1_m4 attempt 2, scope users #3+#4
+[add4]   exit=0
+[add4]   qa_num=353 qa_valid=353 users_ingested=2
+[add4]   OK, probing
+[add4]   probe exit=0
+[add4] ALL DONE 2026-08-31 01:12:15

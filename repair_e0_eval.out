@@ -1,0 +1,5 @@
+[e0-eval] 2026-08-30 18:34:30 re-judging
+/Users/stud113/Documents/lintsai/Memory_Experience/repair_e0_eval.sh: line 18:  9143 Abort trap: 6           "$PY" run.py --backend structmem --version "$VER" --eval-only > "logs_${VER}_rejudge.out" 2>&1
+[e0-eval] exit=134 2026-08-30 20:05:47
+[e0-eval] qa_num=353 valid=184  update_num=291 valid=136
+[e0-eval] probe exit=0 DONE 2026-08-30 20:08:35

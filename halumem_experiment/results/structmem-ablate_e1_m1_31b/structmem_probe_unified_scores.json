@@ -1,21 +1,21 @@
 {
   "run": "structmem-ablate_e1_m1_31b",
-  "n": 126,
-  "P1_fail": 0.0397,
-  "P4_fail": 0.119,
-  "P5_fail": 0.3413,
-  "not_counted": 2,
-  "abstain_n": 43,
+  "n": 271,
+  "P1_fail": 0.0406,
+  "P4_fail": 0.1292,
+  "P5_fail": 0.3801,
+  "not_counted": 1,
+  "abstain_n": 82,
   "unadjudicated": 0,
   "verdicts": {
-    "OK": 61,
-    "SUMMARY": 5,
-    "P5b_OK": 38,
-    "REASONING": 43,
-    "RETRIEVAL": 15,
-    "NOT_COUNTED": 2,
-    "P5b_FAIL": 5
+    "OK": 121,
+    "SUMMARY": 11,
+    "P5b_OK": 71,
+    "RETRIEVAL": 35,
+    "REASONING": 103,
+    "P5b_FAIL": 11,
+    "NOT_COUNTED": 1
   },
   "judge_failures": {},
-  "attributable_error_rate": 0.5
+  "attributable_error_rate": 0.5499
 }

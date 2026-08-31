@@ -1,0 +1,8 @@
+[chain2] 2026-08-30 18:37:10 waiting for the E0 re-judge
+[chain2] 2026-08-30 20:08:51 E0 re-judge finished
+[chain2]   [e0-eval] exit=134 2026-08-30 20:05:47
+[chain2]   [e0-eval] qa_num=353 valid=184  update_num=291 valid=136
+[chain2]   [e0-eval] probe exit=0 DONE 2026-08-30 20:08:35
+[chain2] 2026-08-30 20:08:51 widening E1 and E3 to users #3+#4
+[chain2]   exit=0
+[chain2] ALL DONE 2026-08-31 01:12:15

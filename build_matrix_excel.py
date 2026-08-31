@@ -812,14 +812,21 @@ PURPOSE_GROUPS = [
      "ordering, most recent occurrence). Dropping time information during "
      "extraction guarantees failure."),
     ("4",  "Post-update value",
-     "The same fact has been updated and the latest value must be returned. This "
-     "sits at the Storage stage: whether the stale value was removed or superseded."),
+     "The same fact has been updated and the latest value must be returned. The "
+     "group covers both sides of that one capability: the write side asks whether "
+     "the new value landed and the stale one was removed or superseded, the read "
+     "side asks whether the answer picks the current value when both are still "
+     "reachable. HaluMem's Memory Conflict is the read side and belongs here, not "
+     "with abstention: it does not ask the system to withhold an answer, it asks it "
+     "to choose between two values that were each correct at some point."),
     ("5",  "Abstention and correction",
      "The correct behavior is not to answer but to admit the information is absent "
      "from memory, or to point out that the question rests on a false premise. The "
      "scoring logic differs from the other groups: it judges whether the system "
      "correctly avoided answering, not whether it produced some value, so scores in "
-     "this group should not be pooled with the others."),
+     "this group should not be pooled with the others. Withholding an answer is the "
+     "whole demand here, which is why Memory Conflict sits in Post-update value "
+     "instead: it asks for a value, just the right one of two."),
     ("6",  "Application and extrapolation",
      "No memory entry holds the answer verbatim. What is remembered has to be "
      "applied to a situation that was never discussed, or extrapolated past what "
@@ -848,7 +855,7 @@ _SUBSETS = [
     ("hal_sub_", "Generalization & Application", "Generalization & App.",    "6"),
     ("hal_sub_", "Dynamic Update",               "Dynamic Update",           "4"),
     ("hal_sub_", "Memory Boundary",              "Memory Boundary",          "5"),
-    ("hal_sub_", "Memory Conflict",              "Memory Conflict",          "5"),
+    ("hal_sub_", "Memory Conflict",              "Memory Conflict",          "4"),
     ("mf_sub_",  "persona_retrieval",            "persona_retrieval",        "1"),
     ("mf_sub_",  "conditional_easy",             "conditional_easy",         "1"),
     ("mf_sub_",  "long_hop",                     "long_hop",                 "2a"),
@@ -920,8 +927,11 @@ _SUBSET_NOTE = {
         "construction, not for want of a measurement.",
     ("hal_sub_", "Memory Conflict"):
         "Two values that were each correct at some point both sit in the store; the "
-        "current one must be chosen. Unlike Memory Boundary it does carry evidence, "
-        "so it has full stage rates.",
+        "current one must be chosen. This is the read side of the update capability, "
+        "which is why it groups with Post-update value rather than with abstention. "
+        "Unlike Memory Boundary it does carry evidence, so it has full stage rates, "
+        "and its P5 is the sharpest indicator of whether the store left the reader "
+        "any ambiguity to resolve.",
     ("mf_sub_",  "persona_retrieval"):
         "Half the graded queries name a distractor and require abstention, so this "
         "subset mixes a single-point recall demand with an abstention demand and "
@@ -1649,6 +1659,128 @@ def group_sorted_rows(rows, members):
     return sorted(category_rows(rows, members), key=_sort_key)
 
 
+# ── Mem0 v1 vs v2 ───────────────────────────────────────────────────────────
+# A focused sheet for one question. v1 picks an action per extracted fact
+# (add / update / delete / none); v2 appends everything and leaves the choosing
+# to retrieval. If that difference shows up anywhere it is on questions whose
+# answer was revised later, so the post-update subsets get their own block with
+# a subtotal, and every other subset sits below as the control.
+#
+# Rows and columns come from the By Category machinery rather than a second set
+# of definitions, so a metric cannot mean one thing here and another there.
+# The two runs are the batch 6 pair: same model, same questions, so the
+# comparison is actually like for like.
+_M0_RUNS = ["Mem0 v1 \u2465", "Mem0 v2 \u2465"]
+_M0_FOCUS = "Post-update value"
+# Which denominator each metric is pooled over when a subtotal spans subsets
+_M0_COUNT_KEYS = {"lme_n", "loc_n", "hal_n", "mf_n"}
+_M0_STAGE_KEYS = {"lme_sf_p1", "lme_sf_p4", "lme_sf_p5",
+                  "loc_sf_p1", "loc_sf_p4", "loc_sf_p5",
+                  "hal_sf_p1", "hal_sf_p4", "hal_sf_p5",
+                  "mf_summary", "mf_storage", "mf_retr", "mf_reason"}
+
+
+def _weighted(parts):
+    """Mean of (value, weight) pairs, ignoring entries with no value or no weight."""
+    parts = [(v, w) for v, w in parts
+             if isinstance(v, (int, float)) and isinstance(w, (int, float)) and w]
+    if not parts:
+        return None
+    return sum(v * w for v, w in parts) / sum(w for _, w in parts)
+
+
+def _m0_weights(be):
+    """(dataset, subset display name) -> that subset's n and n_stage."""
+    w = {}
+    for ds in ("longmem", "locomo", "halumem", "memfail"):
+        run = be[_DS_RUN_IDX[ds]]
+        if not run:
+            continue
+        bd = (memfail_subsets(run) if ds == "memfail"
+              else subset_breakdown(ds, run)) or {}
+        for sub, d in bd.items():
+            n = d.get("mf_n") if ds == "memfail" else d.get("n")
+            w[(_LONG_DS_NAME[ds], _SUBSET_DISP.get(sub, sub))] = (
+                n, d.get("n_stage", n))
+    return w
+
+
+def mem0_compare_rows(rows, members, columns):
+    """The two Mem0 rows, post-update block first, each block subtotalled."""
+    order = {n: i for i, n in enumerate(_M0_RUNS)}
+    weights = {}
+    for be in BACKENDS:
+        if be[0] in _M0_RUNS:
+            weights[be[0]] = _m0_weights(be)
+
+    mine = [r for r in category_rows(rows, members) if r.get("backend") in order]
+    picked = [r for r in mine if r.get("_sub_name") != "TOTAL"]
+    # The per-benchmark TOTAL rows, kept aside for the Overall block. They come
+    # straight off the Failure Matrix row, so they also carry the whole-run
+    # metrics a subset row cannot have, cost among them.
+    per_ds = defaultdict(dict)
+    for r in mine:
+        if r.get("_sub_name") == "TOTAL":
+            per_ds[r["backend"]][r["_ds_name"]] = r
+
+    def subtotal(block, label):
+        r = {k: block[0].get(k) for k in ("run_name", "backend", "llm", "batch")}
+        r.update({"_ds_name": "", "_sub_name": label, "_sub_group": "",
+                  "_done": block[0].get("_done", {}), "_subtotal": True})
+        w = weights[block[0]["backend"]]
+        raw = {}
+        for grp, title, key, desc in columns:
+            if key.startswith("_") or key in ("run_name", "backend", "llm", "batch"):
+                continue
+            base = key.split("::")[-1] if key.startswith("fam::") else key
+            stage = base in _M0_STAGE_KEYS or any(
+                k in _M0_STAGE_KEYS for k in members.get(base, ()))
+            parts = []
+            for x in block:
+                v = x.get(key)
+                if not isinstance(v, (int, float)):
+                    continue
+                n, ns = w.get((x["_ds_name"], x["_sub_name"]), (None, None))
+                parts.append((v, ns if stage else n))
+            if not parts:
+                raw[key] = "n/a" if any(x.get(key) == "n/a" for x in block) else None
+            elif base in _M0_COUNT_KEYS or any(k in _M0_COUNT_KEYS
+                                               for k in members.get(base, ())):
+                # A count, not a rate: it adds up. Keyed off the column key
+                # rather than its title, which is "Questions" here and
+                # "LoCoMo questions" elsewhere.
+                raw[key] = sum(v for v, _ in parts)
+            else:
+                raw[key] = _weighted(parts)
+        r.update(raw)
+        return r
+
+    out = []
+    for label, want in ((_M0_FOCUS, True), ("Others", False)):
+        block = [r for r in picked if (r.get("_sub_group") == _M0_FOCUS) == want]
+        if not block:
+            continue
+        out.append({"_section": label})
+        for name in sorted({r["backend"] for r in block}, key=lambda n: order[n]):
+            g = sorted([r for r in block if r["backend"] == name], key=_sort_key)
+            out.extend(g)
+            out.append(subtotal(g, f"{name} \u00b7 subtotal"))
+
+    # Each backend's four benchmark totals, then its bottom line. The benchmark
+    # rows are the Failure Matrix's own values, so they also carry the whole-run
+    # metrics a subset row cannot have, cost among them. The TOTAL row pools
+    # every subset with the same weighting a block subtotal uses; it spans four
+    # benchmarks of very different sizes, so it leans towards the largest.
+    out.append({"_section": "Overall"})
+    for name in sorted({r["backend"] for r in picked}, key=lambda n: order[n]):
+        for ds in SHEET_ORDER:
+            if ds in per_ds[name]:
+                out.append(per_ds[name][ds])
+        out.append(subtotal([r for r in picked if r["backend"] == name],
+                            f"{name} \u00b7 TOTAL"))
+    return out
+
+
 def write_sheet(ws, columns, rows, col_levels=None):
     """Write one set of columns as a sheet: two header rows, merged group headers,
     best value in bold, and RUNNING markers."""
@@ -1711,6 +1843,17 @@ def write_sheet(ws, columns, rows, col_levels=None):
     text_keys = {"run_name", "backend", "llm", "batch",
                  "_sub_ds", "_sub_name", "_sub_group"}
     for ri, row in enumerate(rows, 3):
+        # A section row is a band across the identity columns naming the block
+        # that follows; it carries no data of its own.
+        if row.get("_section"):
+            ws.merge_cells(start_row=ri, start_column=1, end_row=ri, end_column=7)
+            c = ws.cell(row=ri, column=1, value=row["_section"])
+            c.font = Font(bold=True, size=10, color="16685A")
+            c.alignment = Alignment(horizontal="center", vertical="center")
+            for ci in range(1, len(columns) + 1):
+                ws.cell(row=ri, column=ci).fill = PatternFill("solid", fgColor="EDF3EA")
+                ws.cell(row=ri, column=ci).border = border
+            continue
         sub = bool(row.get("_subset"))
         for ci, (grp, title, key, _) in enumerate(columns, 1):
             v = row.get(key)
@@ -1719,7 +1862,14 @@ def write_sheet(ws, columns, rows, col_levels=None):
             c.alignment = Alignment(horizontal="center", vertical="center")
             if isinstance(v, float):
                 c.number_format = "0.0000"
-            if key in text_keys:
+            if row.get("_subtotal"):
+                # A pooled row: shaded so a block's summary reads apart from the
+                # subset rows it pools, without stealing the eye like a header.
+                c.fill = PatternFill("solid", fgColor="F2F5F8")
+                c.font = Font(bold=True, size=9)
+                if key in text_keys:
+                    c.alignment = Alignment(horizontal="left", vertical="center")
+            elif key in text_keys:
                 # Subset rows print their identity a shade lighter than the TOTAL
                 # rows, enough to tell the two apart without making the subset
                 # labels hard to read.
@@ -1832,6 +1982,11 @@ def build():
 
     # The same rows ordered group first, so one purpose group reads as a block
     write_sheet(wb.create_sheet("By Group"), lc, group_sorted_rows(rows, members))
+
+    # One question, one sheet: does v1's update path beat v2's append-everything
+    ws4 = wb.create_sheet("Mem0 v1 vs v2")
+    write_sheet(ws4, lc, mem0_compare_rows(rows, members, lc))
+    ws4.auto_filter.ref = f"A2:{openpyxl.utils.get_column_letter(len(lc))}2"
 
     # One sheet per dataset: same structure, only that dataset's columns
     for ds in SHEET_ORDER:

@@ -1,5 +1,5 @@
 共 1 個 run，並行度 3
 
-  structmem-ablate_e0_baseline_31b       N= 271  P1=0.0554  P4=0.1402  P5=0.6015  錯誤率=0.7971  矇對=3  排除=0
+  structmem-ablate_e0_baseline_31b       N= 271  P1=0.0554  P4=0.1439  P5=0.5978  錯誤率=0.7971  矇對=3  排除=0
 
 已寫入 /Users/stud113/Documents/lintsai/Memory_Experience/halumem_experiment/probe_unified_summary.json
