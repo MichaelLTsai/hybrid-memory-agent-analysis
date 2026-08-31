@@ -144,7 +144,8 @@ def build():
         cell = tbl.cell(0, 1 + 4 * i)
         cell.merge(tbl.cell(0, 4 + 4 * i))
         write(cell, [(name, 12.5, True, ACCENT, FONT),
-                     (f"{subs}   ·   n = {n}", 8.5, False, INK3, FONT)])
+                     (f"{subs}   ·   micro-average, n = {n}",
+                      8.5, False, INK3, FONT)])
         edge(cell, "lnB", 1.0, "16685A")
 
     # Row 1: the four measures. The stages are set softer than the outcome they
@@ -191,8 +192,10 @@ def build():
                "(batch 6, all backends on gemma-4-31B-it)", 14, True, INK, False),
         (5.28, "P1 + P4 + P5 + QA sums to 1.000 on every row: each question is "
                "assigned to exactly one stage, so the three failure rates are the "
-               "complement of accuracy. Bold is the best value in a column. Subsets "
-               "are pooled by question count. MemFail long_hop is excluded from "
+               "complement of accuracy. Bold is the best value in a column. Every "
+               "cell is a micro-average: correct answers and questions are summed "
+               "across the subsets before dividing, so each subset weighs exactly "
+               "as much as the questions it holds. MemFail long_hop is excluded from "
                "multi-hop because it reports the benchmark's own error categories "
                "rather than probe stages, so it can contribute accuracy but no "
                "stages; temporal has no MemFail subset and is unaffected.",
